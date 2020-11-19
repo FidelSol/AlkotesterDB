@@ -1,0 +1,12 @@
+{% extends "poll/layout/base.html" %}
+
+
+
+{% block content %}
+{% for personal in personals %}
+<div class="b">
+             <p>ID: {{ personal.personal_id }} ФИО:
+             <a href="{% url 'detail' personal.pk %}">{{ personal.full_name }}</a></p>
+</div>
+{% endfor %}
+{% endblock %}

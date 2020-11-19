@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type"
+              content="text/html; charset=utf-8">
+        <title>{% block title %} Алкотестер {% endblock %} - Список сотрудников</title>
+    </head>
+    <body>
+        <header>
+            <h1>База результатов тестирования</h1>
+        </header>
+        <nav>
+            <a href="{% url 'index' %}">Список сотрудников</a>
+            <a href="{% url 'fail' %}">Сотрудники, провалившие тест</a>
+        </nav>
+        <section>
+            {% block content %}
+            {% endblock %}
+        </section>
+    </body>
+</html>
