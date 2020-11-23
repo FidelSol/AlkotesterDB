@@ -1,6 +1,9 @@
 
 from django.shortcuts import render
 from .models import Personal, Photo, Tests
+from django.views.generic.edit import CreateView
+from .forms import PersonalForm, TestsForm
+from django.urls import reverse_lazy
 
 
 
@@ -23,7 +26,23 @@ def test_fail(request):
    context = {'tests': tests, 'personals': personals}
    return render(request, 'poll/fail.html', context)
 
+class PersonalCreateView(CreateView):
+    template_name = 'poll/create.html'
+    form_class = PersonalForm
+    success_url = reverse_lazy('index')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class TestsCreateView(CreateView):
+    template_name = 'poll/create.html'
+    form_class = TestsForm
+    success_url = reverse_lazy('index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 
