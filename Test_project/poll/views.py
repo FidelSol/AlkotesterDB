@@ -1,9 +1,12 @@
 
 from django.shortcuts import render
 from .models import Personal, Photo, Tests
+from django.forms import inlineformset_factory
 from django.views.generic.edit import CreateView
-from .forms import PersonalForm, TestsForm
+from .forms import PersonalForm
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+
 
 
 
@@ -26,23 +29,24 @@ def test_fail(request):
    context = {'tests': tests, 'personals': personals}
    return render(request, 'poll/fail.html', context)
 
+
 class PersonalCreateView(CreateView):
     template_name = 'poll/create.html'
     form_class = PersonalForm
-    success_url = reverse_lazy('index')
+    success_url = '/poll/'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
 
-class TestsCreateView(CreateView):
-    template_name = 'poll/create.html'
-    form_class = TestsForm
-    success_url = reverse_lazy('index')
+class AddTestsView.as_view(CreateView):
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+
+
+
+
+
+
 
 
 
