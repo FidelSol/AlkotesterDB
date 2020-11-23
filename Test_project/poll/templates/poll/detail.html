@@ -2,11 +2,13 @@
 {% block title %} Информация по сотруднику {% endblock %}
 
 {% block content %}
-    <div>
-             <a href="{% url 'detail' persona.pk %}">Сотрудник:</a>
-             <h2>{{ persona.full_name }}</h2>
-             <p>Персональный ID: {{ persona.personal_id }}</p>
-             <p>Расширенный ID: {{ persona.ext_id }}</p>
+        <div class="box_text">
+        <a href="{% url 'detail' persona.pk %}"><b>Сотрудник:</b></a>
+        <br>
+            <br>
+             <h2><b>{{ persona.full_name }}</b></h2>
+             <p><b>Персональный ID: {{ persona.personal_id }}</b></p>
+             <p><b>Расширенный ID: {{ persona.ext_id }}</b></p>
 
              {% load static %}
              {% for photo in photos %}
@@ -14,9 +16,10 @@
              {% endfor %}
 
              {% for test in tests %}
-             <p>Назначенное время теста: {{ test.expected_time }}</p>
-             <p>Фактическое время сдачи теста: {{ test.result_time }}</p>
-             <p>Результат: {{ test.result }}</p>
+             <p><b>Назначенное время теста: {{ test.expected_time }}</b></p>
+             <p><b>Фактическое время сдачи теста: {{ test.result_time }}</b></p>
+             <p><b>Результат: {{ test.result }}</b></p>
              {% endfor %}
-    </div>
+        </div>
+
 {% endblock %}

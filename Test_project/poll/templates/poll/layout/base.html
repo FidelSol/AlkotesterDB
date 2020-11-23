@@ -3,19 +3,40 @@
     <head>
         <meta http-equiv="Content-Type"
               content="text/html; charset=utf-8">
+              {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'poll/css/style.css' %}">
         <title>{% block title %} Алкотестер {% endblock %} - Список сотрудников</title>
     </head>
     <body>
+    <div class="content">
         <header>
-            <h1>База результатов тестирования</h1>
+            <h1><b>База результатов тестирования</b></h1>
         </header>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="center">
+        <div class="box_text">
         <nav>
-            <a href="{% url 'index' %}">Список сотрудников</a>
-            <a href="{% url 'fail' %}">Сотрудники, провалившие тест</a>
+            <a href="{% url 'index' %}"><b>Список сотрудников</b></a>
+            <a href="{% url 'fail' %}"><b>Сотрудники, провалившие тест</b></a>
         </nav>
+        </div>
+
         <section>
             {% block content %}
             {% endblock %}
         </section>
+
+        </div>
+        </div>
+
+    <div class="footer">
+	Copyright &copy; 2020
+	</div>
     </body>
 </html>

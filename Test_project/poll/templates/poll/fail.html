@@ -2,9 +2,8 @@
 
 {% block content %}
 {% for personal in personals %}
-<div class="b">
-    <p>ID: {{ personal.personal_id }} ФИО:
-             <a href="{% url 'detail' personal.pk %}">{{ personal.full_name }}</a></p>
+<div class="box_text">
+    <p><b>ID: {{ personal.personal_id }} ФИО: </b><a href="{% url 'detail' personal.pk %}">{{ personal.full_name }}</a></p>
 </div>
 {% endfor %}
 {% endblock %}
