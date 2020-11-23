@@ -39,8 +39,18 @@ class PersonalCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         return context
 
-class AddTestsView.as_view(CreateView):
+class AddTestsView(CreateView):
+    template_name = 'poll/set_forms.html'
+    success_url = '/poll/'
 
+    if request.method == 'POST':
+        form = TestsForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('/poll/')
+    else:
+        form = PersonalForm()
+
+    return render(request, 'name.html', {'form': form})
 
 
 
