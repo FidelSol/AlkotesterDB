@@ -39,8 +39,8 @@ def recieve_form(request):
     value_3 = request.POST.get('expected_time')
     value_4 = request.POST.get('result_time')
     value_5 = request.POST.get('result')
-    personal = Personal.objects.all()
-    tests = Tests.objects.all()
+    personals = Personal.objects.all()
+    test = Tests.objects.all()
 
     if value_5 == 'on':
         value_5 = True
@@ -48,15 +48,11 @@ def recieve_form(request):
         value_5 = False
 
     if request.method == 'POST':
-        personal = Personal.objects.create(full_name=value_1, ext_id=value_2)
-        tests.personal = Tests.objects.create(personal=personal, expected_time=value_3, result_time=value_4, result=value_5)
-        personal = Personal.objects.get(full_name=value_1, ext_id=value_2)
-        tests = Tests.objects.get(personal=personal, expected_time=value_3, result_time=value_4, result=value_5)
-        tests.personal = personal
-        tests.save()
+        personals = Personal.objects.create(full_name=value_1, ext_id=value_2)
+        test = personals.tests_set.create(personal=personals, result=value_5)
     else:
         pass
-    context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'personal': personal, 'tests': tests}
+    context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'personals': personals, 'test': test}
     return render(request, 'poll/set.html', context)
 
 
