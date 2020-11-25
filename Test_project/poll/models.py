@@ -1,12 +1,13 @@
 from django.db import models
 from django.urls import reverse
+
 # Create your models here.
 
 
 class Personal(models.Model):
     personal_id = models.AutoField(primary_key=True)
     ext_id = models.IntegerField(null=True, blank=True)
-    full_name = models.CharField(max_length=30, verbose_name="ФИО", null=True, blank=True)
+    full_name = models.CharField(max_length=30, verbose_name="ФИО")
 
     objects = models.Manager()
 

@@ -2,7 +2,10 @@
 from django.shortcuts import render
 from .models import Personal, Photo, Tests
 from django.views.generic.edit import CreateView
-from .forms import PersonalForm
+from .forms import TestsForm
+from django.http import request
+
+
 
 def index(request):
     personals = Personal.objects.all()
@@ -11,7 +14,7 @@ def index(request):
 
 
 def detail(request, personal_id):
-    persona = Personal.objects.get(pk=personal_id)
+    persona = Personal.objects.get(pk = personal_id)
     photos = Photo.objects.filter(personal__personal_id=personal_id)
     tests = Tests.objects.filter(personal__personal_id=personal_id)
     context = {'persona': persona, 'photos': photos, 'tests': tests}
@@ -23,15 +26,6 @@ def test_fail(request):
    context = {'tests': tests, 'personals': personals}
    return render(request, 'poll/fail.html', context)
 
-
-class PersonalCreateView(CreateView):
-    template_name = 'poll/create.html'
-    form_class = PersonalForm
-    success_url = '/poll/'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 def recieve_form(request):
     value_1 = request.POST.get('full_name')
@@ -49,10 +43,23 @@ def recieve_form(request):
 
     if request.method == 'POST':
         personals = Personal.objects.create(full_name=value_1, ext_id=value_2)
-        test = personals.tests_set.create(personal=personals, result=value_5)
+        test = personals.tests_set.create(personal=personals, result=value_5, expected_time=value_3, result_time=value_4)
     else:
         pass
     context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'personals': personals, 'test': test}
     return render(request, 'poll/set.html', context)
+
+class TestsCreateView(CreateView):
+    template_name = 'poll/tests.html'
+    form_class = TestsForm
+    success_url = '/poll/'
+
+
+
+
+
+
+
+
 
 
