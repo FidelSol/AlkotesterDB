@@ -1,0 +1,29 @@
+{% extends "poll/layout/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+    {{ form.media }}
+
+    <form  action="" method="POST">
+                {% csrf_token %}
+
+        <p><label><b>Назначенное время сдачи теста:</b></label>
+            <div class="input-group date" id="expected_time" data-target-input="nearest">
+                {{ form.expected_time }}
+            <div class="input-group-append" data-target="#expected_time" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div></div></div></p>
+
+            <p><label><b>Фактическое время сдачи теста:</b></label>
+            <div class="input-group date" id="result_time" data-target-input="nearest">
+                 {{ form.result_time }}
+            <div class="input-group-append" data-target="#result_time" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div></div></p>
+        <button type="submit" class="btn btn-success">Добавить</button></form>
+</div>
+{% endblock %}

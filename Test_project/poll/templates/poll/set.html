@@ -1,21 +1,34 @@
 {% extends "poll/layout/base.html" %}
 
-
+{% load crispy_forms_tags %}
 
 {% block content %}
-<div class="box_text">
+<div class="container">
     <form id="personal" method="post">{% csrf_token %}
         <br>
         <label><b>ФИО:</b></label>
     <p><input type="text" name="full_name" id="full_name" form="personal"></p>
         <label><b>Расширенный ID:</b></label>
         <p><input type="number" name="ext_id" id="ext_id" form="personal"></p>
+
         <label><b>Назначенное время сдачи теста:</b></label>
-        <p><input type="datetime" name="expected_time" id="expected_time" form="personal"></p>
+        <div class="input-group date" id="expected_time" data-target-input="nearest">
+            <input type="text" class="form-control datetimepicker-input" data-target="#expected_time"/>
+            <div class="input-group-append" data-target="#expected_time" data-toggle="datetimepicker">
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+        </div>
+
         <label><b>Фактическое время сдачи теста:</b></label>
-        <p><input type="datetime" name="result_time" id="result_time" form="personal"></p>
+        <div class="input-group date" id="result_time" data-target-input="nearest">
+            <input type="text" class="form-control datetimepicker-input" data-target="#result_time"/>
+            <div class="input-group-append" data-target="#result_time" data-toggle="datetimepicker">
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+        </div>
+
         <label><b>Результат теста:</b></label>
         <p><input type="checkbox" name="result" id="result" form="personal"></p>
-    <p><input type="submit" form="personal"></p></form>
+        <button type="submit" class="btn btn-success">Добавить</button></form>
 </div>
 {% endblock %}
