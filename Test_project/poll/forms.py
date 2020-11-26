@@ -1,17 +1,12 @@
 
-from .models import Tests
 from django import forms
-from datetimewidget.widgets import DateTimeWidget
+from .models import Tests
 
 
 class TestsForm(forms.ModelForm):
-    expected_time = forms.DateTimeField(widget=forms.DateTimeInput)
-    result_time = forms.DateTimeField(widget=forms.DateTimeInput)
+    expected_time = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], widget=forms.DateTimeInput(attrs={'class': 'form-control datetimepicker-input', 'data-target': '#datetimepicker1'}))
+    result_time = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], widget=forms.DateTimeInput(attrs={'class': 'form-control datetimepicker-input', 'data-target': '#datetimepicker2'}))
 
     class Meta:
         model = Tests
         fields = ('expected_time', 'result_time')
-        widgets = {'expected_time': DateTimeWidget(attrs={'id': "expected_time"}, usel10n=True, bootstrap_version=4), 'result_time': DateTimeWidget(attrs={'id': "result_time"}, usel10n=True, bootstrap_version=4)
-        }
-
-

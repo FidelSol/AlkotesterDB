@@ -53,7 +53,8 @@ class TestsCreateView(CreateView):
     template_name = 'poll/tests.html'
     form_class = TestsForm
     success_url = '/poll/'
-
+    value_1 = request.POST.get('expected_time')
+    value_2 = request.POST.get('result_time')
 
 
 
