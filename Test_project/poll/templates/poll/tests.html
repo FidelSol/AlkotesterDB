@@ -1,32 +1,23 @@
 {% extends "poll/layout/base.html" %}
 
-
+{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="container">
 
-    <form  action="" method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-             <label><b>Назначенное время сдачи теста:</b></label>
-            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                {{ form.expected_time }}
-            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                <div class="input-group-text"><i class="fa fa-calendar"></i></div></div></div>
 
-            <label><b>Фактическое время сдачи теста:</b></label>
-            <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                 {{ form.result_time }}
-            <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
-                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-            </div></div>
-        <button type="submit" class="btn btn-success">Добавить</button></form>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <b>{{ form|crispy }}</b>
+    <button type="submit" class="btn btn-success">Save person</button>
+  </form>
+
 
 </div>
 <script type="text/javascript">
       $(function () {
-        $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'DD/MM/YYYY HH:mm', });
-        $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'DD/MM/YYYY HH:mm', });
+        $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
+        $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
       });
 </script>
 {% endblock %}

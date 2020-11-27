@@ -1,9 +1,7 @@
 
 from django.shortcuts import render
 from .models import Personal, Photo, Tests
-from django.views.generic.edit import CreateView
-from .forms import TestsForm
-from django.http import request
+from .forms import TestsForm, PhotoForm
 
 
 
@@ -33,8 +31,13 @@ def recieve_form(request):
     value_3 = request.POST.get('expected_time')
     value_4 = request.POST.get('result_time')
     value_5 = request.POST.get('result')
+    value_6 = request.POST.get('data_photo')
     personals = Personal.objects.all()
     test = Tests.objects.all()
+    photos = Photo.objects.all()
+    form_1 = TestsForm(request.POST, request.FILES)
+    form_2 = PhotoForm(request.POST, request.FILES)
+
 
     if value_5 == 'on':
         value_5 = True
@@ -42,19 +45,33 @@ def recieve_form(request):
         value_5 = False
 
     if request.method == 'POST':
+        form_1 = TestsForm(request.POST, request.FILES)
+        form_2 = PhotoForm(request.POST, request.FILES)
         personals = Personal.objects.create(full_name=value_1, ext_id=value_2)
         test = personals.tests_set.create(personal=personals, result=value_5, expected_time=value_3, result_time=value_4)
+        photos = personals.photo_set.create(personal=personals, data_photo=value_6)
+        if form_1.is_valid() and form_2.is_valid():
+            form_1.save()
+            form_2.save()
+            return render(request, 'poll/set.html')
+        else:
+            return render(request, 'poll/set.html', {'form_1': form_1, 'form_2': form_2})
     else:
         pass
-    context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'personals': personals, 'test': test}
+    context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'value_6': value_6, 'personals': personals, 'test': test, 'form_1': form_1, 'form_2': form_2, 'photos': photos}
     return render(request, 'poll/set.html', context)
 
-class TestsCreateView(CreateView):
-    template_name = 'poll/tests.html'
-    form_class = TestsForm
-    success_url = '/poll/'
-    value_1 = request.POST.get('expected_time')
-    value_2 = request.POST.get('result_time')
+def add_photo(request):
+    if request.method == 'POST':
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return render(request, 'poll/tests.html')
+    else:
+        form = PhotoForm()
+    return render(request, 'poll/tests.html', {
+        'form': form
+    })
 
 
 

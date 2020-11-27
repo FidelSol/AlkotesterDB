@@ -4,31 +4,52 @@
 
 {% block content %}
 <div class="container">
-    <form id="personal" method="post">{% csrf_token %}
+    <form id="personal" method="post" enctype="multipart/form-data">{% csrf_token %}
         <br>
+        <div class="row">
+        <div class="col-6">
         <label><b>ФИО:</b></label>
-    <p><input type="text" name="full_name" id="full_name" form="personal"></p>
+            <p><input type="text" name="full_name" id="full_name" form="personal"></p></div>
+        <div class="col-6">
         <label><b>Расширенный ID:</b></label>
-        <p><input type="number" name="ext_id" id="ext_id" form="personal"></p>
-
-        <label><b>Назначенное время сдачи теста:</b></label>
-        <div class="input-group date" id="expected_time" data-target-input="nearest">
-            <input type="text" class="form-control datetimepicker-input" data-target="#expected_time"/>
-            <div class="input-group-append" data-target="#expected_time" data-toggle="datetimepicker">
-            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-        </div>
+            <p><input type="number" name="ext_id" id="ext_id" form="personal"></p></div>
         </div>
 
-        <label><b>Фактическое время сдачи теста:</b></label>
-        <div class="input-group date" id="result_time" data-target-input="nearest">
-            <input type="text" class="form-control datetimepicker-input" data-target="#result_time"/>
-            <div class="input-group-append" data-target="#result_time" data-toggle="datetimepicker">
+
+        <div class="row">
+            <div class="col-6">
+            <label><b>Назначенное время сдачи теста:</b></label>
+            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                <b>{{ form_1.expected_time }}</b>
+            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+            </div>
+            </div>
+
+            <div class="col-6">
+            <label><b>Фактическое время сдачи теста:</b></label>
+            <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                <b>{{ form_1.result_time }}</b>
+            <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+            </div>
+            </div>
         </div>
-        </div>
+
+        <b>{{ form_2.data_photo }}</b>
 
         <label><b>Результат теста:</b></label>
         <p><input type="checkbox" name="result" id="result" form="personal"></p>
         <button type="submit" class="btn btn-success">Добавить</button></form>
+
+
 </div>
+<script type="text/javascript">
+      $(function () {
+        $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
+        $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
+      });
+</script>
 {% endblock %}

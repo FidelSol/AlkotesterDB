@@ -43,8 +43,8 @@ class Photo(models.Model):
 class Tests(models.Model):
     tests_id = models.AutoField(primary_key=True)
     personal = models.ForeignKey(Personal, on_delete=models.CASCADE, null=True, blank=True)
-    expected_time = models.DateTimeField(blank=True, null=True, verbose_name="Назанченное время теста", default=datetime.now().strftime("%d/%m/%Y %H:%M"))
-    result_time = models.DateTimeField(blank=True, null=True, verbose_name="Фактическое время сдачи теста", default=datetime.now().strftime("%d/%m/%Y %H:%M"))
+    expected_time = models.DateTimeField(blank=True, null=True, verbose_name="Назанченное время теста", default=datetime.now().strftime("%Y-%m-%d %H:%M"))
+    result_time = models.DateTimeField(blank=True, null=True, verbose_name="Фактическое время сдачи теста", default=datetime.now().strftime("%Y-%m-%d %H:%M"))
     result = models.BooleanField(default=False, verbose_name="Результат: да/нет")
 
     objects = models.Manager()
