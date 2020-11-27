@@ -1,5 +1,5 @@
 {% extends "poll/layout/base.html" %}
-
+ {% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
@@ -26,7 +26,6 @@
             </div>
             </div>
             </div>
-
             <div class="col-6">
             <label><b>Фактическое время сдачи теста:</b></label>
             <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
@@ -37,12 +36,18 @@
             </div>
             </div>
         </div>
-
-        <b>{{ form_2.data_photo }}</b>
-
+        <br>
+            <input type="file" name="data_photo" id="data_photo" form="personal">
+        <br>
+        <br>
         <label><b>Результат теста:</b></label>
         <p><input type="checkbox" name="result" id="result" form="personal"></p>
         <button type="submit" class="btn btn-success">Добавить</button></form>
+
+    {% if uploaded_file_url %}
+    <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+    {% endif %}
+
 
 
 </div>

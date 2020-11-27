@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from .models import Personal, Photo, Tests
 from .forms import TestsForm, PhotoForm
+from django.core.files.storage import FileSystemStorage
 
 
 
@@ -31,12 +32,12 @@ def recieve_form(request):
     value_3 = request.POST.get('expected_time')
     value_4 = request.POST.get('result_time')
     value_5 = request.POST.get('result')
-    value_6 = request.POST.get('data_photo')
+
     personals = Personal.objects.all()
     test = Tests.objects.all()
     photos = Photo.objects.all()
-    form_1 = TestsForm(request.POST, request.FILES)
-    form_2 = PhotoForm(request.POST, request.FILES)
+    form_1 = TestsForm(request.POST)
+
 
 
     if value_5 == 'on':
@@ -44,21 +45,23 @@ def recieve_form(request):
     else:
         value_5 = False
 
-    if request.method == 'POST':
-        form_1 = TestsForm(request.POST, request.FILES)
-        form_2 = PhotoForm(request.POST, request.FILES)
+    if request.method == 'POST' and request.FILES['data_photo']:
+        form_1 = TestsForm(request.POST)
         personals = Personal.objects.create(full_name=value_1, ext_id=value_2)
         test = personals.tests_set.create(personal=personals, result=value_5, expected_time=value_3, result_time=value_4)
-        photos = personals.photo_set.create(personal=personals, data_photo=value_6)
-        if form_1.is_valid() and form_2.is_valid():
-            form_1.save()
-            form_2.save()
-            return render(request, 'poll/set.html')
-        else:
-            return render(request, 'poll/set.html', {'form_1': form_1, 'form_2': form_2})
+
+        data_photo = request.FILES['data_photo']
+        fs = FileSystemStorage()
+        filename = fs.save(data_photo.name, data_photo)
+        uploaded_file_url = fs.url(filename)
+        photos = personals.photo_set.create(personal=personals, data_photo=data_photo)
+        return render(request, 'poll/set.html', {
+            'uploaded_file_url': uploaded_file_url
+        })
+
     else:
         pass
-    context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'value_6': value_6, 'personals': personals, 'test': test, 'form_1': form_1, 'form_2': form_2, 'photos': photos}
+    context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'personals': personals, 'test': test, 'form_1': form_1, 'photos': photos}
     return render(request, 'poll/set.html', context)
 
 def add_photo(request):
