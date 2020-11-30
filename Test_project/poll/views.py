@@ -1,9 +1,14 @@
 
 from django.shortcuts import render
+from rest_framework.generics import get_object_or_404
+
 from .models import Personal, Photo, Tests
 from .forms import TestsForm, PhotoForm
 from django.core.files.storage import FileSystemStorage
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from .serializers import TestsSerializer
 
 
 def index(request):
@@ -37,8 +42,6 @@ def recieve_form(request):
     test = Tests.objects.all()
     photos = Photo.objects.all()
     form_1 = TestsForm(request.POST)
-
-
 
     if value_5 == 'on':
         value_5 = True
@@ -76,10 +79,37 @@ def add_photo(request):
         'form': form
     })
 
+class TestsView(APIView):
+    def get(self, request,  *args, **kwargs):
+        tests = Tests.objects.all()
+        serializer = TestsSerializer(tests, many=True)
+        return Response({"tests": serializer.data})
 
+    def post(self, request):
+        tests = request.data.get('tests')
+        serializer = TestsSerializer(data=tests)
+        if serializer.is_valid(raise_exception=True):
+            tests_saved = serializer.save()
+        return Response({"success": "Test '{}' created successfully".format(tests_saved.personal_id)})
 
+    def put(self, request, pk):
+        saved_tests = get_object_or_404(Tests.objects.all(), pk=pk)
+        data = request.data.get('tests')
+        serializer = TestsSerializer(instance=saved_tests, data=data, partial=True)
 
+        if serializer.is_valid(raise_exception=True):
+            tests_saved = serializer.save()
 
+        return Response({
+            "success": "Test '{}' updated successfully".format(tests_saved.result)
+        })
+
+    def delete(self, request, pk):
+        tests = get_object_or_404(Tests.objects.all(), pk=pk)
+        tests.delete()
+        return Response({
+            "message": "Test with id `{}` has been deleted.".format(pk)
+        }, status=204)
 
 
 

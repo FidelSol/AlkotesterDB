@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'poll',
     'crispy_forms',
     'datetimewidget',
+    'rest_framework',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
