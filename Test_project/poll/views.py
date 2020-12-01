@@ -7,7 +7,7 @@ from .forms import TestsForm, PhotoForm
 from django.core.files.storage import FileSystemStorage
 
 
-from .serializers import TestsSerializer
+from .serializers import TestsSerializer, PhotoSerializer
 
 
 def index(request):
@@ -90,7 +90,17 @@ class SingleTestsView(RetrieveUpdateDestroyAPIView):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
 
+class PhotoView(ListCreateAPIView):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
 
+    def perform_create(self, serializer):
+        personal = get_object_or_404(Personal, id=self.request.data.get('personal_id'))
+        return serializer.save(personal=personal)
+
+class SinglePhotoView(RetrieveUpdateDestroyAPIView):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
 
 
 

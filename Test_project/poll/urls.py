@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import TestsView, SingleTestsView
+from .views import TestsView, SingleTestsView, PhotoView, SinglePhotoView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -31,4 +31,6 @@ urlpatterns = [
     path('set/', views.recieve_form, name='set'),
     path('tests/', TestsView.as_view(),),
     path('tests/<int:pk>/', SingleTestsView.as_view(),),
+    path('photo/', PhotoView.as_view(),),
+    path('photo/<int:pk>/', SinglePhotoView.as_view(),),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
