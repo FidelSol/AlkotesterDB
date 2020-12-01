@@ -39,11 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'poll',
     'crispy_forms',
     'datetimewidget',
     'rest_framework',
 ]
+
+SWAGGER_SETTINGS = {
+    'VALIDATOR_URL': 'http://localhost:8000',
+}
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
