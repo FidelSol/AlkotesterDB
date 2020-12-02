@@ -1,9 +1,6 @@
 from django.db import models
 from django.urls import reverse
 from datetime import datetime
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters.html import HtmlFormatter
-from pygments import highlight
 from django.contrib.auth.models import User
 # Create your models here.
 
@@ -47,12 +44,6 @@ class Photo(models.Model):
         return reverse('views.detail', args=[str(self.photo_id)])
 
     def save(self, *args, **kwargs):
-        photo_id = get_lexer_by_name(self.photo_id)
-        personal = 'table' if self.personal else False
-        options = {'data_photo': self.data_photo} if self.data_photo else {}
-        formatter = HtmlFormatter(data_photo=self.data_photo, personal=personal,
-                                  full=True, **options)
-        self.highlighted = highlight(self.photo_id, personal, formatter)
         super(Photo, self).save(*args, **kwargs)
 
 class Tests(models.Model):
@@ -77,21 +68,15 @@ class Tests(models.Model):
         return reverse('views.detail', args=[str(self.tests_id)])
 
     def save(self, *args, **kwargs):
-        tests_id = get_lexer_by_name(self.tests_id)
-        personal = 'table' if self.personal else False
-        options = {'result': self.result, 'expected_time': self.expected_time, 'result_time': self.result_time} if self.result else {}
-        formatter = HtmlFormatter(result=self.result, expected_time=self.expected_time, result_time=self.result_time, personal=personal,
-                                  full=True, **options)
-        self.highlighted = highlight(self.tests_id, personal, formatter)
         super(Tests, self).save(*args, **kwargs)
 
 class userProfile(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE,related_name="profile")
-    description=models.TextField(blank=True,null=True)
-    location=models.CharField(max_length=30,blank=True)
-    date_joined=models.DateTimeField(auto_now_add=True)
-    updated_on=models.DateTimeField(auto_now=True)
-    is_organizer=models.BooleanField(default=False)
+    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name="profile")
+    description = models.TextField(blank=True,null=True)
+    location = models.CharField(max_length=30,blank=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    is_organizer = models.BooleanField(default=False)
 
     objects = models.Manager()
 
