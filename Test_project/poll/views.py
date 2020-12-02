@@ -1,13 +1,14 @@
 
 from django.shortcuts import render
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-
+from rest_framework.parsers import FormParser, MultiPartParser
 from .models import Personal, Photo, Tests
 from .forms import TestsForm, PhotoForm
 from django.core.files.storage import FileSystemStorage
-
-
-from .serializers import TestsSerializer, PhotoSerializer
+from .serializers import TestsSerializer, PhotoSerializer, UserSerializer
+from django.contrib.auth.models import User
+from rest_framework import permissions
+from .permissions import IsOwnerOrReadOnly
 
 
 def index(request):
@@ -81,6 +82,7 @@ def add_photo(request):
 class TestsView(ListCreateAPIView):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         personal = get_object_or_404(Personal, id=self.request.data.get('personal_id'))
@@ -89,10 +91,13 @@ class TestsView(ListCreateAPIView):
 class SingleTestsView(RetrieveUpdateDestroyAPIView):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
 class PhotoView(ListCreateAPIView):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    parser_classes = (FormParser, MultiPartParser)
 
     def perform_create(self, serializer):
         personal = get_object_or_404(Personal, id=self.request.data.get('personal_id'))
@@ -101,6 +106,18 @@ class PhotoView(ListCreateAPIView):
 class SinglePhotoView(RetrieveUpdateDestroyAPIView):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
+    parser_classes = (FormParser, MultiPartParser)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
+class UserView(ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class SingleUserView(RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
