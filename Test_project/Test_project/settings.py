@@ -44,7 +44,16 @@ INSTALLED_APPS = [
     'crispy_forms',
     'datetimewidget',
     'rest_framework',
+    'djoser',
+    'rest_framework_simplejwt',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
 
 SWAGGER_SETTINGS = {
     'VALIDATOR_URL': 'http://localhost:8000',

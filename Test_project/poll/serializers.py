@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Tests, Photo
+from .models import Tests, Photo, userProfile
 
 
 class TestsSerializer(serializers.ModelSerializer):
@@ -21,3 +21,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'tests', 'photos']
         owner = serializers.ReadOnlyField(source='owner.username')
+
+class userProfileSerializer(serializers.ModelSerializer):
+    user=serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = userProfile
+        fields = '__all__'

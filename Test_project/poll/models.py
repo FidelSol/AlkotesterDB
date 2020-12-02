@@ -4,6 +4,7 @@ from datetime import datetime
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -83,3 +84,16 @@ class Tests(models.Model):
                                   full=True, **options)
         self.highlighted = highlight(self.tests_id, personal, formatter)
         super(Tests, self).save(*args, **kwargs)
+
+class userProfile(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE,related_name="profile")
+    description=models.TextField(blank=True,null=True)
+    location=models.CharField(max_length=30,blank=True)
+    date_joined=models.DateTimeField(auto_now_add=True)
+    updated_on=models.DateTimeField(auto_now=True)
+    is_organizer=models.BooleanField(default=False)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.user.username

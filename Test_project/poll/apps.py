@@ -1,5 +1,10 @@
 from django.apps import AppConfig
 
 
-class App1Config(AppConfig):
-    name = 'App_1'
+class PollConfig(AppConfig):
+    name = 'poll'
+
+    def ready(self):
+        import signals
+
+

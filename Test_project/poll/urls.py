@@ -3,10 +3,11 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import TestsView, SingleTestsView, PhotoView, SinglePhotoView, UserView, SingleUserView
+from .views import TestsView, SingleTestsView, PhotoView, SinglePhotoView, UserView, SingleUserView, UserProfileListCreateView, userProfileDetailView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -35,4 +36,6 @@ urlpatterns = [
     path('photo/<int:pk>/', SinglePhotoView.as_view(),),
     path('users/', UserView.as_view()),
     path('users/<int:pk>/', SingleUserView.as_view()),
+    path("all-profiles", UserProfileListCreateView.as_view(), name="all-profiles"),
+    path("profile/<int:pk>",userProfileDetailView.as_view(),name="profile"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -2,10 +2,13 @@
 from django.shortcuts import render
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FormParser, MultiPartParser
-from .models import Personal, Photo, Tests
+from rest_framework.permissions import IsAuthenticated
+
+from .license import IsOwnerProfileOrReadOnly
+from .models import Personal, Photo, Tests, userProfile
 from .forms import TestsForm, PhotoForm
 from django.core.files.storage import FileSystemStorage
-from .serializers import TestsSerializer, PhotoSerializer, UserSerializer
+from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, userProfileSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly
@@ -121,3 +124,17 @@ class SingleUserView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
 
 
+
+class UserProfileListCreateView(ListCreateAPIView):
+    queryset=userProfile.objects.all()
+    serializer_class=userProfileSerializer
+    permission_classes=[IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user=self.request.user
+        serializer.save(user=user)
+
+class userProfileDetailView(RetrieveUpdateDestroyAPIView):
+    queryset=userProfile.objects.all()
+    serializer_class=userProfileSerializer
+    permission_classes=[IsOwnerProfileOrReadOnly, IsAuthenticated]
