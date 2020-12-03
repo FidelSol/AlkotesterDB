@@ -5,7 +5,6 @@
               content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
               {% load static %}
-
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
@@ -26,11 +25,24 @@
         <br>
         <br>
             <hr class="mt-0 mb-4">
-        <nav>
-            <a href="{% url 'index' %}"><b>Список сотрудников</b></a>
-            <a href="{% url 'fail' %}"><b>Сотрудники, провалившие тест</b></a>
-            <a href="{% url 'set' %}"><b>Добавить по форме HTML</b></a>
-        </nav>
+       <ul class="nav nav-pills">
+            <li class="nav-item">
+            <a class="nav-item nav-link active" href="{% url 'index' %}"><b>Список сотрудников</b></a>
+                </li>
+           <li class="nav-item">
+            <a class="nav-item nav-link active" href="{% url 'fail' %}"><b>Сотрудники, провалившие тест</b></a>
+               </li>
+           <li class="nav-item">
+            <a class="nav-item nav-link active" href="{% url 'set' %}"><b>Добавить информацию</b></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Авторизация</a>
+                <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+                <a class="dropdown-item" href="{% url 'password_reset' %}">Сбросить пароль</a>
+                </div>
+            </li>
+        </ul>
         <section>
             {% block main %}
             {% endblock %}

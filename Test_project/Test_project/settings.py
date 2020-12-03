@@ -62,7 +62,9 @@ SWAGGER_SETTINGS = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = '/poll'
+LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = 'login/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

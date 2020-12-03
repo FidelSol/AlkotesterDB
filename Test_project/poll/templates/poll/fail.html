@@ -1,9 +1,22 @@
 {% extends "poll/layout/base.html" %}
 
 {% block main %}
+<br>
+<br>
+<table class="table">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">ФИО</th>
+    </tr>
+  </thead>
 {% for personal in personals %}
-<div class="box_text">
-    <p><b>ID: {{ personal.personal_id }} ФИО: </b><a href="{% url 'detail' personal.pk %}">{{ personal.full_name }}</a></p>
-</div>
+<tbody>
+    <tr>
+        <th scope="row">{{ personal.personal_id }}</th>
+        <td><a href="{% url 'detail' personal.pk %}"><b>{{ personal.full_name }}</b></a></b></td>
+    </tr>
+    </tbody>
 {% endfor %}
+    </table>
 {% endblock %}

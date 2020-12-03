@@ -6,20 +6,22 @@ from rest_framework.permissions import IsAuthenticated
 
 from .license import IsOwnerProfileOrReadOnly
 from .models import Personal, Photo, Tests, userProfile
-from .forms import TestsForm, PhotoForm
+from .forms import TestsForm
 from django.core.files.storage import FileSystemStorage
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, userProfileSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly
 
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     personals = Personal.objects.all()
     context = {'personals': personals}
     return render(request, 'poll/index.html', context)
 
-
+@login_required
 def detail(request, personal_id):
     persona = Personal.objects.get(pk = personal_id)
     photos = Photo.objects.filter(personal__personal_id=personal_id)
@@ -27,13 +29,14 @@ def detail(request, personal_id):
     context = {'persona': persona, 'photos': photos, 'tests': tests}
     return render(request, 'poll/detail.html', context)
 
+@login_required
 def test_fail(request):
    tests = Tests.objects.filter(result = False)
    personals = Personal.objects.filter(tests__result = False)
    context = {'tests': tests, 'personals': personals}
    return render(request, 'poll/fail.html', context)
 
-
+@login_required
 def recieve_form(request):
     value_1 = request.POST.get('full_name')
     value_2 = request.POST.get('ext_id')
@@ -69,18 +72,6 @@ def recieve_form(request):
         pass
     context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'personals': personals, 'test': test, 'form_1': form_1, 'photos': photos}
     return render(request, 'poll/set.html', context)
-
-def add_photo(request):
-    if request.method == 'POST':
-        form = PhotoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return render(request, 'poll/tests.html')
-    else:
-        form = PhotoForm()
-    return render(request, 'poll/tests.html', {
-        'form': form
-    })
 
 class TestsView(ListCreateAPIView):
     queryset = Tests.objects.all()
