@@ -1,0 +1,8 @@
+{% extends "poll/layout/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+<p>Вы вышли!</p>
+<a  href="{% url 'login' %}">Log in again</a>
+
+{% endblock %}

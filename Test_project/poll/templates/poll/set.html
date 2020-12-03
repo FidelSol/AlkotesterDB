@@ -3,7 +3,10 @@
 {% load crispy_forms_tags %}
 
 {% block main %}
-<div class="container">
+<br>
+<br>
+<div class="container-fluid">
+    <h2>ДОБАВИТЬ ИНФОРМАЦИЮ</h2>
     <form id="personal" method="post" enctype="multipart/form-data">{% csrf_token %}
         <br>
         <div class="row">
@@ -43,10 +46,6 @@
         <label><b>Результат теста:</b></label>
         <p><input type="checkbox" name="result" id="result" form="personal"></p>
         <button type="submit" class="btn btn-success">Добавить</button></form>
-
-
-
-
 
 </div>
 <script type="text/javascript">
