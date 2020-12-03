@@ -14,6 +14,20 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
         <title>{% block title %} Алкотестер {% endblock %} - Список сотрудников</title>
+        <style>
+  header {
+    background-color: #dfdfdf;
+    text-align: center;
+  }
+  footer{
+    margin-left: -15px;
+    text-align: center;
+    height: 45px;
+    width: 100%;
+    color:#fff;
+    background-color:#434445;
+  }
+  </style>
     </head>
     <body>
     <div class="container">
@@ -50,8 +64,10 @@
         </div>
         </div>
         </div>
-    <div class="footer">
-	Copyright &copy; 2020
+    </body>
+    <body class="d-flex flex-column min-vh-100">
+    <div class="wrapper flex-grow-1"></div>
+    <footer>Copyright &copy; 2020</footer>
 	</div>
     </body>
 </html>
