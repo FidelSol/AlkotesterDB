@@ -22,7 +22,10 @@ from django.conf.urls import url
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from poll.views import TestsView, SingleTestsView, PhotoView, SinglePhotoView, UserView, SingleUserView
+from poll.views import TestsViewSet, PhotoView, SinglePhotoView, UserView, SingleUserView
+from rest_framework.routers import DefaultRouter
+
+
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -36,6 +39,9 @@ schema_view = get_schema_view(
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
+
+router = DefaultRouter()
+router.register('api/v1/tests', TestsViewSet, basename='Tests')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,13 +58,11 @@ urlpatterns = [
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api-auth/', include('rest_framework.urls')),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.jwt')),
-    path('tests/', TestsView.as_view(),),
-    path('tests/<int:pk>/', SingleTestsView.as_view(),),
-    path('photos/', PhotoView.as_view(),),
-    path('photos/<int:pk>/', SinglePhotoView.as_view(),),
-    path('users/', UserView.as_view()),
-    path('users/<int:pk>/', SingleUserView.as_view()),
+    path('api/v1/auth/', include('djoser.urls')),
+    path('api/v1/auth/', include('djoser.urls.jwt')),
+    path('api/v1/photos/', PhotoView.as_view(),),
+    path('api/v1/photos/<int:pk>/', SinglePhotoView.as_view(),),
+    path('api/v1/users/', UserView.as_view()),
+    path('api/v1/users/<int:pk>/', SingleUserView.as_view()),
     path('', include('poll.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + router.urls + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
