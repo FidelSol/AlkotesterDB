@@ -13,6 +13,10 @@ pipfile = "*"
 bootstrap4 = "*"
 drf-yasg = "*"
 djoser = "*"
+django-datatable-view = "*"
+pipenv = "*"
+pip = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
