@@ -1,19 +1,24 @@
 
 from django.shortcuts import render
+from requests import Response
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
+from rest_framework.viewsets import GenericViewSet
 
-from .license import IsOwnerProfileOrReadOnly
-from .models import Personal, Photo, Tests, userProfile
+from .models import Personal, Photo, Tests
 from .forms import TestsForm
 from django.core.files.storage import FileSystemStorage
-from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, userProfileSerializer
+from .serializers import TestsSerializer, PhotoSerializer, UserSerializer
 from django.contrib.auth.models import User
-from rest_framework import permissions
+from rest_framework import permissions, viewsets
 from .permissions import IsOwnerOrReadOnly
 
 from django.contrib.auth.decorators import login_required
+from .utils import serialize_bootstraptable
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+
+from rest_framework import mixins
+
 
 @login_required
 def index(request):
@@ -73,19 +78,25 @@ def recieve_form(request):
     context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'personals': personals, 'test': test, 'form_1': form_1, 'photos': photos}
     return render(request, 'poll/set.html', context)
 
-class TestsView(ListCreateAPIView):
+class MyTemplateHTMLRenderer(TemplateHTMLRenderer):
+    def get_template_context(self, data, renderer_context):
+        response = renderer_context['response']
+        if response.exception:
+            data['status_code'] = response.status_code
+        return {'data': data}
+
+class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    renderer_classes = (MyTemplateHTMLRenderer, JSONRenderer,)
+    template_name = 'poll/tests_table.html'
+    parser_classes = [JSONParser]
 
-    def perform_create(self, serializer):
-        personal = get_object_or_404(Personal, id=self.request.data.get('personal_id'))
-        return serializer.save(personal=personal)
-
-class SingleTestsView(RetrieveUpdateDestroyAPIView):
-    queryset = Tests.objects.all()
-    serializer_class = TestsSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    def get(self, request, format=None):
+        tests = Tests.objects.all()
+        content = {'tests': tests}
+        return Response(content)
 
 class PhotoView(ListCreateAPIView):
     queryset = Photo.objects.all()
@@ -113,6 +124,21 @@ class UserView(ListCreateAPIView):
 class SingleUserView(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+
+def html_for_json(request, *args, **kwargs):
+    queryset = Tests.objects.all()
+    json = serialize_bootstraptable(queryset)
+    context = dict(json=json)
+    return render(request, 'poll/bootstrap_table.html', context)
+
+
+
+
+
+
+
 
 
 
