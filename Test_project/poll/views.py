@@ -3,7 +3,7 @@ from django.shortcuts import render
 from requests import Response
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
-from rest_framework.viewsets import GenericViewSet
+
 
 from .models import Personal, Photo, Tests
 from .forms import TestsForm
@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 from .utils import serialize_bootstraptable
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 
-from rest_framework import mixins
+
 
 
 @login_required
@@ -88,15 +88,9 @@ class MyTemplateHTMLRenderer(TemplateHTMLRenderer):
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     renderer_classes = (MyTemplateHTMLRenderer, JSONRenderer,)
     template_name = 'poll/tests_table.html'
     parser_classes = [JSONParser]
-
-    def get(self, request, format=None):
-        tests = Tests.objects.all()
-        content = {'tests': tests}
-        return Response(content)
 
 class PhotoView(ListCreateAPIView):
     queryset = Photo.objects.all()

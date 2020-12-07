@@ -41,7 +41,7 @@ schema_view = get_schema_view(
 )
 
 router = DefaultRouter()
-router.register('api/v1/tests', TestsViewSet, basename='Tests')
+router.register(r'api/v1/tests', TestsViewSet, basename='Tests')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
