@@ -221,10 +221,21 @@
     })
     $remove.click(function () {
       var ids = getIdSelections()
-      $table.bootstrapTable('remove', {
-        field: 'tests_id',
-        values: tests_ids
+
+
+      $.ajax({
+          url: "/api/v1/tests/" + ids,
+          method: "delete",
+          dataType: "json",
+          success: function(){
+            $table.bootstrapTable('remove', {
+              field: 'tests_id',
+              values: ids
+            })
+            }
       })
+
+
       $remove.prop('disabled', true)
     })
 }
