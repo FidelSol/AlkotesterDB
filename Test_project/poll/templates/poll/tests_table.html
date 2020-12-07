@@ -109,7 +109,7 @@
 
     function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
-      return row.id
+      return row.tests_id
         })
     }
 
@@ -222,19 +222,20 @@
     $remove.click(function () {
       var ids = getIdSelections()
 
+    ids.forEach(function(item, index, array) {
 
       $.ajax({
-          url: "/api/v1/tests/" + ids,
+          url: "/api/v1/tests/" + ids[index] +"/",
           method: "delete",
           dataType: "json",
           success: function(){
             $table.bootstrapTable('remove', {
               field: 'tests_id',
-              values: ids
+              values: ids[index],
             })
             }
+          })
       })
-
 
       $remove.prop('disabled', true)
     })
