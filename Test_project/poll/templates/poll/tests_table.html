@@ -1,5 +1,5 @@
 {% extends "poll/layout/base.html" %}
-
+{% load rest_framework %}
 
 {% block main %}
 <style>
@@ -71,15 +71,38 @@
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
+<div class="btn-group">
+  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Добавить
+  </button>
+  <div class="dropdown-menu dropdown-menu-right">
+  <form class="px-4 py-3" method="post" id="ajax_form" action="">
+    <div class="form-group">
+    <div class="row">
+
+
+      <div class="col">
+        <input type="datetime-local"  class="form-control" name="expected_time" placeholder="expected_time" /><br>
+      </div>
+      <div class="col">
+        <input type="datetime-local" class="form-control" name="result_time" placeholder="result_time" /><br>
+      </div>
+      <div class="col">
+        <input type="checkbox" class="form-control" name="result" placeholder="result: true/false" /><br>
+      </div>
+      <div class="col">
+        <input type="button" class="btn btn-primary" id="btn" value="Добавить" />
+      </div>
+    </div>
+    </div>
+</form></div></div>
 </div>
 
-
+<div id="result_form"></div>
 
 <table
   id="table"
-
   data-toggle="table"
-
   data-toolbar="#toolbar"
   data-search="true"
   data-show-refresh="true"
@@ -99,6 +122,9 @@
   data-show-footer="true"
   data-side-pagination="server"
   data-url="{% url 'Tests-list' %}"
+
+  data-buttons="buttons"
+
   data-response-handler="responseHandler">
 
 
@@ -253,6 +279,40 @@
 
 })
 }
+
+
+$(function () {
+        $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
+        $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
+      });
+
+
+
+
+
+$( document ).ready(function() {
+    $("#btn").click(
+		function(){
+			sendAjaxForm('result_form', 'ajax_form', "/api/v1/tests/");
+			return false;
+		}
+	);
+});
+
+function sendAjaxForm(result_form, ajax_form, url) {
+    $.ajax({
+        url: "/api/v1/tests/",
+        type: "POST",
+        success: function(response) {
+        	result = $.parseJSON(response);
+        	$('#result_form').html('Все охуенно!');
+    	},
+    	error: function(response) { // Данные не отправлены
+            $('#result_form').html('Ошибка. Данные не отправлены.');
+    	}
+ 	});
+}
+
 
 
 

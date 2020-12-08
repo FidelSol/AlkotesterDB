@@ -1,6 +1,6 @@
 
 from django.shortcuts import render
-from requests import Response
+
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 
@@ -91,6 +91,10 @@ class TestsViewSet(viewsets.ModelViewSet):
     renderer_classes = (MyTemplateHTMLRenderer, JSONRenderer,)
     template_name = 'poll/tests_table.html'
     parser_classes = [JSONParser]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.save(serializer.data)
 
 class PhotoView(ListCreateAPIView):
     queryset = Photo.objects.all()
