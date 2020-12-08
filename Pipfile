@@ -17,6 +17,7 @@ django-datatable-view = "*"
 pipenv = "*"
 pip = "*"
 django-cors-headers = "*"
+django-tables2-bootstrap4 = "*"
 
 [dev-packages]
 

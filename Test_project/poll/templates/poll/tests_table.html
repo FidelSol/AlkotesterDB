@@ -77,6 +77,9 @@
 
 <table
   id="table"
+
+  data-toggle="table"
+
   data-toolbar="#toolbar"
   data-search="true"
   data-show-refresh="true"
@@ -98,6 +101,7 @@
   data-url="{% url 'Tests-list' %}"
   data-response-handler="responseHandler">
 
+
 </table>
 
 
@@ -115,7 +119,7 @@
 
     function responseHandler(res) {
     $.each(res.rows, function (i, row) {
-      row.state = $.inArray(row.id, selections) !== -1
+      row.state = $.inArray(row.tests_id, selections) !== -1
     })
     return res
     }
@@ -159,6 +163,8 @@
 
  function initTable() {
     $table.bootstrapTable('destroy').bootstrapTable({
+    height: 550,
+    locale: $('#locale').val(),
     columns: [
         [{
           field: 'state',
@@ -216,30 +222,39 @@
         selections = getIdSelections()
       })
 
+
+
+
+
+
  $table.on('all.bs.table', function (e, name, args) {
       console.log(name, args)
     })
-    $remove.click(function () {
-      var ids = getIdSelections()
 
-    ids.forEach(function(item, index, array) {
+ $remove.click(function () {
+               var ids = getIdSelections()
 
-      $.ajax({
+
+ ids.forEach(function(value, index, ids) {
+        $.ajax({
           url: "/api/v1/tests/" + ids[index] +"/",
           method: "delete",
           dataType: "json",
           success: function(){
             $table.bootstrapTable('remove', {
               field: 'tests_id',
-              values: ids[index],
+              values: ids,
             })
-            }
-          })
-      })
+          }
+        })
+ })
 
-      $remove.prop('disabled', true)
-    })
+  $remove.prop('disabled', true)
+
+})
 }
+
+
 
 
 
