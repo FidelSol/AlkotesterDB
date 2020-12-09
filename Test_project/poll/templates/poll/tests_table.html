@@ -1,7 +1,23 @@
-{% extends "poll/layout/base.html" %}
-{% load rest_framework %}
+<!doctype html>
+<html lang="en">
+ <head>
+<meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% block main %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<link href="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.css" rel="stylesheet">
+</head>
+ <body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.1/locale/bootstrap-table-ru-RU.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
 <style>
   .select,
   #locale {
@@ -11,6 +27,7 @@
     margin-right: 10px;
   }
 </style>
+
 <br>
 <br><br>
 <div class="select">
@@ -67,36 +84,53 @@
 
 
 
+
+
+
+
 <div id="toolbar">
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
-<div class="btn-group">
-  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Добавить
-  </button>
-  <div class="dropdown-menu dropdown-menu-right">
+
+  <button id="button" class="btn btn-secondary">Добавить</button>
+  <button id="button_load" class="btn btn-secondary">Загрузить</button>
+</div>
+
+
+
   <form class="px-4 py-3" method="post" id="ajax_form" action="">
-    <div class="form-group">
+    <div class="input-group mb-3">
     <div class="row">
 
+      <div class="col">
+          <input type="number" class="form-control" name="tests_id" placeholder="tests_id" /><br>
+      </div>
 
       <div class="col">
-        <input type="datetime-local"  class="form-control" name="expected_time" placeholder="expected_time" /><br>
+          <input type="number" class="form-control" name="personal_id" placeholder="personal_id" /><br>
       </div>
+
       <div class="col">
-        <input type="datetime-local" class="form-control" name="result_time" placeholder="result_time" /><br>
+
       </div>
+
       <div class="col">
-        <input type="checkbox" class="form-control" name="result" placeholder="result: true/false" /><br>
+
       </div>
+
+      <div class="col">
+        <input type="checkbox" class="form-control" name="result" placeholder="result" /><br>
+      </div>
+
       <div class="col">
         <input type="button" class="btn btn-primary" id="btn" value="Добавить" />
       </div>
+
     </div>
     </div>
-</form></div></div>
-</div>
+  </form>
+
 
 <div id="result_form"></div>
 
@@ -123,6 +157,7 @@
   data-side-pagination="server"
   data-url="{% url 'Tests-list' %}"
 
+
   data-buttons="buttons"
 
   data-response-handler="responseHandler">
@@ -136,6 +171,8 @@
     var $table = $('#table')
     var $remove = $('#remove')
     var selections = []
+     var $button = $('#button')
+     var $button_load = $('#button_load')
 
     function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
@@ -281,11 +318,6 @@
 }
 
 
-$(function () {
-        $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
-        $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
-      });
-
 
 
 
@@ -303,16 +335,69 @@ function sendAjaxForm(result_form, ajax_form, url) {
     $.ajax({
         url: "/api/v1/tests/",
         type: "POST",
+        dataType: "html",
+        data: $("#"+ajax_form).serialize(),
         success: function(response) {
         	result = $.parseJSON(response);
-        	$('#result_form').html('Все охуенно!');
+        	$('#result_form').html('EEEEE');
     	},
-    	error: function(response) { // Данные не отправлены
+    	error: function(response) {
             $('#result_form').html('Ошибка. Данные не отправлены.');
     	}
  	});
 }
 
+
+
+ $(function() {
+    $button.click(function () {
+     var user_answer_1 = prompt("Введите tests_id: ")
+      var user_answer_2 = prompt("Введите personal_id: ")
+      var user_answer_3 = prompt("Введите expected_time: ")
+      var user_answer_4 = prompt("Введите result_time: ")
+      var user_answer_5 = prompt("Введите result: ")
+      $table.bootstrapTable('insertRow', {
+        index: 0,
+        row: {
+          tests_id: user_answer_1,
+          personal_id: user_answer_2,
+          expected_time: user_answer_3 ,
+          result_time: user_answer_4,
+          result: user_answer_5,
+          operate: 'operate',
+        }
+      })
+    })
+  })
+
+  $(function() {
+    $button_load.click(function () {
+    var user_answer_1 = prompt("Введите tests_id: ")
+      var user_answer_2 = prompt("Введите personal_id: ")
+      var user_answer_3 = prompt("Введите expected_time: ")
+      var user_answer_4 = prompt("Введите result_time: ")
+      var user_answer_5 = prompt("Введите result: ")
+          $.ajax({
+                url: "/api/v1/tests/",
+                type: "POST",
+                dataType: "json",
+
+                data: JSON.stringify(({tests_id: $(user_answer_1),
+                        personal_id: $(user_answer_2),
+                        expected_time: $(user_answer_3) ,
+                        result_time: $(user_answer_4),
+                        result: $(user_answer_5)}).serialize()),
+                success: function(data) {
+        	      result = $.parseJSON(data);
+        	      alert('EEEEE');
+    	        },
+    	        error: function(response) {
+                  alert('Не отправлено!');
+    	        }
+ 	      });
+
+    })
+  })
 
 
 
@@ -325,4 +410,5 @@ $(function() {
   })
 
   </script>
-{% endblock %}
+</body>
+</html>

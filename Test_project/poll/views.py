@@ -1,16 +1,17 @@
 
 from django.shortcuts import render
+from rest_framework.fields import empty
 
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
-
+from rest_framework.response import Response
 
 from .models import Personal, Photo, Tests
 from .forms import TestsForm
 from django.core.files.storage import FileSystemStorage
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer
 from django.contrib.auth.models import User
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, status
 from .permissions import IsOwnerOrReadOnly
 
 from django.contrib.auth.decorators import login_required
@@ -92,9 +93,18 @@ class TestsViewSet(viewsets.ModelViewSet):
     template_name = 'poll/tests_table.html'
     parser_classes = [JSONParser]
 
-    def create(self, request, *args, **kwargs):
+
+
+
+    def create(self, request, format=None, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.save(serializer.data)
+        if serializer.is_valid():
+            serializer.save(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data)
+
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PhotoView(ListCreateAPIView):
     queryset = Photo.objects.all()

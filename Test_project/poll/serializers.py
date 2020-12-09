@@ -1,12 +1,26 @@
+
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework.fields import empty
+
 from .models import Tests, Photo, userProfile
 
 
 class TestsSerializer(serializers.ModelSerializer):
+    tests_id = serializers.IntegerField(required=False)
+    personal_id = serializers.IntegerField(required=False)
+    expected_time = serializers.DateTimeField()
+    result_time = serializers.DateTimeField()
+    result = serializers.BooleanField()
+
     class Meta:
         model = Tests
         fields = ('tests_id', 'personal_id', 'expected_time', 'result_time', 'result')
+
+    def create(self, validated_data):
+        return Tests.objects.create(**validated_data)
+
+
 
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
