@@ -1,9 +1,11 @@
-
+from django.core.serializers import json
+from django.http import JsonResponse
 from django.shortcuts import render
-from rest_framework.fields import empty
+
 
 from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from .models import Personal, Photo, Tests
@@ -89,21 +91,8 @@ class MyTemplateHTMLRenderer(TemplateHTMLRenderer):
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
-    renderer_classes = (MyTemplateHTMLRenderer, JSONRenderer,)
-    template_name = 'poll/tests_table.html'
     parser_classes = [JSONParser]
 
-
-
-
-    def create(self, request, format=None, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.data)
-
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PhotoView(ListCreateAPIView):
@@ -139,10 +128,7 @@ def html_for_json(request, *args, **kwargs):
     queryset = Tests.objects.all()
     json = serialize_bootstraptable(queryset)
     context = dict(json=json)
-    return render(request, 'poll/bootstrap_table.html', context)
-
-
-
+    return render(request, 'poll/tests_table.html', context)
 
 
 
