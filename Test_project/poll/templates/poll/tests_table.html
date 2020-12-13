@@ -17,7 +17,7 @@
 <script src="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table-locale-all.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.1/locale/bootstrap-table-ru-RU.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.18.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
-<script src="/static/poll/js/jquery.cookie.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 <style>
   .select,
@@ -97,9 +97,9 @@
   <button id="button_load" class="btn btn-secondary">Загрузить</button>
 </div>
 
-<p id="demo"></p>
+ <div id="result_form"></div>
 
-  <form class="px-4 py-3" method="post" id="myForm" OnSubmit="return CuteAjax();" action="{% url 'Tests-list' %}">
+  <form class="px-4 py-3" method="post" id="ajax_form" action="">
     {% csrf_token %}
     <div class="input-group mb-3">
     <div class="row">
@@ -121,19 +121,21 @@
       </div>
 
       <div class="col">
-        <input type="checkbox" class="form-control" name="result" placeholder="result" /><br>
+        <div class="form-check">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" name="result" checked>result
+        </label>
+        </div>
       </div>
 
       <div class="col">
-        <input type="submit" value="Submit">
+        <input type="button" id="btn" value="Отправить" />
       </div>
 
     </div>
     </div>
   </form>
 
-
-<div id="result_form"></div>
 
 <table
   id="table"
@@ -315,7 +317,7 @@
 
 function Boolean(string){
     switch(string.toLowerCase().trim()){
-        case "true": case "yes": case "1": return true;
+        case "true": case "yes": case "1": case "on":  return true;
         case "false": case "no": case "0": case null: return false;
         default: return Boolean(string);
     }
@@ -337,50 +339,53 @@ $.ajaxSetup({
 });
 
 
-      var elements = document.getElementById("myForm").elements;
-      var data = {};
-      for(var i = 0 ; i < elements.length ; i++){
-        var item = elements.item(i);
-        data[item.name] = item.value;
-       }
-      console.log(data);
-      document.getElementById("demo").innerHTML = JSON.stringify(data);
 
 
-function CuteAjax() {
-    $('#myForm input[type="submit"]').click(function(e) {
-      var elements = document.getElementById("myForm").elements;
-      var data = {};
-      for(var i = 0 ; i < elements.length ; i++){
-        var item = elements.item(i);
-        data[item.name] = item.value;
-       }
-      alert(data.get('tests_id'))
-      document.getElementById("demo").innerHTML = JSON.stringify(data);
+
+$(function() {
+  $("#btn").click(function(){
+			var elements = document.getElementById("ajax_form").elements;
+            var data = {};
+            for(var i = 1 ; i < 6 ; i++){
+            var item = elements.item(i);
+            data[item.name] = item.value;
+		    }
+
+		    var tests_id = parseInt(data.tests_id)
+            var personal_id = parseInt(data.personal_id)
+            var expected_time = data.expected_time
+            var result_time = data.result_time
+            if(data.result == "on") { var result = true
+            } else { result = false }
 
     $.ajax({
-      url: "{% url 'Tests-list' %}",
-      type: "POST",
-      dataType: "json",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({'tests_id': parseInt(data.get('tests_id')),
-                        'personal_id': parseInt(data.get('personal_id')),
-                        'expected_time': data.get('expected_time'),
-                        'result_time': data.get('result_time'),
-                        'result': Boolean(data.get('result'))}),
-      success: function(response) {
-        result = $.parseJSON(response);
-        $('#result_form').html('EEEEE');
-      },
-      error: function(response) {
-        console.log($data);
-        $('#result_form').html('Ошибка. Данные не отправлены.');
-      }
-    });
+        url: "/api/v1/tests/",
+        type: "POST",
+        dataType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify({'tests_id': tests_id,
+                        'personal_id': personal_id,
+                        'expected_time': expected_time,
+                        'result_time': result_time,
+                        'result': result}),
+        success: function(response) {
+        	result = $.parseJSON(response);
+        	$('#result_form').html('Заебись!');
+        	console.log(JSON.stringify(data));
+    	},
+    	error: function(response) {
+    	    console.log(JSON.stringify({'tests_id': tests_id,
+                        'personal_id': personal_id,
+                        'expected_time': expected_time,
+                        'result_time': result_time,
+                        'result': result}))
+    	    console.log(JSON.stringify(expected_time))
+            $('#result_form').html('Ошибка. Данные не отправлены.');
+    	}
+ 	});
+ })
+})
 
-
-    });
-}
 
 
 
