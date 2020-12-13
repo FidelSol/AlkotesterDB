@@ -91,7 +91,7 @@ class MyTemplateHTMLRenderer(TemplateHTMLRenderer):
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
-    parser_classes = [JSONParser]
+    parser_classes = [JSONParser, FormParser, MultiPartParser]
 
 
 
