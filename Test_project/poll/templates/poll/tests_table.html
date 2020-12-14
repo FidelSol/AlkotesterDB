@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <link href="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous">
-</head>
+<link rel="icon" href="https://getbootstrap.com/docs/4.5/assets/img/favicons/favicon.ico">
+ </head>
  <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -21,7 +22,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
 
 
 <style>
@@ -32,6 +33,12 @@
   .like {
     margin-right: 10px;
   }
+
+  .form-group {
+     width: 100%;
+     height: 100%;
+}
+
 </style>
 
 <br>
@@ -90,65 +97,111 @@
 
 
 
-
-
+<br>
+<ul id="output"></ul>
 
 
 <div id="toolbar">
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+
+<div class="btn-group mr-2" role="group" aria-label="First group">
   <button id="remove" class="btn btn-danger" disabled>
     <i class="fa fa-trash"></i> Delete
   </button>
-
-  <button id="button_load" class="btn btn-secondary">Загрузить</button>
 </div>
 
- <div id="result_form"></div>
-
+<div class="btn-group mr-2" role="group" aria-label="Second group">
+<div class="dropdown mr-4">
+    <button type="button" class="btn btn-secondary dropdown-toggle" style="width: 200px;" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+      Загрузить
+    </button>
+<div class="dropdown-menu">
   <form class="px-4 py-3" method="post" id="ajax_form" enctype="multipart/form-data" action="">
     {% csrf_token %}
-    <div class="input-group mb-3">
-    <div class="row">
 
-      <div class="col">
+        <div class="form-group">
           <input type="number" class="form-control" name="tests_id" placeholder="tests_id" /><br>
-      </div>
+        </div>
 
-      <div class="col">
+        <div class="form-group">
           <input type="number" class="form-control" name="personal_id" placeholder="personal_id" /><br>
-      </div>
+        </div>
 
-      <div class="col">
+        <div class="form-group">
           <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" name="expected_time" data-target="#datetimepicker1"/>
                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
-      </div>
+        </div>
 
-      <div class="col">
+        <div class="form-group">
           <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" name="result_time" data-target="#datetimepicker2"/>
                     <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
-      </div>
+        </div>
 
-      <div class="col">
+        <div class="form-group">
         <div class="form-check">
         <label class="form-check-label">
         <input class="form-check-input" type="checkbox" name="result" checked>result
         </label>
         </div>
-      </div>
+        </div>
 
-      <div class="col">
-        <input type="button" id="btn" value="Отправить" />
-      </div>
 
-    </div>
-    </div>
+        <input type="submit" class="btn btn-primary" id="btn" value="Загрузить" />
+
   </form>
+</div>
+</div>
+</div>
 
+
+<div class="btn-group" role="group" aria-label="Third group">
+<div class="dropdown mr-4">
+    <button type="button" class="btn btn-secondary dropdown-toggle" style="width: 200px;" id="dropdownMenuOffset_put" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+      Изменить
+    </button>
+<div class="dropdown-menu">
+  <form class="px-4 py-3" method="post" id="ajax_put" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <div class="form-group">
+          <div class="input-group date" id="datetimepicker1_put" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" name="expected_time_put" data-target="#datetimepicker1_put"/>
+                    <div class="input-group-append" data-target="#datetimepicker1_put" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div></div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group date" id="datetimepicker2_put" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" name="result_time_put" data-target="#datetimepicker2_put"/>
+                    <div class="input-group-append" data-target="#datetimepicker2_put" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div></div>
+        </div>
+
+        <div class="form-group">
+        <div class="form-check">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" name="result_put" checked>result
+        </label>
+        </div>
+        </div>
+
+
+        <input type="submit" class="btn btn-primary" id="btn_put" value="Изменить" />
+
+  </form>
+</div>
+</div>
+</div>
+
+</div>
+</div>
 
 <table
   id="table"
@@ -173,7 +226,6 @@
   data-side-pagination="server"
   data-url="{% url 'Tests-list' %}"
 
-
   data-buttons="buttons"
 
   data-response-handler="responseHandler">
@@ -188,7 +240,6 @@
     var $remove = $('#remove')
     var selections = []
     var $button = $('#button')
-    var $button_load = $('#button_load')
     var csrftoken = $.cookie('csrftoken');
 
     function getIdSelections() {
@@ -197,12 +248,16 @@
         })
     }
 
+
+
     function responseHandler(res) {
     $.each(res.rows, function (i, row) {
       row.state = $.inArray(row.tests_id, selections) !== -1
     })
     return res
     }
+
+
 
     function detailFormatter(index, row) {
     var html = []
@@ -302,13 +357,14 @@
         selections = getIdSelections()
       })
 
+
+
  $table.on('all.bs.table', function (e, name, args) {
       console.log(name, args)
     })
 
  $remove.click(function () {
                var ids = getIdSelections()
-
 
  ids.forEach(function(value, index, ids) {
         $.ajax({
@@ -355,6 +411,8 @@ $.ajaxSetup({
 $(function () {
         $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
         $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
+        $("#datetimepicker1_put").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
+        $("#datetimepicker2_put").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
       });
 
 
@@ -366,7 +424,7 @@ $(function() {
             var item = elements.item(i);
             data[item.name] = item.value;
 		    }
-             console.log(data.expected_time)
+
             var csrfmiddlewaretoken = data.csrfmiddlewaretoken
 		    var tests_id = parseInt(data.tests_id)
             var personal_id = parseInt(data.personal_id)
@@ -387,7 +445,6 @@ $(function() {
                         'result_time': result_time,
                         'result': result},
         success: function(response) {
-        	result = $.parseJSON(response);
         	$('#result_form').html('Отправлено!');
         	console.log(JSON.stringify(data));
     	},
@@ -406,37 +463,80 @@ $(function() {
 
 
 
+$(function() {
+
+var checkedRows = [];
+
+$('#table').on('check.bs.table', function (e, row) {
+  checkedRows.push({tests_id: row.tests_id});
+  console.log(checkedRows);
+});
+
+$('#table').on('uncheck.bs.table', function (e, row) {
+  $.each(checkedRows, function(index, value) {
+    if (value.tests_id === row.tests_id) {
+      checkedRows.splice(index,1);
+    }
+  });
+  console.log(checkedRows);
+});
+
+$("#output").empty();
+$.each(checkedRows, function(index, value) {
+$('#output').append($('<li></li>').text(value.tests_id));
+});
+
+    $("#btn_put").click(function(){
 
 
 
-  $(function() {
-    $button_load.click(function () {
-      var user_answer_1 = parseInt(prompt("Введите tests_id: "))
-      var user_answer_2 = parseInt(prompt("Введите personal_id: "))
-      var user_answer_3 = prompt("Введите expected_time: ")
-      var user_answer_4 = prompt("Введите result_time: ")
-      var user_answer_5 = Boolean(prompt("Введите result: "))
-          $.ajax({
-                url: "/api/v1/tests/",
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
+			var elements = document.getElementById("ajax_put").elements;
+            var data = {};
+            for(var i = 0 ; i < length.elements ; i++){
+            var item = elements.item(i);
+            data[item.name] = item.value;
+		    }
+
+            var expected_time_put = data.expected_time_put
+            var result_time_put = data.result_time_put
+            var result_put = Boolean(data.result_put)
+
+           checkedRows.forEach(function(value, index, checkedRows) {
+            $.ajax({
+                url: "/api/v1/tests/" + checkedRows[index] +"/",
+                type: "PUT",
+                dataType: "application/json; charset=utf-8",
                 dataType: "json",
-                data: JSON.stringify({'tests_id': user_answer_1,
-                        'personal_id': user_answer_2,
-                        'expected_time': user_answer_3,
-                        'result_time': user_answer_4,
-                        'result': user_answer_5}),
+                data: {
+                    'expected_time': expected_time_put,
+                    'result_time': result_time_put,
+                    'result': result_put },
                 success: function(response) {
-        	      result = $.parseJSON(response);
-        	      alert('EEEEE');
-    	        },
-    	        error: function(response) {
-                  alert('Не отправлено!');
-    	        }
- 	      });
 
-    })
-  })
+                    $table.bootstrapTable('updateRow', {
+                        index: checkedRows[index],
+                        'expected_time': expected_time_put,
+                        'result_time': result_time_put,
+                        'result': result_put
+                    })
+                },
+                error: function(response) {
+                    console.log({
+                    'expected_time': expected_time_put,
+                    'result_time': result_time_put,
+                    'result': result_put});
+                }
+            })})
+
+});
+})
+
+
+
+
+
+
+
 
 $(function() {
     initTable()
