@@ -14,9 +14,10 @@ class PersonalSerializer(serializers.ModelSerializer):
     position = serializers.CharField()
     punishment = serializers.IntegerField()
 
+
     class Meta:
         model = Personal
-        fields = ('personal_id', 'ext_id', 'full_name', 'birth_date', 'position', 'punishment', )
+        fields = ('personal_id', 'ext_id', 'full_name', 'birth_date', 'position', 'punishment')
 
     def create(self, validated_data):
         return Personal.objects.create(**validated_data)

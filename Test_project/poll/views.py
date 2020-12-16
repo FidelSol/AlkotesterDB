@@ -1,4 +1,4 @@
-
+from django.db.models import Prefetch
 from django.shortcuts import render
 
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
@@ -83,7 +83,7 @@ class MyTemplateHTMLRenderer(TemplateHTMLRenderer):
         return {'data': data}
 
 class PersonalsViewSet(viewsets.ModelViewSet):
-    queryset = Personal.objects.all()
+    queryset = Personal.objects.prefetch_related('tests_set').all()
     serializer_class = PersonalSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
 
@@ -113,8 +113,14 @@ def persons_for_json(request, *args, **kwargs):
     context = dict(json=json)
     return render(request, 'api/personal_table.html', context)
 
-
-
+def card_for_json(request, personal_id):
+    persona = Personal.objects.get(pk=personal_id)
+    photos = Photo.objects.filter(personal__personal_id=personal_id)
+    tests = Tests.objects.filter(personal__personal_id=personal_id)
+    json_photos = serialize_bootstraptable(photos)
+    json_tests = serialize_bootstraptable(tests)
+    context = {'persona': persona, 'photos': photos, 'tests': tests, 'json_photos': json_photos, 'json_tests': json_tests}
+    return render(request, 'api/card.html', context)
 
 
 

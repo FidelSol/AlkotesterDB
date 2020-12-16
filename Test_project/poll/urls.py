@@ -15,4 +15,5 @@ urlpatterns = [
     path('set/', views.recieve_form, name='set'),
     path('jsons/tests', views.tests_for_json, name='jsons_tests'),
     path('jsons/personals', views.persons_for_json, name='jsons_personals'),
+    path('jsons/card/<int:personal_id>/', views.card_for_json, name='jsons_card'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
