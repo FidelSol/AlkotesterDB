@@ -1,24 +1,18 @@
-from django.core.serializers import json
-from django.http import JsonResponse
+
 from django.shortcuts import render
 
-
-from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-
 from .models import Personal, Photo, Tests
 from .forms import TestsForm
 from django.core.files.storage import FileSystemStorage
-from .serializers import TestsSerializer, PhotoSerializer, UserSerializer
+from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from django.contrib.auth.models import User
-from rest_framework import permissions, viewsets, status
-from .permissions import IsOwnerOrReadOnly
+from rest_framework import viewsets
+
 
 from django.contrib.auth.decorators import login_required
 from .utils import serialize_bootstraptable
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.renderers import TemplateHTMLRenderer
 
 
 
@@ -88,47 +82,36 @@ class MyTemplateHTMLRenderer(TemplateHTMLRenderer):
             data['status_code'] = response.status_code
         return {'data': data}
 
+class PersonalsViewSet(viewsets.ModelViewSet):
+    queryset = Personal.objects.all()
+    serializer_class = PersonalSerializer
+    parser_classes = [JSONParser, FormParser, MultiPartParser]
+
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
 
-
-
-class PhotoView(ListCreateAPIView):
+class PhotosViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    parser_classes = (FormParser, MultiPartParser)
+    parser_classes = [JSONParser, FormParser, MultiPartParser]
 
-    def perform_create(self, serializer):
-        personal = get_object_or_404(Personal, id=self.request.data.get('personal_id'))
-        return serializer.save(personal=personal)
-
-class SinglePhotoView(RetrieveUpdateDestroyAPIView):
-    queryset = Photo.objects.all()
-    serializer_class = PhotoSerializer
-    parser_classes = (FormParser, MultiPartParser)
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-
-class UserView(ListCreateAPIView):
+class UsersViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-class SingleUserView(RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-
-def html_for_json(request, *args, **kwargs):
+def tests_for_json(request, *args, **kwargs):
     queryset = Tests.objects.all()
     json = serialize_bootstraptable(queryset)
     context = dict(json=json)
-    return render(request, 'poll/tests_table.html', context)
+    return render(request, 'api/tests_table.html', context)
+
+def persons_for_json(request, *args, **kwargs):
+    queryset = Personal.objects.all()
+    json = serialize_bootstraptable(queryset)
+    context = dict(json=json)
+    return render(request, 'api/personal_table.html', context)
 
 
 

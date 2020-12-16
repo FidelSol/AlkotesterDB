@@ -22,9 +22,8 @@ from django.conf.urls import url
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from poll.views import TestsViewSet, PhotoView, SinglePhotoView, UserView, SingleUserView
+from poll.views import PersonalsViewSet, TestsViewSet, PhotosViewSet, UsersViewSet
 from rest_framework.routers import DefaultRouter
-
 
 
 schema_view = get_schema_view(
@@ -41,7 +40,10 @@ schema_view = get_schema_view(
 )
 
 router = DefaultRouter()
+router.register(r'api/v1/personals', PersonalsViewSet, basename='Personals')
 router.register(r'api/v1/tests', TestsViewSet, basename='Tests')
+router.register(r'api/v1/photos', PhotosViewSet, basename='Photos')
+router.register(r'api/v1/users', UsersViewSet, basename='Users')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -60,9 +62,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/auth/', include('djoser.urls')),
     path('api/v1/auth/', include('djoser.urls.jwt')),
-    path('api/v1/photos/', PhotoView.as_view(),),
-    path('api/v1/photos/<int:pk>/', SinglePhotoView.as_view(),),
-    path('api/v1/users/', UserView.as_view()),
-    path('api/v1/users/<int:pk>/', SingleUserView.as_view()),
     path('', include('poll.urls')),
 ] + router.urls + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
