@@ -9,10 +9,10 @@ from .models import Personal, Tests, Photo
 class PersonalSerializer(serializers.ModelSerializer):
     personal_id = serializers.IntegerField(required=False)
     ext_id = serializers.IntegerField(required=False)
-    full_name = serializers.CharField()
-    birth_date = serializers.DateField()
-    position = serializers.CharField()
-    punishment = serializers.IntegerField()
+    full_name = serializers.CharField(required=False)
+    birth_date = serializers.DateField(required=False)
+    position = serializers.CharField(required=False)
+    punishment = serializers.IntegerField(required=False)
 
 
     class Meta:
@@ -25,9 +25,9 @@ class PersonalSerializer(serializers.ModelSerializer):
 class TestsSerializer(serializers.ModelSerializer):
     tests_id = serializers.IntegerField(required=False)
     personal_id = serializers.IntegerField(required=False)
-    expected_time = serializers.DateTimeField()
-    result_time = serializers.DateTimeField()
-    result = serializers.BooleanField()
+    expected_time = serializers.DateTimeField(required=False)
+    result_time = serializers.DateTimeField(required=False)
+    result = serializers.BooleanField(required=False)
 
     class Meta:
         model = Tests
