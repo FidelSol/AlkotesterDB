@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from datetime import datetime
+import datetime
 
 # Create your models here.
 
@@ -51,8 +51,8 @@ class Photo(models.Model):
 class Tests(models.Model):
     tests_id = models.AutoField(primary_key=True)
     personal = models.ForeignKey(Personal, on_delete=models.CASCADE, null=True, blank=True)
-    expected_time = models.DateTimeField(blank=True, null=True, verbose_name="Назначенное время теста", default=datetime.now().strftime("%Y-%m-%d %H:%M"))
-    result_time = models.DateTimeField(blank=True, null=True, verbose_name="Фактическое время сдачи теста", default=datetime.now().strftime("%Y-%m-%d %H:%M"))
+    expected_time = models.DateTimeField(blank=True, null=True, verbose_name="Назначенное время теста")
+    result_time = models.DateTimeField(blank=True, null=True, verbose_name="Фактическое время сдачи теста")
     result = models.BooleanField(default=False, verbose_name="Результат: да/нет")
 
 

@@ -30,10 +30,6 @@
   #locale {
     width: 100%;
   }
-  .like {
-    margin-right: 10px;
-  }
-
   .form-group {
      width: 100%;
      height: 100%;
@@ -45,61 +41,10 @@
 <br><br>
 <div class="select">
   <select class="form-control" id="locale">
-    <option value="af-ZA">af-ZA</option>
-    <option value="ar-SA">ar-SA</option>
-    <option value="ca-ES">ca-ES</option>
-    <option value="cs-CZ">cs-CZ</option>
-    <option value="da-DK">da-DK</option>
-    <option value="de-DE">de-DE</option>
-    <option value="el-GR">el-GR</option>
     <option value="en-US" selected>en-US</option>
-    <option value="es-AR">es-AR</option>
-    <option value="es-CL">es-CL</option>
-    <option value="es-CR">es-CR</option>
-    <option value="es-ES">es-ES</option>
-    <option value="es-MX">es-MX</option>
-    <option value="es-NI">es-NI</option>
-    <option value="es-SP">es-SP</option>
-    <option value="et-EE">et-EE</option>
-    <option value="eu-EU">eu-EU</option>
-    <option value="fa-IR">fa-IR</option>
-    <option value="fi-FI">fi-FI</option>
-    <option value="fr-BE">fr-BE</option>
-    <option value="fr-FR">fr-FR</option>
-    <option value="he-IL">he-IL</option>
-    <option value="hr-HR">hr-HR</option>
-    <option value="hu-HU">hu-HU</option>
-    <option value="id-ID">id-ID</option>
-    <option value="it-IT">it-IT</option>
-    <option value="ja-JP">ja-JP</option>
-    <option value="ka-GE">ka-GE</option>
-    <option value="ko-KR">ko-KR</option>
-    <option value="ms-MY">ms-MY</option>
-    <option value="nb-NO">nb-NO</option>
-    <option value="nl-NL">nl-NL</option>
-    <option value="pl-PL">pl-PL</option>
-    <option value="pt-BR">pt-BR</option>
-    <option value="pt-PT">pt-PT</option>
-    <option value="ro-RO">ro-RO</option>
     <option value="ru-RU">ru-RU</option>
-    <option value="sk-SK">sk-SK</option>
-    <option value="sv-SE">sv-SE</option>
-    <option value="th-TH">th-TH</option>
-    <option value="tr-TR">tr-TR</option>
-    <option value="uk-UA">uk-UA</option>
-    <option value="ur-PK">ur-PK</option>
-    <option value="uz-Latn-UZ">uz-Latn-UZ</option>
-    <option value="vi-VN">vi-VN</option>
-    <option value="zh-CN">zh-CN</option>
-    <option value="zh-TW">zh-TW</option>
   </select>
 </div>
-
-
-
-<br>
-<ul id="output"></ul>
-
 
 <div id="toolbar">
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -120,16 +65,16 @@
     {% csrf_token %}
 
         <div class="form-group">
-          <input type="number" class="form-control" name="tests_id" placeholder="tests_id" /><br>
+          <input type="number" class="form-control" name="tests_id" placeholder="Тест ID" /><br>
         </div>
 
         <div class="form-group">
-          <input type="number" class="form-control" name="personal_id" placeholder="personal_id" /><br>
+          <input type="number" class="form-control" name="personal_id" placeholder="Персон. ID" /><br>
         </div>
 
         <div class="form-group">
           <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" name="expected_time" data-target="#datetimepicker1"/>
+                    <input type="text" class="form-control datetimepicker-input" name="expected_time" data-target="#datetimepicker1" placeholder="Назнач. время"/>
                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
@@ -137,7 +82,7 @@
 
         <div class="form-group">
           <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" name="result_time" data-target="#datetimepicker2"/>
+                    <input type="text" class="form-control datetimepicker-input" name="result_time" data-target="#datetimepicker2" placeholder="Фактич. время"/>
                     <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
@@ -146,7 +91,7 @@
         <div class="form-group">
         <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="result" checked>result
+        <input class="form-check-input" type="checkbox" name="result" placeholder="Результат" checked>result
         </label>
         </div>
         </div>
@@ -172,7 +117,7 @@
       {% csrf_token %}
     <div class="form-group">
           <div class="input-group date" id="datetimepicker1_put" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" name="expected_time_put" data-target="#datetimepicker1_put"/>
+                    <input type="text" class="form-control datetimepicker-input" name="expected_time_put" data-target="#datetimepicker1_put" placeholder="Назнач. время"/>
                     <div class="input-group-append" data-target="#datetimepicker1_put" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
@@ -180,7 +125,7 @@
 
         <div class="form-group">
           <div class="input-group date" id="datetimepicker2_put" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" name="result_time_put" data-target="#datetimepicker2_put"/>
+                    <input type="text" class="form-control datetimepicker-input" name="result_time_put" data-target="#datetimepicker2_put" placeholder="Фактич. время"/>
                     <div class="input-group-append" data-target="#datetimepicker2_put" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
@@ -189,7 +134,7 @@
         <div class="form-group">
         <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="result_put" checked>result
+        <input class="form-check-input" type="checkbox" name="result_put" placeholder="Результат" checked>result
         </label>
         </div>
         </div>
@@ -227,12 +172,8 @@
   data-show-footer="true"
   data-side-pagination="server"
   data-url="{% url 'Tests-list' %}"
-
   data-buttons="buttons"
-
   data-response-handler="responseHandler">
-
-
 </table>
 
 
@@ -250,16 +191,12 @@
         })
     }
 
-
-
     function responseHandler(res) {
     $.each(res.rows, function (i, row) {
       row.state = $.inArray(row.tests_id, selections) !== -1
     })
     return res
     }
-
-
 
     function detailFormatter(index, row) {
     var html = []
@@ -271,9 +208,6 @@
 
     function operateFormatter(value, row, index) {
     return [
-      '<a class="like" href="javascript:void(0)" title="Like">',
-      '<i class="fa fa-heart"></i>',
-      '</a>  ',
       '<a class="remove" href="javascript:void(0)" title="Remove">',
       '<i class="fa fa-trash"></i>',
       '</a>'
@@ -281,9 +215,6 @@
     }
 
     window.operateEvents = {
-    'click .like': function (e, value, row, index) {
-      alert('You click like action, row: ' + JSON.stringify(row))
-    },
     'click .remove': function (e, value, row, index) {
         $.ajax({
           url: "/api/v1/tests/" + row.tests_id +"/",
@@ -311,39 +242,39 @@
           valign: 'middle'
         },{
             field: 'tests_id',
-            title: 'Tests ID',
+            title: 'Тест ID',
             rowspan: 2,
             align: 'center',
             valign: 'middle',
             sortable: true,
         }, {
-          title: 'Tests Detail',
+          title: 'Детальная информация',
           colspan: 5,
           align: 'center'
         }],
         [{
             field: 'personal_id',
-            title: 'Personal ID',
+            title: 'Персональный ID',
             sortable: true,
             align: 'center',
         },{
             field: 'expected_time',
-            title: 'expected_time',
+            title: 'Назначенное время сдачи теста',
             sortable: true,
             align: 'center',
         },{
             field: 'result_time',
-            title: 'result_time',
+            title: 'Фактическое время сдачи теста',
             sortable: true,
             align: 'center',
         },{
             field: 'result',
-            title: 'result',
+            title: 'Результат',
             sortable: true,
             align: 'center',
         },{
             field: 'operate',
-            title: 'Item Operate',
+            title: 'Удалить',
             align: 'center',
             clickToSelect: false,
             events: window.operateEvents,
@@ -359,8 +290,6 @@
         selections = getIdSelections()
       })
 
-
-
  $table.on('all.bs.table', function (e, name, args) {
       console.log(name, args)
     })
@@ -368,7 +297,7 @@
  $remove.click(function () {
                var ids = getIdSelections()
 
- ids.forEach(function(value, index, ids) {
+    ids.forEach(function(value, index, ids) {
         $.ajax({
           url: "/api/v1/tests/" + ids[index] +"/",
           method: "delete",
@@ -393,9 +322,6 @@ function Boolean(string){
         default: return Boolean(string);
     }
 }
-
-
-
 
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -464,15 +390,7 @@ $(function() {
 })
 
 
-
-
-
-
-
-
 $(function() {
-
-
 
     var checkedRows = [];
 
@@ -544,19 +462,8 @@ function Boolean(string){
                     'result': result_put});
                 }
             })})
-
-
-
-
 })
 })
-
-
-
-
-
-
-
 
 $(function() {
     initTable()

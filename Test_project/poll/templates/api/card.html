@@ -108,7 +108,7 @@ button:hover, a:hover {
   </div>
   {% load static %}
   <p>{% for photo in photos %}
-  <img src="/{{ photo.data_photo }}" width="200" height="222">
+  <img src="/{{ photo.data_photo }}" width="150" height="200">
   {% endfor %}</p>
   <h1>{{ persona.full_name }}</h1>
   <p><b>Персональный ID: {{ persona.personal_id }}</b></p>
@@ -209,7 +209,7 @@ button:hover, a:hover {
         </button>
         <div class="dropdown-menu">
 
-  <form class="px-4 py-3" method="post" id="ajax_form" enctype="multipart/form-data" style="width: 300px;" action="/api/v1/tests/">
+  <form class="px-4 py-3" method="post" id="ajax_form" enctype="multipart/form-data" style="width: 300px;" action="">
         {% csrf_token %}
 
         <div class="form-group">
@@ -228,12 +228,10 @@ button:hover, a:hover {
                     </div>
         </div>
 
-        <div class="form-group">
-                    <div class="form-check">
-                    <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" name="result" placeholder="Результат"/>Результат
-                    </label>
-                    </div>
+        <div class="form-group form-check">
+                    <label class="form-check-label" for="result">
+                    <input type="checkbox" class="form-check-input" id="result" name="result"/>
+                    Результат</label>
         </div>
 
 
@@ -300,7 +298,7 @@ button:hover, a:hover {
 
 </div>
 
-
+<div id="result_form"></div>
 
 <script type="text/javascript">
     var $table = $('#table')
@@ -467,36 +465,60 @@ $(function () {
 
 
 console.log({{ persona.personal_id }})
-var x = {{ persona.personal_id }}
+var x = parseInt({{ persona.personal_id }})
+console.log(x)
+
+
+
+var elements = document.getElementById("ajax_form").elements;
+var data = {};
+            for(var i = 1 ; i < 4 ; i++){
+            var item = elements.item(i);
+            data[item.name] = item.value;
+		    }
+console.log(Boolean(data.result))
+
+// Обработчик checkbox
+$('#result').on('click', function () {
+    let checkboxStatus = $(this).prop('checked')
+    console.log(checkboxStatus)
+    if ( $(this).prop('checked') === true ) {
+        z = true
+
+    } else {
+        z = false
+
+    }
+})
 
 
 // Добавление тестов данного сотрудника
-$(function() {
+$(function Add() {
+  $("#btn").click(function(){
 
-  function Boolean(string){
-    switch(string.toLowerCase().trim()){
+
+        function Boolean(string){
+        switch(string.toLowerCase().trim()){
         case "true": case "yes": case "1": case "on":  return true;
-        case "false": case "no": case "0": case null: return false;
+        case "false": case "no": case "0": case null: case "off": return false;
         default: return Boolean(string);
     }
 }
 
-
-
-  $("#btn").click(function(){
 			var elements = document.getElementById("ajax_form").elements;
             var data = {};
-            for(var i = 0 ; i < 6 ; i++){
+            for(var i = 1 ; i < 4 ; i++){
             var item = elements.item(i);
             data[item.name] = item.value;
 		    }
 
 
-            var csrfmiddlewaretoken = data.csrfmiddlewaretoken
-		    var x = {{ persona.personal_id }}
+
+
             var expected_time = data.expected_time
             var result_time = data.result_time
-            var result = Boolean(data.result)
+            var result = z
+            var y = parseInt({{ persona.personal_id }})
 
 
 
@@ -505,27 +527,19 @@ $(function() {
         type: "POST",
         dataType: "application/json; charset=utf-8",
         dataType: "json",
-
         data:          {
-                        'personal_id': x,
+                        'personal_id': y,
                         'expected_time': expected_time,
                         'result_time': result_time,
                         'result': result},
-        success: function(response) {
-
-        	console.log(JSON.stringify(data));
+        success: function(data) {
+        	console.log(data)
     	},
-    	error: function(response) {
-    	    console.log({
-                        'personal_id': personal_id,
-                        'expected_time': expected_time,
-                        'result_time': result_time,
-                        'result': result})
 
-    	}
- 	});
+   });
  })
 })
+
 
 
 // Не отправляет снова формы при обновлении страницы
