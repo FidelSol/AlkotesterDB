@@ -230,7 +230,7 @@ button:hover, a:hover {
 
         <div class="form-group form-check">
                     <label class="form-check-label" for="result">
-                    <input type="checkbox" class="form-check-input" id="result" name="result"/>
+                    <input type="checkbox" class="form-check-input" id="result" name="result" value="on" checked/>
                     Результат</label>
         </div>
 
@@ -239,15 +239,26 @@ button:hover, a:hover {
 
   </form>
 </div>
+
+          <div class="btn-group mr-2" role="group" aria-label="Second group">
+          <div class="input-group"> <span class="input-group-addon"></span>
+            <input id="filter" type="text" class="form-control" placeholder="Поиск">
+            </div>
+          </div>
+
 </div>
 </div></div>
 </div>
 
+
+
+
   <table
           id="table"
+
           data-toggle="table"
           data-toolbar="#toolbar"
-          data-search="true"
+          data-search="false"
           data-show-refresh="true"
           data-show-toggle="true"
           data-show-fullscreen="true"
@@ -261,6 +272,7 @@ button:hover, a:hover {
           data-minimum-count-columns="2"
           data-show-pagination-switch="true"
           data-pagination="true"
+          data-id-field="tests_id"
           data-page-list="[10, 25, 50, 100, all]"
           data-show-footer="true"
           data-side-pagination="server"
@@ -270,27 +282,30 @@ button:hover, a:hover {
     <thead class="thead-dark">
     <tr>
       <th scope="col" data-field="state" data-checkbox="true"></th>
-      <th scope="col" data-field="tests_id">Тест ID</th>
-      <th scope="col" data-field="expected_time">Назначенное время сдачи теста</th>
-      <th scope="col" data-field="result_time">Фактическое время сдачи теста</th>
-      <th scope="col" data-field="result">Результат</th>
+      <th scope="col" data-field="tests_id" data-searchable="true">Тест ID</th>
+      <th scope="col" data-field="expected_time" data-searchable="true">Назначенное время сдачи теста</th>
+      <th scope="col" data-field="result_time" data-searchable="true">Фактическое время сдачи теста</th>
+      <th scope="col" data-field="result" data-searchable="true">Результат</th>
       <th scope="col" data-field="operate" data-formatter="operateFormatter"
           data-events="operateEvents">Удалить</th>
     </tr>
   </thead>
+<tbody class="searchable">
+{% for test in tests %}
+<tr>
+    <td scope="row" data-field="state"></td>
+  <td scope="row" data-field="tests_id">{{ test.tests_id }}</td>
+  <td scope="row" data-field="expected_time">{{ test.expected_time }}</td>
+  <td scope="row" data-field="result_time">{{ test.result_time }}</td>
+  <td scope="row" data-field="result">{{ test.result }}</td>
+  <td scope="row" data-field="operate"></td>
+  </tr>
+ {% endfor %}
+</tbody>
 
-    <tbody>
-    {% for test in tests %}
-    <tr>
-      <th scope="row"></th>
-      <th scope="row">{{ test.tests_id }}</th>
-      <th scope="row">{{ test.expected_time }}</th>
-      <th scope="row">{{ test.result_time }}</th>
-      <th scope="row">{{ test.result }}</th>
-      <th scope="row"></th>
-      </tr>
-     {% endfor %}
-    </tbody>
+
+
+
 </table>
 
 
@@ -356,49 +371,49 @@ button:hover, a:hover {
           })
     }}
 
+
+var obj = document.getElementById('table')
+cells = obj.getElementsByTagName('td')
+console.log(cells)
+console.log(cells[1], cells[2], cells[3], cells[4])
+
+
+// Функция поиска search
+$(document).ready(function () {
+
+    (function ($) {
+
+        $('#filter').keyup(function () {
+
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable tr').hide();
+            $('.searchable tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+
+        })
+
+    }(jQuery));
+
+});
+
+
+
 // Функция таблицы
- $(function Table() {
-    var data =
-        [{
-          field: 'state',
-          checkbox: true,
-          rowspan: 1,
-          align: 'center',
-          valign: 'middle'
-        },{
-            field: 'tests_id',
-            title: 'Тест ID',
-            rowspan: 1,
-            align: 'center',
-            valign: 'middle',
-            sortable: true,
-        },
-        {
-            field: 'expected_time',
-            title: 'Назначенное время сдачи теста',
-            sortable: true,
-            align: 'center',
-        },{
-            field: 'result_time',
-            title: 'Фактическое время сдачи теста',
-            sortable: true,
-            align: 'center',
-        },{
-            field: 'result',
-            title: 'Результат',
-            sortable: true,
-            align: 'center',
-        },{
-            field: 'operate',
-            title: 'Удалить',
-            align: 'center',
-            clickToSelect: false,
-            events: window.operateEvents,
-            formatter: operateFormatter
-        }
-       ]
-       $table.bootstrapTable({data: data})
-      })
+ $(function() {
+        var data = []
+        var list = new Map()
+        {% for test in tests %}
+            list.set('tests_id', {{ test.tests_id }})
+            list.set('expected_time', '{{ test.expected_time }}')
+            list.set('result_time', '{{ test.result_time }}')
+            list.set('result', '{{ test.result }}')
+            data.push(list)
+        {% endfor %}
+        console.log(data)
+         $table.bootstrapTable({data: data})
+
+})
 
 
 // выбор ряда checkbox
@@ -478,6 +493,7 @@ var data = {};
 		    }
 console.log(Boolean(data.result))
 
+var z = true
 // Обработчик checkbox
 $('#result').on('click', function () {
     let checkboxStatus = $(this).prop('checked')
@@ -495,14 +511,6 @@ $('#result').on('click', function () {
 // Добавление тестов данного сотрудника
 $(function Add() {
   $("#btn").click(function(){
-
-        function Boolean(string){
-        switch(string.toLowerCase().trim()){
-        case "true": case "yes": case "1": case "on":  return true;
-        case "false": case "no": case "0": case null: case "off": return false;
-        default: return Boolean(string);
-    }
-}
 
 			var elements = document.getElementById("ajax_form").elements;
             var data = {};

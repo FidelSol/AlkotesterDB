@@ -44,53 +44,8 @@
 <br><br>
 <div class="select">
   <select class="form-control" id="locale">
-    <option value="af-ZA">af-ZA</option>
-    <option value="ar-SA">ar-SA</option>
-    <option value="ca-ES">ca-ES</option>
-    <option value="cs-CZ">cs-CZ</option>
-    <option value="da-DK">da-DK</option>
-    <option value="de-DE">de-DE</option>
-    <option value="el-GR">el-GR</option>
     <option value="en-US" selected>en-US</option>
-    <option value="es-AR">es-AR</option>
-    <option value="es-CL">es-CL</option>
-    <option value="es-CR">es-CR</option>
-    <option value="es-ES">es-ES</option>
-    <option value="es-MX">es-MX</option>
-    <option value="es-NI">es-NI</option>
-    <option value="es-SP">es-SP</option>
-    <option value="et-EE">et-EE</option>
-    <option value="eu-EU">eu-EU</option>
-    <option value="fa-IR">fa-IR</option>
-    <option value="fi-FI">fi-FI</option>
-    <option value="fr-BE">fr-BE</option>
-    <option value="fr-FR">fr-FR</option>
-    <option value="he-IL">he-IL</option>
-    <option value="hr-HR">hr-HR</option>
-    <option value="hu-HU">hu-HU</option>
-    <option value="id-ID">id-ID</option>
-    <option value="it-IT">it-IT</option>
-    <option value="ja-JP">ja-JP</option>
-    <option value="ka-GE">ka-GE</option>
-    <option value="ko-KR">ko-KR</option>
-    <option value="ms-MY">ms-MY</option>
-    <option value="nb-NO">nb-NO</option>
-    <option value="nl-NL">nl-NL</option>
-    <option value="pl-PL">pl-PL</option>
-    <option value="pt-BR">pt-BR</option>
-    <option value="pt-PT">pt-PT</option>
-    <option value="ro-RO">ro-RO</option>
     <option value="ru-RU">ru-RU</option>
-    <option value="sk-SK">sk-SK</option>
-    <option value="sv-SE">sv-SE</option>
-    <option value="th-TH">th-TH</option>
-    <option value="tr-TR">tr-TR</option>
-    <option value="uk-UA">uk-UA</option>
-    <option value="ur-PK">ur-PK</option>
-    <option value="uz-Latn-UZ">uz-Latn-UZ</option>
-    <option value="vi-VN">vi-VN</option>
-    <option value="zh-CN">zh-CN</option>
-    <option value="zh-TW">zh-TW</option>
   </select>
 </div>
 
@@ -198,6 +153,14 @@
 </div>
 </div>
 
+         <div class="btn-group mr-2" role="group" aria-label="Forth group">
+          <div class="input-group"> <span class="input-group-addon"></span>
+            <input id="filter" type="text" class="form-control" placeholder="Поиск">
+            </div>
+          </div>
+
+
+
 </div>
 </div>
 
@@ -205,7 +168,7 @@
   id="table"
   data-toggle="table"
   data-toolbar="#toolbar"
-  data-search="true"
+  data-search="false"
   data-show-refresh="true"
   data-show-toggle="true"
   data-show-fullscreen="true"
@@ -223,12 +186,27 @@
   data-show-footer="true"
   data-side-pagination="server"
   data-url="{% url 'Personals-list' %}"
-
   data-buttons="buttons"
-
   data-response-handler="responseHandler">
 
+    <thead class="thead-dark">
+        <tr>
+        <td scope="col" data-field="state" data-checkbox="true"></td>
+        <td scope="col" data-field="personal_id" data-searchable="true">Персональный ID</td>
+        <td scope="col"></td>
+        <td scope="col" data-field="ext_id" data-searchable="true">Расширенный ID</td>
+        <td scope="col" data-field="full_name" data-searchable="true">ФИО</td>
+        <td scope="col" data-field="birth_date" data-searchable="true">Дата рождения</td>
+        <td scope="col" data-field="position" data-searchable="true">Должность</td>
+        <td scope="col" data-field="punishment" data-searchable="true">Дисциплинарные зыскания</td>
+        <td scope="col"data-field="operate" data-formatter="operateFormatter"
+          data-events="operateEvents"></td>
+        </tr>
+  </thead>
 
+    <tbody class="searchable">
+
+    </tbody>
 </table>
 
 
@@ -309,6 +287,7 @@
             align: 'center',
             valign: 'middle',
             sortable: true,
+             searchable: true
         }, {
           title: 'Детальная информация',
           colspan: 6,
@@ -349,6 +328,27 @@
         }]
        ]
       })
+
+
+// Функция поиска search
+$(document).ready(function () {
+
+    (function ($) {
+
+        $('#filter').keyup(function () {
+
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable tr').hide();
+            $('.searchable tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+
+        })
+
+    }(jQuery));
+
+});
+
 
  $table.on('check.bs.table uncheck.bs.table ' +
       'check-all.bs.table uncheck-all.bs.table',

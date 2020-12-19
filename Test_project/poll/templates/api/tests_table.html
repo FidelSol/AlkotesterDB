@@ -144,6 +144,14 @@
 
   </form>
 </div>
+
+        <div class="btn-group mr-2" role="group" aria-label="Forth group">
+          <div class="input-group"> <span class="input-group-addon"></span>
+            <input id="filter" type="text" class="form-control" placeholder="Поиск">
+            </div>
+          </div>
+
+
 </div>
 </div>
 
@@ -153,8 +161,9 @@
 <table
   id="table"
   data-toggle="table"
+
   data-toolbar="#toolbar"
-  data-search="true"
+  data-search="false"
   data-show-refresh="true"
   data-show-toggle="true"
   data-show-fullscreen="true"
@@ -174,6 +183,24 @@
   data-url="{% url 'Tests-list' %}"
   data-buttons="buttons"
   data-response-handler="responseHandler">
+
+<thead class="thead-dark">
+    <tr>
+      <td scope="col" data-field="state" data-checkbox="true"></td>
+      <td scope="col" data-field="tests_id" data-searchable="true">Тест ID</td>
+        <td scope="col"></td>
+        <td scope="col" data-field="personal_id" data-searchable="true">Персональный ID</td>
+      <td scope="col" data-field="expected_time" data-searchable="true">Назначенное время сдачи теста</td>
+      <td scope="col" data-field="result_time" data-searchable="true">Фактическое время сдачи теста</td>
+      <td scope="col" data-field="result" data-searchable="true">Результат</td>
+      <td scope="col" data-field="operate" data-formatter="operateFormatter"
+          data-events="operateEvents">Удалить</td>
+    </tr>
+  </thead>
+<tbody class="searchable">
+
+    </tbody>
+
 </table>
 
 
@@ -228,7 +255,7 @@
           })
     }}
 
-
+// функция таблицы
  function initTable() {
     $table.bootstrapTable('destroy').bootstrapTable({
     height: 550,
@@ -247,6 +274,7 @@
             align: 'center',
             valign: 'middle',
             sortable: true,
+            searchable: true
         }, {
           title: 'Детальная информация',
           colspan: 5,
@@ -283,6 +311,27 @@
        ]
       })
 
+// Функция поиска search
+$(document).ready(function () {
+
+    (function ($) {
+
+        $('#filter').keyup(function () {
+
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable tr').hide();
+            $('.searchable tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+
+        })
+
+    }(jQuery));
+
+});
+
+
+// функция выбора ряда/рядов
  $table.on('check.bs.table uncheck.bs.table ' +
       'check-all.bs.table uncheck-all.bs.table',
     function () {
@@ -294,6 +343,7 @@
       console.log(name, args)
     })
 
+// удаление выбранных рядов
  $remove.click(function () {
                var ids = getIdSelections()
 
@@ -314,7 +364,7 @@
 })
 }
 
-
+// функция перевода в Boolean
 function Boolean(string){
     switch(string.toLowerCase().trim()){
         case "true": case "yes": case "1": case "on":  return true;
@@ -323,6 +373,8 @@ function Boolean(string){
     }
 }
 
+
+// функция включения токена
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -335,7 +387,7 @@ $.ajaxSetup({
     }
 });
 
-
+// календарь dominus
 $(function () {
         $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
         $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
@@ -343,7 +395,7 @@ $(function () {
         $("#datetimepicker2_put").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
       });
 
-
+// функция добавления тестов
 $(function() {
   $("#btn").click(function(){
 			var elements = document.getElementById("ajax_form").elements;
@@ -389,7 +441,7 @@ $(function() {
  })
 })
 
-
+// функция контроля формирования ряда (вывод убран)
 $(function() {
 
     var checkedRows = [];
@@ -422,7 +474,7 @@ function Boolean(string){
     }
 }
 
-
+// функция изменения тестов PUT
     $("#btn_put").click(function(){
 
 			var elements = document.getElementById("ajax_put").elements;
@@ -465,6 +517,7 @@ function Boolean(string){
 })
 })
 
+// запуск табличных данных и выбор языка (русский/английский)
 $(function() {
     initTable()
 
