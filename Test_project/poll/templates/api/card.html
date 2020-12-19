@@ -484,10 +484,10 @@ $('#result').on('click', function () {
     console.log(checkboxStatus)
     if ( $(this).prop('checked') === true ) {
         z = true
-
+        console.log(z)
     } else {
         z = false
-
+        console.log(z)
     }
 })
 
@@ -495,7 +495,6 @@ $('#result').on('click', function () {
 // Добавление тестов данного сотрудника
 $(function Add() {
   $("#btn").click(function(){
-
 
         function Boolean(string){
         switch(string.toLowerCase().trim()){
@@ -512,15 +511,10 @@ $(function Add() {
             data[item.name] = item.value;
 		    }
 
-
-
-
             var expected_time = data.expected_time
             var result_time = data.result_time
             var result = z
             var y = parseInt({{ persona.personal_id }})
-
-
 
     $.ajax({
         url: "/api/v1/tests/",
