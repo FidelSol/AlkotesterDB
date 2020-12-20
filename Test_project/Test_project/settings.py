@@ -52,6 +52,8 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
+
+    'PAGINATE_BY': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
@@ -62,8 +64,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
-    'PAGINATE_BY': 10,
+
 }
+
+
 
 SWAGGER_SETTINGS = {
     'VALIDATOR_URL': 'http://localhost:8000',

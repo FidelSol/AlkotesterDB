@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+
 from django.shortcuts import render
 
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
@@ -8,7 +8,7 @@ from django.core.files.storage import FileSystemStorage
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from django.contrib.auth.models import User
 from rest_framework import viewsets
-
+from rest_framework_extensions.mixins import PaginateByMaxMixin
 
 from django.contrib.auth.decorators import login_required
 from .utils import serialize_bootstraptable
@@ -89,6 +89,7 @@ class PersonalsViewSet(viewsets.ModelViewSet):
 
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
+
     serializer_class = TestsSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
 
