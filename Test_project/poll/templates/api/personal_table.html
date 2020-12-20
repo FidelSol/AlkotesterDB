@@ -20,7 +20,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.1/locale/bootstrap-table-ru-RU.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.18.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
 
@@ -154,7 +153,7 @@
 </div>
 
          <div class="btn-group mr-2" role="group" aria-label="Forth group">
-          <div class="input-group"> <span class="input-group-addon"></span>
+            <div class="input-group"> <span class="input-group-addon"></span>
             <input id="filter" type="text" class="form-control" placeholder="Поиск">
             </div>
           </div>
@@ -184,7 +183,6 @@
   data-id-field="tests_id"
   data-page-list="[10, 25, 50, 100, all]"
   data-show-footer="true"
-
   data-url="{% url 'Personals-list' %}"
   data-buttons="buttons"
   data-response-handler="responseHandler">
@@ -268,7 +266,7 @@
           })
     }}
 
-
+// Функция таблицы
  function initTable() {
     $table.bootstrapTable('destroy').bootstrapTable({
     height: 550,
@@ -349,7 +347,7 @@ $(document).ready(function () {
 
 });
 
-
+// выбор checkbox
  $table.on('check.bs.table uncheck.bs.table ' +
       'check-all.bs.table uncheck-all.bs.table',
     function () {
@@ -361,6 +359,7 @@ $(document).ready(function () {
       console.log(name, args)
     })
 
+// функция удаления выбранных рядов
  $remove.click(function () {
                var ids = getIdSelections()
 
@@ -381,6 +380,7 @@ $(document).ready(function () {
 })
 }
 
+// установка csrf
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -393,13 +393,13 @@ $.ajaxSetup({
     }
 });
 
-
+// dominus
 $(function () {
         $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD', });
         $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD', });
 });
 
-
+// добавление сотрудников
 $(function() {
   $("#btn").click(function(){
 			var elements = document.getElementById("ajax_form").elements;
@@ -442,6 +442,7 @@ $(function() {
 })
 
 
+// изменение метод put
 $(function() {
 
     var checkedRows = [];
@@ -497,6 +498,7 @@ $(function() {
     })
 })
 
+//запуск функции таблицы и выбор языка
 $(function() {
     initTable()
     $('#locale').change(initTable)
