@@ -41,11 +41,45 @@
      width: 100%;
      height: 100%;
 }
+* {box-sizing:border-box}
 
+/* Container for skill bars */
+.container {
+    width: 100%; /* Full width */
+    background-color: #ddd; /* Grey background */
+    margin-left: 30px;
+}
+
+.skills {
+    text-align: right; /* Right-align text */
+    padding-right: 20px; /* Add some right padding */
+    line-height: 30px; /* Set the line-height to center the text inside the skill bar, and to expand the height of the container */
+    color: white; /* White text color */
+}
+
+.css {background-color: #2196F3;} /* Blue */
+.js {background-color: #f44336;} /* Red */
 </style>
 
+<b><p>Всего тестов:
+<div id="count"></div></p></b>
+
+<b><p>Тестов сдано успешно:
+<div id="passed"></div></p></b>
+
+<div class="container">
+    <div class="skills css" id="pass"></div>
+</div>
+
+<b><p>Тестов провалено:
+<div id="failed"></div></p></b>
+
+<div class="container">
+    <div class="skills js" id="fail"></div>
+</div>
+
+
 <br>
-<br><br>
 <div class="select">
   <select class="form-control" id="locale">
     <option value="en-US" selected>en-US</option>
@@ -61,6 +95,8 @@
     <i class="fa fa-trash"></i> Delete
   </button>
 </div>
+
+
 
 <div class="btn-group mr-2" role="group" aria-label="Second group">
 <div class="dropdown mr-4">
@@ -525,12 +561,54 @@ function Boolean(string){
 })
 })
 
+
+
+
+
+
+
+
 // запуск табличных данных и выбор языка (русский/английский)
 $(function() {
     initTable()
 
     $('#locale').change(initTable)
  })
+
+// фильтрация и вывод данных через ajax
+$('#table').on('load-success.bs.table', function (data_f) {
+  console.log($table.bootstrapTable('getData'))
+  var data = $table.bootstrapTable('getData')
+  console.log(data)
+
+    // всего тестов
+    var count = data.length
+    console.log(count)
+    document.getElementById("count").innerHTML = count + " тестов"
+
+    // всего проваленных тестов
+    var fail = 0
+    $(data).each(function(i){
+    if (data[i].result === false) {
+        fail = fail + 1;
+        }
+    });
+    document.getElementById("failed").innerHTML = fail + " тестов"
+    console.log(fail)
+
+    // вывести в шкалу fail
+    var fail_perc = (100 * fail) / count
+    document.getElementById("fail").innerHTML = Math.round(fail_perc) + '%';
+    document.querySelector('#fail').style['width'] = Math.round(fail_perc) + '%';
+
+    // всего пройденных тестов
+    var passed = count - fail
+    document.getElementById("passed").innerHTML = passed + " тестов"
+    console.log(passed)
+    document.getElementById("pass").innerHTML = (100 - Math.round(fail_perc)) + '%';
+    document.querySelector('#pass').style['width'] = (100 - Math.round(fail_perc)) + '%';
+
+})
 
 </script>
 </body>

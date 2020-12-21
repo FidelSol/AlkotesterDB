@@ -8,7 +8,7 @@ from django.core.files.storage import FileSystemStorage
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from django.contrib.auth.models import User
 from rest_framework import viewsets
-from rest_framework_extensions.mixins import PaginateByMaxMixin
+
 
 from django.contrib.auth.decorators import login_required
 from .utils import serialize_bootstraptable
