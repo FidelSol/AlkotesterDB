@@ -608,6 +608,20 @@ $('#table').on('load-success.bs.table', function (data_f) {
     document.getElementById("pass").innerHTML = (100 - Math.round(fail_perc)) + '%';
     document.querySelector('#pass').style['width'] = (100 - Math.round(fail_perc)) + '%';
 
+    // фильтр по датам фактических сдач
+    var startDate = new Date("2020-12-10T14:32:00");
+    var endDate = new Date("2020-12-16T11:14:22");
+
+    var resultProductData = data.filter(function (a) {
+        var hitDates = a.result_time || {};
+        hitDates = Object.keys(hitDates);
+        hitDates = hitDates.map(function(datetime) { return new Date(datetime); });
+
+        var hitDateMatches = hitDates.filter(function(datetime) { return datetime >= startDate && datetime <= endDate });
+        return hitDateMatches.length>0;
+        });
+        console.log(resultProductData);
+
 })
 
 </script>
