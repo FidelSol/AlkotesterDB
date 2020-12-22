@@ -134,7 +134,7 @@
         <div class="form-group">
         <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="result" placeholder="Результат" checked>result
+        <input class="form-check-input" type="checkbox" name="result" id="result" placeholder="Результат" value="on" checked>Результат
         </label>
         </div>
         </div>
@@ -177,7 +177,7 @@
         <div class="form-group">
         <div class="form-check">
         <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="result_put" placeholder="Результат" checked>result
+        <input class="form-check-input" type="checkbox" name="result_put" id="result_put" placeholder="Результат" value="on" checked>Результат
         </label>
         </div>
         </div>
@@ -187,12 +187,41 @@
 
   </form>
 </div>
+        <div class="btn-group mr-2" role="group" aria-label="Fifth group">
 
-        <div class="btn-group mr-2" role="group" aria-label="Forth group">
+         <button type="button" class="btn btn-secondary dropdown-toggle" style="width: 200px;" id="dropdownMenuOffset_period" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">Фильтр по периоду</button>
+            <div class="dropdown-menu">
+
+                <form class="px-4 py-3" method="get" id="period" enctype="multipart/form-data" action="">
+                    <label class="form-check-label"><b>Тесты, которые сданы в период:</b></label>
+
+                    <div class="form-group">
+                    <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" name="result_time_since" data-target="#datetimepicker3" placeholder="От..."/>
+                    <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div></div>
+                    </div>
+
+                    <div class="form-group">
+                    <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" name="result_time_for" data-target="#datetimepicker4" placeholder="До..."/>
+                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div></div>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" id="btn_period" value="Фильтр" />
+                </form>
+        </div>
+        </div>
+
+        <div class="btn-group mr-2" role="group" aria-label="Six group">
           <div class="input-group"> <span class="input-group-addon"></span>
             <input id="filter" type="text" class="form-control" placeholder="Поиск">
             </div>
           </div>
+
 
 
 </div>
@@ -437,7 +466,24 @@ $(function () {
         $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
         $("#datetimepicker1_put").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
         $("#datetimepicker2_put").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
+        $("#datetimepicker3").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
+        $("#datetimepicker4").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
       });
+
+
+var z = true
+// Обработчик checkbox
+$('#result').on('click', function () {
+    let checkboxStatus = $(this).prop('checked')
+    console.log(checkboxStatus)
+    if ( $(this).prop('checked') === true ) {
+        z = true
+        console.log(z)
+    } else {
+        z = false
+        console.log(z)
+    }
+})
 
 // функция добавления тестов
 $(function() {
@@ -449,12 +495,13 @@ $(function() {
             data[item.name] = item.value;
 		    }
 
+            console.log(z)
             var csrfmiddlewaretoken = data.csrfmiddlewaretoken
 		    var tests_id = parseInt(data.tests_id)
             var personal_id = parseInt(data.personal_id)
             var expected_time = data.expected_time
             var result_time = data.result_time
-            var result = Boolean(data.result)
+            var result = z
 
     $.ajax({
         url: "/api/v1/tests/",
@@ -509,7 +556,7 @@ $('#table').on('uncheck.bs.table', function (e, row) {
   console.log(checkedRows);
 });
 
-
+// перевод значения checkbox в boolean
 function Boolean(string){
     switch(string.toLowerCase().trim()){
         case "on": case "true": case "yes": case "1":  return true;
@@ -517,6 +564,20 @@ function Boolean(string){
         default: return Boolean(string);
     }
 }
+
+var h = true
+// Обработчик checkbox
+$('#result_put').on('click', function () {
+    let checkboxStatus = $(this).prop('checked')
+    console.log(checkboxStatus)
+    if ( $(this).prop('checked') === true ) {
+        h = true
+        console.log(h)
+    } else {
+        h = false
+        console.log(h)
+    }
+})
 
 // функция изменения тестов PUT
     $("#btn_put").click(function(){
@@ -530,7 +591,7 @@ function Boolean(string){
 
             var expected_time_put = data.expected_time_put
             var result_time_put = data.result_time_put
-            var result_put = Boolean(data.result_put)
+            var result_put = h
 
             console.log(data)
 
@@ -562,18 +623,13 @@ function Boolean(string){
 })
 
 
-
-
-
-
-
-
 // запуск табличных данных и выбор языка (русский/английский)
 $(function() {
     initTable()
 
     $('#locale').change(initTable)
  })
+
 
 // фильтрация и вывод данных через ajax
 $('#table').on('load-success.bs.table', function (data_f) {
@@ -609,18 +665,27 @@ $('#table').on('load-success.bs.table', function (data_f) {
     document.querySelector('#pass').style['width'] = (100 - Math.round(fail_perc)) + '%';
 
     // фильтр по датам фактических сдач
+    // передача данных из формы period
+    var elements = document.getElementById("period").elements;
+    var period = {};
+    for(var i = 0 ; i < 2 ; i++){
+    var item = elements.item(i);
+    period[item.name] = item.value;
+    }
+    console.log(period)
+
     var startDate = new Date("2020-12-10T14:32:00");
     var endDate = new Date("2020-12-16T11:14:22");
 
-    var resultProductData = data.filter(function (a) {
-        var hitDates = a.result_time || {};
-        hitDates = Object.keys(hitDates);
-        hitDates = hitDates.map(function(datetime) { return new Date(datetime); });
+    var resultData = data.filter(function (a) {
+        var resultDates = new Date(a.result_time);
+       return resultDates >= startDate && resultDates <= endDate })
 
-        var hitDateMatches = hitDates.filter(function(datetime) { return datetime >= startDate && datetime <= endDate });
-        return hitDateMatches.length>0;
-        });
-        console.log(resultProductData);
+    console.log(resultData)
+
+
+
+
 
 })
 
