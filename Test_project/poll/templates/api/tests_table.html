@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <link href="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.css" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <link rel="stylesheet" href="http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous">
@@ -43,40 +43,88 @@
 }
 * {box-sizing:border-box}
 
-/* Container for skill bars */
-.container {
-    width: 100%; /* Full width */
-    background-color: #ddd; /* Grey background */
-    margin-left: 30px;
+
+/* Style the table */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
 }
 
-.skills {
-    text-align: right; /* Right-align text */
-    padding-right: 20px; /* Add some right padding */
-    line-height: 30px; /* Set the line-height to center the text inside the skill bar, and to expand the height of the container */
-    color: white; /* White text color */
+/* Style table headers and table data */
+th, td {
+  text-align: center;
+  padding: 16px;
 }
 
-.css {background-color: #2196F3;} /* Blue */
-.js {background-color: #f44336;} /* Red */
+th:first-child, td:first-child {
+  text-align: left;
+}
+
+/* Zebra-striped table rows */
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+
+.fa-check {
+  color: green;
+}
+
+.fa-remove {
+  color: red;
+}
+
+.col-container {
+    display: table; /* Make the container element behave like a table */
+    width: 100%; /* Set full-width to expand the whole page */
+}
+
+.col {
+    display: table-cell; /* Make elements inside the container behave like table cells */
+}
 </style>
 
-<b><p>Всего тестов:
-<div id="count"></div></p></b>
+<table>
+    <tr><th colspan="3" style="text-align: center">ОБЩИЕ ДАННЫЕ ПО ТЕСТАМ</th></tr>
+    <tr>
+      <th style="width:32%">Тестов всего</th>
+      <th>Тестов сдано успешно<i class="fa fa-check"></i></th>
+      <th>Тестов провалено<i class="fa fa-remove"></i></th>
+    </tr>
+    <tr>
+      <td><div id="count"></div></td>
+        <td><div id="passed"></div></td>
+      <td><div id="failed"></div></td>
+    </tr>
+    <tr>
+        <td><b>Процент:</b></td>
+        <td><div id="pass"></div></td>
+      <td><div id="fail"></div></td>
+    </tr>
+    <tr>
+        <td><b>Среднее количество тестов в день:</b> <div id="aver"></div></td>
 
-<b><p>Тестов сдано успешно:
-<div id="passed"></div></p></b>
+    </tr>
+</table>
+<br>
+<table>
+    <tr><th colspan="3" style="text-align: center">ДАННЫЕ ТЕСТОВ В ПЕРИОД</th></tr>
+    <tr><th colspan="1" style="text-align: center">c <div id="start"></div></th>
+    <th colspan="2" style="text-align: center">по <div id="end"></div></th></tr>
+    <tr>
+      <th style="width:32%">Тестов всего</th>
+      <th>Тестов сдано успешно<i class="fa fa-check"></i></th>
+      <th>Тестов провалено<i class="fa fa-remove"></i></th>
+    </tr>
+    <tr>
+      <td><div id="count_p"></div></td>
+        <td><div id="passed_p"></div></td>
+      <td><div id="fail_p"></div></td>
+    </tr>
 
-<div class="container">
-    <div class="skills css" id="pass"></div>
-</div>
+</table>
 
-<b><p>Тестов провалено:
-<div id="failed"></div></p></b>
-
-<div class="container">
-    <div class="skills js" id="fail"></div>
-</div>
 
 
 <br>
@@ -211,7 +259,7 @@
                     </div></div>
                     </div>
 
-                    <input type="submit" class="btn btn-primary" id="btn_period" value="Фильтр" />
+
                 </form>
         </div>
         </div>
@@ -280,6 +328,7 @@
 
 <script type="text/javascript">
     var $table = $('#table')
+
     var $remove = $('#remove')
     var selections = []
     var $button = $('#button')
@@ -630,6 +679,10 @@ $(function() {
     $('#locale').change(initTable)
  })
 
+var count = 0
+var passed = 0
+var fail = 0
+
 
 // фильтрация и вывод данных через ajax
 $('#table').on('load-success.bs.table', function (data_f) {
@@ -638,34 +691,63 @@ $('#table').on('load-success.bs.table', function (data_f) {
   console.log(data)
 
     // всего тестов
-    var count = data.length
+     count = data.length
     console.log(count)
-    document.getElementById("count").innerHTML = count + " тестов"
+    document.getElementById("count").innerHTML = count
 
     // всего проваленных тестов
-    var fail = 0
+     fail = 0
     $(data).each(function(i){
     if (data[i].result === false) {
         fail = fail + 1;
         }
     });
-    document.getElementById("failed").innerHTML = fail + " тестов"
+    document.getElementById("failed").innerHTML = fail
     console.log(fail)
 
     // вывести в шкалу fail
     var fail_perc = (100 * fail) / count
     document.getElementById("fail").innerHTML = Math.round(fail_perc) + '%';
-    document.querySelector('#fail').style['width'] = Math.round(fail_perc) + '%';
+
 
     // всего пройденных тестов
-    var passed = count - fail
-    document.getElementById("passed").innerHTML = passed + " тестов"
+     passed = count - fail
+    document.getElementById("passed").innerHTML = passed
     console.log(passed)
     document.getElementById("pass").innerHTML = (100 - Math.round(fail_perc)) + '%';
-    document.querySelector('#pass').style['width'] = (100 - Math.round(fail_perc)) + '%';
 
-    // фильтр по датам фактических сдач
+    // среднее значение тестов в день
+    // все даты
+    var all_d = [];
+    for(var i = 0 ; i < data.length ; i++){
+    var item = data[i].result_time;
+    all_d.push(item)
+    }
+    console.log(all_d)
+    //самая ранняя
+    earliest = all_d.reduce(function (pre, cur) {
+        return Date.parse(pre) > Date.parse(cur) ? cur : pre;
+    });
+    console.log(earliest)
+    // поздняя
+    last = all_d.reduce(function (pre, cur) {
+        return Date.parse(pre) < Date.parse(cur) ? cur : pre;
+    });
+    console.log(last)
+    //количество дней
+    var future = moment(last);
+    var start = moment(earliest);
+    var d = future.diff(start, 'days');
+    console.log(d);
+    //количество тестов в день
+    var aver = Math.round(data.length / d)
+    document.getElementById("aver").innerHTML = aver
+    console.log(aver)
+
+    // ФИЛЬТР по датам фактических сдач
     // передача данных из формы period
+    $("#period").click(function(){
+
     var elements = document.getElementById("period").elements;
     var period = {};
     for(var i = 0 ; i < 2 ; i++){
@@ -674,20 +756,59 @@ $('#table').on('load-success.bs.table', function (data_f) {
     }
     console.log(period)
 
-    var startDate = new Date("2020-12-10T14:32:00");
-    var endDate = new Date("2020-12-16T11:14:22");
+    // перевод в html
+    document.getElementById("start").innerHTML = period.result_time_since
+    document.getElementById("end").innerHTML = period.result_time_for
 
+    // переменные порога от - до
+    var startDate = new Date(period.result_time_since);
+    var endDate = new Date(period.result_time_for);
+    console.log(startDate, endDate)
+
+    // фильтр
     var resultData = data.filter(function (a) {
         var resultDates = new Date(a.result_time);
        return resultDates >= startDate && resultDates <= endDate })
+     console.log(resultData)
 
-    console.log(resultData)
+    //всего тестов по фильтру в заданный период
+    count_p = resultData.length
+    console.log(count_p)
+    document.getElementById("count_p").innerHTML = count_p
 
+    // всего проваленных тестов по фильтру в заданный период
+     fail_p = 0
+    $(resultData).each(function(i){
+    if (resultData[i].result === false) {
+        fail_p = fail_p + 1;
+        }
+    });
+    document.getElementById("fail_p").innerHTML = fail_p
 
+    // всего успешно сданных тестов по фильтру в заданный период
+     passed_p = count_p - fail_p
+    document.getElementById("passed_p").innerHTML = passed_p
+
+    // формирование списка для табличного фильтра
+    var list = []
+    resultData.forEach(function(value, index, resultData) {
+           list.push(resultData[index].result_time)
+      })
+    console.log(list)
+
+    // табличный фильтр
+    $table.bootstrapTable('filterBy', {
+        result_time: list
+      })
+
+    })
 
 
 
 })
+
+
+
 
 </script>
 </body>
