@@ -49,7 +49,6 @@
 }
 .card3 {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    height: 410px;
     margin: auto;
     text-align: center;
 }
@@ -136,15 +135,21 @@ button:hover, a:hover {
      width: 100%;
      height: 100%;
 }
+.col-container {
+    display: table; /* Make the container element behave like a table */
+    width: 100%; /* Set full-width to expand the whole page */
+}
 
+.col {
+    display: table-cell; /* Make elements inside the container behave like table cells */
+}
 </style>
 
 
 <br>
-<div class="row">
+<div class="col-container">
 
-
-
+    <div class="col">
 <div class="card1">
   <div class="dark">
   <b>СОТРУДНИК</b>
@@ -205,7 +210,6 @@ button:hover, a:hover {
                       </div>
         </div>
 
-
         <div class="input-group mb-3">
           <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon4">Должность</span>
@@ -231,20 +235,20 @@ button:hover, a:hover {
   <div class="dark3">
   <b>ОБЩИЕ ДАННЫЕ ПО ТЕСТАМ</b>
   </div>
-  <p><b>Всего тестов: </b></p><div id="count"></div>
-  <p><b>Тестов сдано успешно: <i class="fa fa-check"></i></b><div id="passed"></div><div id="pass"></div></p>
-  <p><b>Тестов провалено: <i class="fa fa-remove"></i></b><div id="failed"></div><div id="fail"></div></p>
-    <p><b>Среднее количество тестов в день:</b> <div id="aver"></div></p>
-    <p><b></b><div id="last"></div></p>
+  <div id="count"></div>
+  <div id="passed"></div><div id="pass"></div>
+  <div id="failed"></div><div id="fail"></div>
+    <div id="aver"></div>
+    <div id="last"></div>
 </div>
 
 
 
 
 </div>
+    </div>
 
-
-
+<div class="col">
 <div class="card2">
   <div class="dark">
   <b>СПИСОК ТЕСТОВ СОТРУДНИКА</b>
@@ -335,9 +339,6 @@ button:hover, a:hover {
 </div></div>
 </div>
 
-
-
-
   <table
           id="table"
           data-toggle="table"
@@ -405,7 +406,7 @@ button:hover, a:hover {
 </table>
 
 </div>
-
+</div>
 </div>
 
 
@@ -513,7 +514,7 @@ $(document).ready(function () {
         //тестов всего
         count = data.length
         console.log(count)
-        document.getElementById("count").innerHTML = count
+        document.getElementById("count").innerHTML = '<b>Тестов всего: <b>' + count
 
         //перевод строки в bool
         function Boolean(string){
@@ -530,7 +531,7 @@ $(document).ready(function () {
         fail = fail + 1;
         }
         });
-        document.getElementById("failed").innerHTML = fail
+        document.getElementById("failed").innerHTML = '<b>Тестов провалено<i class="fa fa-remove"></i>: <b>' + fail
         console.log(fail)
 
         // вывести в шкалу fail
@@ -539,7 +540,7 @@ $(document).ready(function () {
 
         // всего пройденных тестов
         passed = count - fail
-        document.getElementById("passed").innerHTML = passed
+        document.getElementById("passed").innerHTML = '<b>Тестов сдано успешно<i class="fa fa-check"></i>: <b>' + passed
         console.log(passed)
         document.getElementById("pass").innerHTML = (100 - Math.round(fail_perc)) + '%';
 
@@ -577,7 +578,7 @@ $(document).ready(function () {
         console.log(d);
         //количество тестов в день
         var aver = Math.round(data.length / d)
-        document.getElementById("aver").innerHTML = aver
+        document.getElementById("aver").innerHTML = '<b>Среднее количество тестов в день: </b>' + aver
         console.log(aver)
 
         // ФИЛЬТР по датам фактических сдач
