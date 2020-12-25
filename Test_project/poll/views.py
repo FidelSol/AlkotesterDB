@@ -89,7 +89,6 @@ class PersonalsViewSet(viewsets.ModelViewSet):
 
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
-
     serializer_class = TestsSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
 

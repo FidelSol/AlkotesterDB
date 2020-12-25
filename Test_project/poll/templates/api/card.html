@@ -47,10 +47,53 @@
     margin: auto;
     text-align: center;
 }
+.card3 {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    height: 410px;
+    margin: auto;
+    text-align: center;
+}
+.dark3 {
+    border: none;
+    padding: 8px;
+    color: white;
+    background-color:  #556B2F;
+    text-align: center;
+};
+
 table {
     margin: auto;
 }
 
+/* Style the table */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+/* Style table headers and table data */
+th, td {
+  text-align: center;
+  padding: 16px;
+}
+
+th:first-child, td:first-child {
+  text-align: left;
+}
+
+/* Zebra-striped table rows */
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+.fa-check {
+  color: green;
+}
+
+.fa-remove {
+  color: red;
+}
 .title {
     color: black;
     font-size: 18px;
@@ -183,6 +226,21 @@ button:hover, a:hover {
  </div>
 </div>
 </div>
+
+    <div class="card3">
+  <div class="dark3">
+  <b>ОБЩИЕ ДАННЫЕ ПО ТЕСТАМ</b>
+  </div>
+  <p><b>Всего тестов: </b></p><div id="count"></div>
+  <p><b>Тестов сдано успешно: <i class="fa fa-check"></i></b><div id="passed"></div><div id="pass"></div></p>
+  <p><b>Тестов провалено: <i class="fa fa-remove"></i></b><div id="failed"></div><div id="fail"></div></p>
+    <p><b>Среднее количество тестов в день:</b> <div id="aver"></div></p>
+    <p><b></b><div id="last"></div></p>
+</div>
+
+
+
+
 </div>
 
 
@@ -240,9 +298,36 @@ button:hover, a:hover {
   </form>
 </div>
 
-          <div class="btn-group mr-2" role="group" aria-label="Second group">
+          <div class="btn-group mr-2" role="group" aria-label="Third group">
+
+         <button type="button" class="btn btn-secondary dropdown-toggle" style="width: 200px;" id="dropdownMenuOffset_period" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">Фильтр по периоду</button>
+            <div class="dropdown-menu">
+
+                <form class="px-4 py-3" method="get" id="period" enctype="multipart/form-data" style="width: 300px;" action="">
+                    <label class="form-check-label"><b>Тесты, которые сданы в период:</b></label>
+
+                    <div class="form-group">
+                    <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" name="result_time_since" data-target="#datetimepicker3" placeholder="C..."/>
+                    <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div></div>
+                    </div>
+
+                    <div class="form-group">
+                    <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" name="result_time_for" data-target="#datetimepicker4" placeholder="По..."/>
+                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div></div>
+                    </div>
+                </form>
+        </div>
+        </div>
+
+          <div class="btn-group mr-2" role="group" aria-label="Forth group">
           <div class="input-group"> <span class="input-group-addon"></span>
-            <input id="filter" type="text" class="form-control" placeholder="Поиск">
+            <input id="filter" style="width: 150px;" type="text" class="form-control" placeholder="Поиск">
             </div>
           </div>
 
@@ -255,7 +340,6 @@ button:hover, a:hover {
 
   <table
           id="table"
-
           data-toggle="table"
           data-toolbar="#toolbar"
           data-search="false"
@@ -294,25 +378,36 @@ button:hover, a:hover {
 <tr>
     <td scope="row" data-field="state"></td>
   <td scope="row" data-field="tests_id">{{ test.tests_id }}</td>
-  <td scope="row" data-field="expected_time">{{ test.expected_time }}</td>
-  <td scope="row" data-field="result_time">{{ test.result_time }}</td>
+  <td scope="row" data-field="expected_time">{{ test.expected_time|date:"Y-m-d H:m:s" }}</td>
+  <td scope="row" data-field="result_time">{{ test.result_time|date:"Y-m-d H:m:s" }}</td>
   <td scope="row" data-field="result">{{ test.result }}</td>
   <td scope="row" data-field="operate"></td>
   </tr>
  {% endfor %}
 </tbody>
+</table>
 
-
-
+<table>
+    <tr><th class="dark3" colspan="3" style="text-align: center">ДАННЫЕ ТЕСТОВ В ПЕРИОД</th></tr>
+    <tr><th colspan="1" style="text-align: center">c <div id="start"></div></th>
+    <th colspan="2" style="text-align: center">по <div id="end"></div></th></tr>
+    <tr>
+      <th style="width:32%">Тестов всего</th>
+      <th>Тестов сдано успешно<i class="fa fa-check"></i></th>
+      <th>Тестов провалено<i class="fa fa-remove"></i></th>
+    </tr>
+    <tr>
+      <td><div id="count_p"></div></td>
+        <td><div id="passed_p"></div></td>
+      <td><div id="fail_p"></div></td>
+    </tr>
 
 </table>
 
-
 </div>
 
 </div>
 
-<div id="result_form"></div>
 
 <script type="text/javascript">
     var $table = $('#table')
@@ -398,21 +493,158 @@ $(document).ready(function () {
 
 
 
-// Функция таблицы
+// Функция таблицы и фильтрация
  $(function() {
-        var data = []
+
+          var data = []
         var list = new Map()
         {% for test in tests %}
-            list.set('tests_id', {{ test.tests_id }})
-            list.set('expected_time', '{{ test.expected_time }}')
-            list.set('result_time', '{{ test.result_time }}')
-            list.set('result', '{{ test.result }}')
-            data.push(list)
+           var obj = {'tests_id': {{ test.tests_id }},
+            'expected_time': '{{ test.expected_time|date:"Y-m-d H:m:s" }}',
+            'result_time': '{{ test.result_time|date:"Y-m-d H:m:s" }}',
+            'result': '{{ test.result }}'}
+            data.push(obj)
+            console.log(obj)
         {% endfor %}
-        console.log(data)
-         $table.bootstrapTable({data: data})
 
+        $table.bootstrapTable({data: data})
+        console.log(data)
+
+        //тестов всего
+        count = data.length
+        console.log(count)
+        document.getElementById("count").innerHTML = count
+
+        //перевод строки в bool
+        function Boolean(string){
+    switch(string.toLowerCase().trim()){
+        case "true": case "yes": case "1": case "on":  return true;
+        case "False": case "false": case "no": case "0": case null: return false;
+        default: return Boolean(string);
+    }}
+
+        //тестов провалено
+        fail = 0
+        data.forEach(function(value, index, data) {
+        if ((Boolean(data[index].result)) === false) {
+        fail = fail + 1;
+        }
+        });
+        document.getElementById("failed").innerHTML = fail
+        console.log(fail)
+
+        // вывести в шкалу fail
+        var fail_perc = (100 * fail) / count
+        document.getElementById("fail").innerHTML = Math.round(fail_perc) + '%';
+
+        // всего пройденных тестов
+        passed = count - fail
+        document.getElementById("passed").innerHTML = passed
+        console.log(passed)
+        document.getElementById("pass").innerHTML = (100 - Math.round(fail_perc)) + '%';
+
+        // среднее значение тестов в день
+        // все даты
+        var all_d = [];
+        for(var i = 0 ; i < data.length ; i++){
+        var item = data[i].result_time;
+        all_d.push(item)
+        }
+        console.log(all_d)
+
+        //самая ранняя
+        earliest = all_d.reduce(function (a, b) {
+        return a < b ? a : b;
+        });
+        console.log(earliest)
+        console.log(Date.parse(earliest))
+        // поздняя
+        last = all_d.reduce(function (a, b) {
+        return a > b ? a : b;
+        });
+        console.log(last)
+        console.log(Date.parse(last))
+        // дата и результат последнего теста
+        var y = data.filter(function (data) {
+            return data.result_time === last
+            });
+        console.log(y[0].result)
+        document.getElementById("last").innerHTML = '<b>Последний тест: </b>' + last + '<b> Результат: </b>' + y[0].result
+        //количество дней
+        var future = moment(last);
+        var start = moment(earliest);
+        var d = future.diff(start, 'days');
+        console.log(d);
+        //количество тестов в день
+        var aver = Math.round(data.length / d)
+        document.getElementById("aver").innerHTML = aver
+        console.log(aver)
+
+        // ФИЛЬТР по датам фактических сдач
+        // передача данных из формы period
+        $("#period").click(function(){
+
+        var elements = document.getElementById("period").elements;
+        var period = {};
+        for(var i = 0 ; i < 2 ; i++){
+        var item = elements.item(i);
+        period[item.name] = item.value;
+        }
+        console.log(period)
+
+        // перевод в html
+        document.getElementById("start").innerHTML = period.result_time_since
+        document.getElementById("end").innerHTML = period.result_time_for
+
+        // переменные порога от - до
+        var startDate = new Date(period.result_time_since);
+        var endDate = new Date(period.result_time_for);
+        console.log(startDate, endDate)
+
+
+
+         // фильтр
+         resultData = []
+         data.forEach(function(value, index, data) {
+              var resultDate = new Date(data[index].result_time);
+              if (resultDate >= startDate && resultDate <= endDate) {
+                resultData.push(data[index])
+              }
+         })
+         console.log(resultData)
+
+         //всего тестов по фильтру в заданный период
+            count_p = resultData.length
+            console.log(count_p)
+            document.getElementById("count_p").innerHTML = count_p
+
+         // всего проваленных тестов по фильтру в заданный период
+            fail_p = 0
+            $(resultData).each(function(i){
+            if (resultData[i].result === false) {
+                fail_p = fail_p + 1;
+            }
+            });
+            document.getElementById("fail_p").innerHTML = fail_p
+
+            // всего успешно сданных тестов по фильтру в заданный период
+                passed_p = count_p - fail_p
+                document.getElementById("passed_p").innerHTML = passed_p
+
+            // формирование списка для табличного фильтра
+                var list = []
+                resultData.forEach(function(value, index, resultData) {
+                list.push(resultData[index].result_time)
+                })
+                console.log(list)
+
+            // табличный фильтр
+                $table.bootstrapTable('filterBy', {
+                result_time: list
+                })
+        })
 })
+
 
 
 // выбор ряда checkbox
@@ -475,6 +707,8 @@ $(function () {
         $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
         $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
         $("#datetimepicker_p").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD', });
+        $("#datetimepicker3").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
+        $("#datetimepicker4").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DDTHH:mm:ss', });
       });
 
 
@@ -587,8 +821,6 @@ $("#btn_put").click(function(){
              console.log(data)
 
 })
-
-
 
 
 </script>
