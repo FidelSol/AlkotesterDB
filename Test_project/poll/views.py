@@ -1,21 +1,13 @@
-
 from django.shortcuts import render
-
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from .models import Personal, Photo, Tests
-from .forms import TestsForm
+from .forms import TestsForm, PersonalForm, PhotoForm
 from django.core.files.storage import FileSystemStorage
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from django.contrib.auth.models import User
 from rest_framework import viewsets
-
-
 from django.contrib.auth.decorators import login_required
 from .utils import serialize_bootstraptable
-from rest_framework.renderers import TemplateHTMLRenderer
-
-
-
 
 @login_required
 def index(request):
@@ -45,7 +37,6 @@ def recieve_form(request):
     value_3 = request.POST.get('expected_time')
     value_4 = request.POST.get('result_time')
     value_5 = request.POST.get('result')
-
     personals = Personal.objects.all()
     test = Tests.objects.all()
     photos = Photo.objects.all()
@@ -75,18 +66,18 @@ def recieve_form(request):
     context = {'value_1': value_1, 'value_2': value_2, 'value_3': value_3, 'value_4': value_4, 'value_5': value_5, 'personals': personals, 'test': test, 'form_1': form_1, 'photos': photos}
     return render(request, 'poll/set.html', context)
 
-class MyTemplateHTMLRenderer(TemplateHTMLRenderer):
-    def get_template_context(self, data, renderer_context):
-        response = renderer_context['response']
-        if response.exception:
-            data['status_code'] = response.status_code
-        return {'data': data}
+@login_required
+def add_personal(request):
+    new = PersonalForm(request.POST)
+    if new.is_valid():
+        new.save()
+    context = {"new": new}
+    return render(request, 'poll/add_personal.html', context)
 
 class PersonalsViewSet(viewsets.ModelViewSet):
     queryset = Personal.objects.prefetch_related('tests_set').all()
     serializer_class = PersonalSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
-
 
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
@@ -106,7 +97,7 @@ def tests_for_json(request, *args, **kwargs):
     queryset = Tests.objects.all()
     json = serialize_bootstraptable(queryset)
     context = dict(json=json)
-    return render(request, 'api/tests_table.html', context)
+    return render(request, 'inter/tests_table.html', context)
 
 def persons_for_json(request, *args, **kwargs):
     queryset = Personal.objects.all()
@@ -114,7 +105,7 @@ def persons_for_json(request, *args, **kwargs):
     f = len(fails)
     json = serialize_bootstraptable(queryset)
     context = dict(json=json, fails=fails, f=f)
-    return render(request, 'api/personal_table.html', context)
+    return render(request, 'inter/personal_table.html', context)
 
 def card_for_json(request, personal_id):
     persona = Personal.objects.get(pk=personal_id)
@@ -123,7 +114,7 @@ def card_for_json(request, personal_id):
     json_photos = serialize_bootstraptable(photos)
     json_tests = serialize_bootstraptable(tests)
     context = {'persona': persona, 'photos': photos, 'tests': tests, 'json_photos': json_photos, 'json_tests': json_tests}
-    return render(request, 'api/card.html', context)
+    return render(request, 'inter/card.html', context)
 
 
 

@@ -7,7 +7,7 @@ import datetime
 
 class Personal(models.Model):
     personal_id = models.AutoField(primary_key=True)
-    ext_id = models.IntegerField(null=True, blank=True)
+    ext_id = models.IntegerField(null=True, blank=True, verbose_name="Расширенный ID")
     full_name = models.CharField(max_length=30, verbose_name="ФИО")
     birth_date = models.DateField(db_index=True, verbose_name="Дата рождения", null=True, blank=True)
     position = models.CharField(max_length=30, verbose_name="Должность", null=True, blank=True)

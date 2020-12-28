@@ -1,10 +1,6 @@
-
 from rest_framework import serializers
 from django.contrib.auth.models import User
-
-
 from .models import Personal, Tests, Photo
-
 
 class PersonalSerializer(serializers.ModelSerializer):
     personal_id = serializers.IntegerField(required=False)
@@ -13,7 +9,6 @@ class PersonalSerializer(serializers.ModelSerializer):
     birth_date = serializers.DateField(required=False)
     position = serializers.CharField(required=False)
     punishment = serializers.IntegerField(required=False)
-
 
     class Meta:
         model = Personal
