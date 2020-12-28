@@ -378,7 +378,7 @@ button:hover, a:hover {
   <td scope="row" data-field="tests_id">{{ test.tests_id }}</td>
   <td scope="row" data-field="expected_time">{{ test.expected_time|date:"Y-m-d H:m:s" }}</td>
   <td scope="row" data-field="result_time">{{ test.result_time|date:"Y-m-d H:m:s" }}</td>
-  <td scope="row" data-field="result">{{ test.result }}</td>
+  <td scope="row" data-field="result">{{ test.result|yesno:"Успешно,Провален" }}</td>
   <td scope="row" data-field="operate"></td>
   </tr>
  {% endfor %}
@@ -566,6 +566,13 @@ $(document).ready(function () {
         var y = data.filter(function (data) {
             return data.result_time === last
             });
+        console.log(y[0].result)
+
+        if(  y[0].result === false ) {
+            y[0].result = "×";
+        } else {
+            y[0].result = "✔";
+        }
         console.log(y[0].result)
         document.getElementById("last").innerHTML = '<b>Последний тест: </b>' + last + '<b> Результат: </b>' + y[0].result
         //количество дней

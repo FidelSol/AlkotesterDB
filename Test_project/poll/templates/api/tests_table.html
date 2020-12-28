@@ -357,6 +357,9 @@ tr:nth-child(even) {
 
     function operateFormatter(value, row, index) {
     return [
+      '<a class="like" href="javascript:void(0)" title="Профиль">',
+      '<i class="fa fa-id-card" aria-hidden="true"></i>',
+      '</a>  ',
       '<a class="remove" href="javascript:void(0)" title="Remove">',
       '<i class="fa fa-trash"></i>',
       '</a>'
@@ -364,6 +367,10 @@ tr:nth-child(even) {
     }
 
     window.operateEvents = {
+    'click .like': function (e, value, row, index) {
+        value = [row.personal_id],
+        document.location.href = "/jsons/card/" + row.personal_id +"/";
+    },
     'click .remove': function (e, value, row, index) {
         $.ajax({
           url: "/api/v1/tests/" + row.tests_id +"/",
@@ -376,6 +383,14 @@ tr:nth-child(even) {
 		         alert("Удалить получилось!");}
           })
     }}
+
+    function resultFormatter(value, row, index) {
+        if(  value === false ) {
+            return "Провален"
+        } else {
+        return "Успешно" }
+    }
+
 
 // функция таблицы
  function initTable() {
@@ -422,6 +437,7 @@ tr:nth-child(even) {
             title: 'Результат',
             sortable: true,
             align: 'center',
+            formatter: resultFormatter,
         },{
             field: 'operate',
             title: 'Удалить',

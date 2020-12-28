@@ -87,6 +87,7 @@ class PersonalsViewSet(viewsets.ModelViewSet):
     serializer_class = PersonalSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
 
+
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
@@ -109,8 +110,10 @@ def tests_for_json(request, *args, **kwargs):
 
 def persons_for_json(request, *args, **kwargs):
     queryset = Personal.objects.all()
+    fails = Personal.objects.filter(tests__result=False).distinct()
+    f = len(fails)
     json = serialize_bootstraptable(queryset)
-    context = dict(json=json)
+    context = dict(json=json, fails=fails, f=f)
     return render(request, 'api/personal_table.html', context)
 
 def card_for_json(request, personal_id):

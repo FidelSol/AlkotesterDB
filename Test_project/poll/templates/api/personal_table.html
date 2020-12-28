@@ -72,6 +72,9 @@ tr:nth-child(even) {
 
 </style>
 
+
+
+
 <table style="border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
@@ -79,13 +82,17 @@ tr:nth-child(even) {
     <tr style="background-color: #f2f2f2"><th colspan="3" style="text-align: center">ПЕРСОНАЛ</th></tr>
     <tr style="background-color: #f2f2f2">
       <th style="width:32%; text-align: center;
-  padding: 16px;">Тестов всего</th>
+  padding: 16px;">Сотрудников всего</th>
       <th style="width:32%; text-align: center;
+  padding: 16px;">Сотрудников, проваливших тесты<i class="fa fa-remove" style="color: red;"></i></th>
+        <th style="width:32%; text-align: center;
   padding: 16px;">Всего дисциплинарных взысканий<i class="fa fa-exclamation" style="color: red;"></i></th>
     </tr>
     <tr>
       <td style="text-align: center;
   padding: 16px;"><div id="count"></div></td>
+        <td style="text-align: center;
+  padding: 16px;">{{ f }}</td>
       <td style="text-align: center;
   padding: 16px;"><div id="punish"></div></td>
     </tr>
@@ -146,7 +153,6 @@ tr:nth-child(even) {
         <input type="text" class="form-control" name="punishment" placeholder="Взыскания">
         </div>
 
-
         <input type="submit" class="btn btn-primary" id="btn" value="Загрузить" />
 
   </form>
@@ -198,7 +204,11 @@ tr:nth-child(even) {
 </div>
 </div>
 
-         <div class="btn-group mr-2" role="group" aria-label="Forth group">
+        <div class="btn-group mr-2" role="group" aria-label="Forth group">
+        <button id="button" class="btn btn-secondary">Кто провалил тесты</button>
+        </div>
+
+         <div class="btn-group mr-2" role="group" aria-label="Fifth group">
             <div class="input-group"> <span class="input-group-addon"></span>
             <input id="filter" type="text" class="form-control" placeholder="Поиск">
             </div>
@@ -569,10 +579,21 @@ $('#table').on('load-success.bs.table', function (data) {
     var sum_punish = punish_list.reduce(function(a, b) { return a + b; }, 0);
      document.getElementById("punish").innerHTML = sum_punish
     console.log(sum_punish)
+  })
 
+var names = []
+{% for fail in fails %}
+    var fail = '{{ fail }}'
+    names.push(fail)
+{% endfor %}
+console.log(names)
 
-
-
+$(function() {
+    $button.click(function () {
+      $table.bootstrapTable('filterBy', {
+        full_name: names
+      })
+    })
   })
 
 </script>

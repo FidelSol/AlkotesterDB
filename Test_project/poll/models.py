@@ -49,11 +49,16 @@ class Photo(models.Model):
         super(Photo, self).save(*args, **kwargs)
 
 class Tests(models.Model):
+    RESULT_CHOICES = [
+        (False, 'Провален'),
+        (True, 'Успешно'),
+    ]
+
     tests_id = models.AutoField(primary_key=True)
     personal = models.ForeignKey(Personal, on_delete=models.CASCADE, null=True, blank=True)
     expected_time = models.DateTimeField(blank=True, null=True, verbose_name="Назначенное время теста")
     result_time = models.DateTimeField(blank=True, null=True, verbose_name="Фактическое время сдачи теста")
-    result = models.BooleanField(default=False, verbose_name="Результат: да/нет")
+    result = models.BooleanField(choices=RESULT_CHOICES, default=False, verbose_name="Результат: да/нет")
 
 
     objects = models.Manager()
@@ -61,6 +66,7 @@ class Tests(models.Model):
     class Meta:
         verbose_name = 'Тест'
         verbose_name_plural = 'Тесты'
+        ordering = ['-result_time']
 
     def __str__(self):
         return str(self.personal)
