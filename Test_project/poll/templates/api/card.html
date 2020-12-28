@@ -186,7 +186,7 @@ button:hover, a:hover {
       {% csrf_token %}
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">Расширенный ID</span>
+              <span class="input-group-text" id="basic-addon1"><b>Расширенный ID</b></span>
           </div>
           <input type="number" class="form-control" name="ext_id_put" value="{{ persona.ext_id }}" placeholder="Расширенный ID" /><br>
 
@@ -194,14 +194,14 @@ button:hover, a:hover {
 
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon2">ФИО</span>
+              <span class="input-group-text" id="basic-addon2"><b>ФИО</b></span>
           </div>
         <input type="text" class="form-control" name="full_name_put" value="{{ persona.full_name }}" placeholder="ФИО"/>
         </div>
 
         <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon3">Д.Р.</span>
+                        <span class="input-group-text" id="basic-addon3"><b>Д.Р.</b></span>
 
                     <div class="input-group date" id="datetimepicker_p" style="width: 350px;" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" name="birth_date_put" data-target="#datetimepicker_p" value="{{ persona.birth_date }}" placeholder="Дата рождения"/>
@@ -212,14 +212,14 @@ button:hover, a:hover {
 
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon4">Должность</span>
+              <span class="input-group-text" id="basic-addon4"><b>Должность</b></span>
           </div>
         <input type="text" class="form-control" name="position_put" value="{{ persona.position }}" placeholder="Должность"/>
         </div>
 
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon5">Взыскания</span>
+          <span class="input-group-text" id="basic-addon5"><b>Взыскания</b></span>
           </div>
         <input type="text" class="form-control" name="punishment_put" value="{{ persona.punishment }}" placeholder="Взыскания"/>
         </div>
@@ -241,9 +241,6 @@ button:hover, a:hover {
     <div id="aver"></div>
     <div id="last"></div>
 </div>
-
-
-
 
 </div>
     </div>

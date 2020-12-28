@@ -7,11 +7,18 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 <link href="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous">
 <link rel="icon" href="https://getbootstrap.com/docs/4.5/assets/img/favicons/favicon.ico">
  </head>
  <body>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+ <script src="http://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
@@ -20,6 +27,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.1/locale/bootstrap-table-ru-RU.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.18.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
 
@@ -35,23 +43,62 @@
   .form-group {
      width: 100%;
      height: 100%;
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+/* Style table headers and table data */
+th, td {
+  text-align: center;
+  padding: 16px;
+}
+
+th:first-child, td:first-child {
+  text-align: left;
+}
+
+/* Zebra-striped table rows */
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+
+.fa-exclamation {
+  color: red;
 }
 
 </style>
 
+<table style="border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;">
+    <tr style="background-color: #f2f2f2"><th colspan="3" style="text-align: center">ПЕРСОНАЛ</th></tr>
+    <tr style="background-color: #f2f2f2">
+      <th style="width:32%; text-align: center;
+  padding: 16px;">Тестов всего</th>
+      <th style="width:32%; text-align: center;
+  padding: 16px;">Всего дисциплинарных взысканий<i class="fa fa-exclamation" style="color: red;"></i></th>
+    </tr>
+    <tr>
+      <td style="text-align: center;
+  padding: 16px;"><div id="count"></div></td>
+      <td style="text-align: center;
+  padding: 16px;"><div id="punish"></div></td>
+    </tr>
+</table>
+
 <br>
-<br><br>
 <div class="select">
   <select class="form-control" id="locale">
     <option value="en-US" selected>en-US</option>
     <option value="ru-RU">ru-RU</option>
   </select>
 </div>
-
-
-
 <br>
-
 <div id="toolbar">
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
 
@@ -106,7 +153,6 @@
 </div>
 </div>
 </div>
-
 
 <div class="btn-group" role="group" aria-label="Third group">
 <div class="dropdown mr-4">
@@ -197,7 +243,7 @@
         <td scope="col" data-field="birth_date" data-searchable="true">Дата рождения</td>
         <td scope="col" data-field="position" data-searchable="true">Должность</td>
         <td scope="col" data-field="punishment" data-searchable="true">Дисциплинарные зыскания</td>
-        <td scope="col"data-field="operate" data-formatter="operateFormatter"
+        <td scope="col" data-field="operate" data-formatter="operateFormatter"
           data-events="operateEvents"></td>
         </tr>
   </thead>
@@ -503,6 +549,31 @@ $(function() {
     initTable()
     $('#locale').change(initTable)
  })
+
+// фильтрация и вывод данных через ajax
+$('#table').on('load-success.bs.table', function (data) {
+  console.log($table.bootstrapTable('getData'))
+  var data = $table.bootstrapTable('getData')
+  console.log(data)
+
+  // всего сотрудников
+    count = data.length
+    console.log(count)
+    document.getElementById("count").innerHTML = count
+
+  // дисциплинарные взыскания
+  var punish_list = []
+  $(data).each(function(i){
+        punish_list.push(data[i].punishment)
+    });
+    var sum_punish = punish_list.reduce(function(a, b) { return a + b; }, 0);
+     document.getElementById("punish").innerHTML = sum_punish
+    console.log(sum_punish)
+
+
+
+
+  })
 
 </script>
 </body>
