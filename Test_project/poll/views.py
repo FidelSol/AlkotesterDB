@@ -115,9 +115,10 @@ class UsersViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 def tests_for_json(request, *args, **kwargs):
+    personals = Personal.objects.all()
     queryset = Tests.objects.all()
     json = serialize_bootstraptable(queryset)
-    context = dict(json=json)
+    context = dict(json=json, personals=personals)
     return render(request, 'inter/tests_table.html', context)
 
 def persons_for_json(request, *args, **kwargs):
