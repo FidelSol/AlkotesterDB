@@ -279,7 +279,7 @@ tr:nth-child(even) {
     window.operateEvents = {
     'click .like': function (e, value, row, index) {
         value = [row.personal_id],
-        document.location.href = "/jsons/card/" + row.personal_id +"/";
+        document.location.href = "/card/" + row.personal_id +"/";
     },
     'click .remove': function (e, value, row, index) {
         $.ajax({

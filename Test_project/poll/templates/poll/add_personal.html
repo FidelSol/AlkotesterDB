@@ -13,24 +13,24 @@
  <div class="row">
 
         <div class="col-6">
-         {{  form.ext_id|as_crispy_field }}
+            <b>{{  form.ext_id|as_crispy_field }}</b>
         </div>
 
         <div class="col-6">
-         {{ form.full_name|as_crispy_field }}
+         <b>{{ form.full_name|as_crispy_field }}</b>
         </div>
 
   <div class="col-6">
-         {{ form.position|as_crispy_field }}
+         <b>{{ form.position|as_crispy_field }}</b>
         </div>
 
   <div class="col-6">
 
-         {{ form.punishment|as_crispy_field }}
+         <b>{{ form.punishment|as_crispy_field }}</b>
         </div>
 
   <div class="col-6">
-<label>Дата рождения</label>
+<label><b>Дата рождения</b></label>
 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
       {{ form.birth_date }}
 <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">

@@ -1,7 +1,5 @@
-
 from django import forms
 from .models import Tests, Photo, Personal
-
 
 class PersonalForm(forms.ModelForm):
     birth_date = forms.DateField(label='Дата рождения:')
@@ -16,7 +14,7 @@ class TestsForm(forms.ModelForm):
 
     class Meta:
         model = Tests
-        fields = ('expected_time', 'result_time')
+        fields = ('expected_time', 'result_time', 'result')
 
 class PhotoForm(forms.ModelForm):
     data_photo = forms.ImageField(label='Фото')

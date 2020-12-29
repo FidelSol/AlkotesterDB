@@ -11,6 +11,7 @@ from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required
 from .utils import serialize_bootstraptable
 
+
 @login_required
 def index(request):
     personals = Personal.objects.all()
@@ -78,6 +79,21 @@ def add_personal(request):
         else:
             form = PersonalForm(request.POST)
     return render(request, 'poll/add_personal.html', {"form": form})
+
+@login_required
+def add_tests(request):
+    personals = Personal.objects.all()
+    value_name = request.POST.get('full_name')
+    form = TestsForm(request.POST)
+    if request.method == "POST" and form.is_valid():
+        a = form.save()
+        persona = Personal.objects.get(full_name=value_name)
+        test = Tests.objects.get(tests_id=a.tests_id)
+        persona.tests_set.add(test)
+        return HttpResponseRedirect(reverse("add_t"))
+    else:
+        form = TestsForm(request.POST)
+    return render(request, 'poll/add_tests.html', {'personals': personals, 'form': form})
 
 class PersonalsViewSet(viewsets.ModelViewSet):
     queryset = Personal.objects.prefetch_related('tests_set').all()

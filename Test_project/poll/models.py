@@ -58,7 +58,7 @@ class Tests(models.Model):
     personal = models.ForeignKey(Personal, on_delete=models.CASCADE, null=True, blank=True)
     expected_time = models.DateTimeField(blank=True, null=True, verbose_name="Назначенное время теста")
     result_time = models.DateTimeField(blank=True, null=True, verbose_name="Фактическое время сдачи теста")
-    result = models.BooleanField(choices=RESULT_CHOICES, default=False, verbose_name="Результат: да/нет")
+    result = models.BooleanField(choices=RESULT_CHOICES, default=False, verbose_name="Результат")
 
 
     objects = models.Manager()

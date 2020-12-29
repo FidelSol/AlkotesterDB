@@ -1,0 +1,56 @@
+{% extends "poll/layout/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block main %}
+<div class="container-fluid">
+    <h2>ДОБАВИТЬ ТЕСТЫ</h2>
+
+<form class="px-4 py-3" method="post" id="ajax_form" enctype="multipart/form-data" style="width: 300px;" action="">
+        {% csrf_token %}
+
+    <div class="form-group">
+        <label><b>Сотрудник:</b></label>
+    <input list="personal" name="full_name">
+      <datalist id="personal">
+          {% for personal in personals %}
+            <option value="{{ personal.full_name }}">
+          {% endfor %}
+      </datalist>
+    </div>
+
+        <div class="form-group">
+            <label><b>Назначенное время сдачи теста:</b></label>
+                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                     <b>{{ form.expected_time }}</b>
+                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker"><div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                    </div>
+        </div>
+
+        <div class="form-group">
+            <label><b>Фактическое время сдачи теста:</b></label>
+                    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                     <b>{{ form.result_time }}</b>
+                    <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker"><div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                    </div>
+        </div>
+
+                     <b>{{ form.result|as_crispy_field }}</b>
+
+        <input type="submit" class="btn btn-primary" id="btn" value="Сохранить" />
+
+  </form>
+
+
+</div>
+<script type="text/javascript">
+      $(function () {
+        $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
+        $("#datetimepicker2").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD HH:mm', });
+      });
+
+
+</script>
+{% endblock %}
