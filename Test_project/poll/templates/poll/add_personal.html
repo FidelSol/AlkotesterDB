@@ -13,25 +13,30 @@
  <div class="row">
 
         <div class="col-6">
-         {{ new.ext_id|as_crispy_field }}
+         {{  form.ext_id|as_crispy_field }}
         </div>
 
         <div class="col-6">
-         {{ new.full_name|as_crispy_field }}
+         {{ form.full_name|as_crispy_field }}
         </div>
 
   <div class="col-6">
-         {{ new.position|as_crispy_field }}
-        </div>
-
-  <div class="col-6">
-
-         {{ new.punishment|as_crispy_field }}
+         {{ form.position|as_crispy_field }}
         </div>
 
   <div class="col-6">
 
-      {{ new.birth_date|as_crispy_field }}
+         {{ form.punishment|as_crispy_field }}
+        </div>
+
+  <div class="col-6">
+<label>Дата рождения</label>
+<div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+      {{ form.birth_date }}
+<div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+            </div>
 
   </div>
  </div>
@@ -41,9 +46,9 @@
 </div>
 <script type="text/javascript">
 
-  $( function() {
-    $( "#datepicker" ).datepicker();
-  } );
+    $(function () {
+        $("#datetimepicker1").datetimepicker({ locale: 'ru', format: 'YYYY-MM-DD', });
+      });
 
 </script>
 {% endblock %}

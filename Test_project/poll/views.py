@@ -1,4 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from .models import Personal, Photo, Tests
 from .forms import TestsForm, PersonalForm, PhotoForm
@@ -68,11 +70,14 @@ def recieve_form(request):
 
 @login_required
 def add_personal(request):
-    new = PersonalForm(request.POST)
-    if new.is_valid():
-        new.save()
-    context = {"new": new}
-    return render(request, 'poll/add_personal.html', context)
+    form = PersonalForm(request.POST)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("add_p"))
+        else:
+            form = PersonalForm(request.POST)
+    return render(request, 'poll/add_personal.html', {"form": form})
 
 class PersonalsViewSet(viewsets.ModelViewSet):
     queryset = Personal.objects.prefetch_related('tests_set').all()
