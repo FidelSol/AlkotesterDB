@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from .models import Personal, Photo, Tests
-from .forms import TestsForm, PersonalForm, PhotoForm
+from .forms import TestsForm, PersonalForm, PhotoFormSet
 from django.core.files.storage import FileSystemStorage
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from django.contrib.auth.models import User
@@ -133,9 +133,19 @@ def card_for_json(request, personal_id):
     persona = Personal.objects.get(pk=personal_id)
     photos = Photo.objects.filter(personal__personal_id=personal_id)
     tests = Tests.objects.filter(personal__personal_id=personal_id)
+    formset = PhotoFormSet(instance=persona)
     json_photos = serialize_bootstraptable(photos)
     json_tests = serialize_bootstraptable(tests)
-    context = {'persona': persona, 'photos': photos, 'tests': tests, 'json_photos': json_photos, 'json_tests': json_tests}
+    if request.method == "POST":
+        formset = PhotoFormSet(request.POST, request.FILES, instance=persona)
+        if formset.is_valid():
+            formset.save()
+            return render(request, 'inter/card.html', {
+                'formset': formset, 'persona': persona, 'photos': photos, 'tests': tests, 'json_photos': json_photos, 'json_tests': json_tests,
+            })
+        else:
+            formset = PhotoFormSet()
+    context = {'persona': persona, 'photos': photos, 'tests': tests, 'json_photos': json_photos, 'json_tests': json_tests, 'formset': formset}
     return render(request, 'inter/card.html', context)
 
 

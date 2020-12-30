@@ -32,7 +32,6 @@ class Photo(models.Model):
     data_pub = models.DateField(auto_now=True, db_index=True, verbose_name="Дата публикации")
     data_photo = models.ImageField(upload_to='static/poll', null=True, blank=True, verbose_name="Фото")
 
-
     objects = models.Manager()
 
     class Meta:

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+{% load crispy_forms_tags %}
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -143,6 +144,34 @@ button:hover, a:hover {
   <p>{% for photo in photos %}
   <img src="/{{ photo.data_photo }}" width="150" height="200">
   {% endfor %}</p>
+
+<div class="btn-group btn-group dropup">
+    <div class="dropdown mr-4">
+  <button type="button" class="btn btn-secondary dropdown-toggle" style="border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color: #2f4f4f;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 20px; width: 450px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Изменить фото</button>
+  <div class="dropdown-menu" style="width: 800px;">
+      <form class="px-4 py-3" method="post" id="photo" style="text-align: center;" enctype="multipart/form-data" action="">{% csrf_token %}
+            {{ formset.management_form }}
+            <table>
+                {% for form in formset %}
+                    {{ form }}
+                {% endfor %}
+            </table>
+            <br>
+            <input type="submit" class="btn btn-primary" value="Сохранить" />
+      </form>
+  </div>
+    </div>
+</div>
+
   <h1>{{ persona.full_name }}</h1>
   <p><b>Персональный ID: {{ persona.personal_id }}</b></p>
   <p><b>Расширенный ID: {{ persona.ext_id }}</b></p>
