@@ -1,6 +1,5 @@
 from django import forms
 from django.forms import inlineformset_factory
-
 from .models import Tests, Photo, Personal
 
 class PersonalForm(forms.ModelForm):
@@ -19,10 +18,9 @@ class TestsForm(forms.ModelForm):
         fields = ('expected_time', 'result_time', 'result')
 
 class PhotoForm(forms.ModelForm):
-    data_photo = forms.ImageField(label='Фото')
 
     class Meta:
         model = Photo
         fields = ( 'data_photo', )
 
-PhotoFormSet = inlineformset_factory(Personal, Photo, fields=('data_photo',), max_num=3)
+PhotoFormSet = inlineformset_factory(Personal, Photo, fields=('data_photo',), can_delete=True)

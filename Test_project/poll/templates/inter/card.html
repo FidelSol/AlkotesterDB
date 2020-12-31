@@ -158,12 +158,9 @@ button:hover, a:hover {
     width: 100%;
     font-size: 20px; width: 450px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Изменить фото</button>
   <div class="dropdown-menu" style="width: 800px;">
-      <form class="px-4 py-3" method="post" id="photo" style="text-align: center;" enctype="multipart/form-data" action="">{% csrf_token %}
-            {{ formset.management_form }}
-            <table>
-                {% for form in formset %}
-                    {{ form }}
-                {% endfor %}
+      <form class="px-4 py-3" method="post" style="text-align: center;" enctype="multipart/form-data" action="">{% csrf_token %}
+          <table>
+           {{ formset }}
             </table>
             <br>
             <input type="submit" class="btn btn-primary" value="Сохранить" />
@@ -531,13 +528,22 @@ $(document).ready(function () {
 
         // вывести в шкалу fail
         var fail_perc = (100 * fail) / count
-        document.getElementById("fail").innerHTML = Math.round(fail_perc) + '%';
+        console.log(fail_perc)
+
 
         // всего пройденных тестов
         passed = count - fail
         document.getElementById("passed").innerHTML = '<b>Тестов сдано успешно<i class="fa fa-check"></i>: <b>' + passed
         console.log(passed)
-        document.getElementById("pass").innerHTML = (100 - Math.round(fail_perc)) + '%';
+
+
+        // проценты
+        if (isNaN(fail_perc)) {
+        document.getElementById("fail").innerHTML = 0 + '%';
+        document.getElementById("pass").innerHTML = 0 + '%'; }
+        else {
+        document.getElementById("fail").innerHTML = Math.round(fail_perc) + '%';
+        document.getElementById("pass").innerHTML = (100 - Math.round(fail_perc)) + '%'; }
 
         // среднее значение тестов в день
         // все даты

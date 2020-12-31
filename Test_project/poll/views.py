@@ -136,15 +136,16 @@ def card_for_json(request, personal_id):
     formset = PhotoFormSet(instance=persona)
     json_photos = serialize_bootstraptable(photos)
     json_tests = serialize_bootstraptable(tests)
-    if request.method == "POST":
+    if request.method == 'POST' and request.FILES:
         formset = PhotoFormSet(request.POST, request.FILES, instance=persona)
         if formset.is_valid():
             formset.save()
             return render(request, 'inter/card.html', {
-                'formset': formset, 'persona': persona, 'photos': photos, 'tests': tests, 'json_photos': json_photos, 'json_tests': json_tests,
+                 'persona': persona, 'photos': photos, 'tests': tests, 'json_photos': json_photos, 'json_tests': json_tests, 'formset': formset
             })
         else:
-            formset = PhotoFormSet()
+            formset = PhotoFormSet(instance=persona)
+
     context = {'persona': persona, 'photos': photos, 'tests': tests, 'json_photos': json_photos, 'json_tests': json_tests, 'formset': formset}
     return render(request, 'inter/card.html', context)
 
