@@ -159,11 +159,10 @@ button:hover, a:hover {
     font-size: 20px; width: 450px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Изменить фото</button>
   <div class="dropdown-menu" style="width: 800px;">
       <form class="px-4 py-3" method="post" style="text-align: center;" enctype="multipart/form-data" action="">{% csrf_token %}
-          <table>
-           {{ formset }}
-            </table>
+           <table>{{ formset }}</table>
+
             <br>
-            <input type="submit" class="btn btn-primary" value="Сохранить" />
+            <input type="submit" value="Сохранить" />
       </form>
   </div>
     </div>
@@ -755,6 +754,8 @@ $(function Add() {
             var item = elements.item(i);
             data[item.name] = item.value;
 		    }
+
+            console.log(data)
 
             var expected_time = data.expected_time
             var result_time = data.result_time

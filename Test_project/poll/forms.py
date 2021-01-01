@@ -19,8 +19,9 @@ class TestsForm(forms.ModelForm):
 
 class PhotoForm(forms.ModelForm):
 
+
     class Meta:
         model = Photo
-        fields = ( 'data_photo', )
+        fields = ( '__all__' )
 
-PhotoFormSet = inlineformset_factory(Personal, Photo, fields=('data_photo',), can_delete=True)
+PhotoFormSet = inlineformset_factory(Personal, Photo, form=PhotoForm, extra=1, can_delete=True)
