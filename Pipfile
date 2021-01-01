@@ -19,6 +19,7 @@ pip = "*"
 django-cors-headers = "*"
 django-tables2-bootstrap4 = "*"
 drf-proxy-pagination = "*"
+pytz = "*"
 
 [dev-packages]
 

@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 {% load crispy_forms_tags %}
+{% load tz %}
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -382,16 +383,18 @@ button:hover, a:hover {
     </tr>
   </thead>
 <tbody class="searchable">
+
 {% for test in tests %}
 <tr>
     <td scope="row" data-field="state"></td>
   <td scope="row" data-field="tests_id">{{ test.tests_id }}</td>
-  <td scope="row" data-field="expected_time">{{ test.expected_time|date:"Y-m-d H:m:s" }}</td>
-  <td scope="row" data-field="result_time">{{ test.result_time|date:"Y-m-d H:m:s" }}</td>
+  <td scope="row" data-field="expected_time">{{ test.expected_time|date:"Y-m-d H:i:s" }}</td>
+  <td scope="row" data-field="result_time">{{ test.result_time|date:"Y-m-d H:i:s" }}</td>
   <td scope="row" data-field="result">{{ test.result|yesno:"Успешно,Провален" }}</td>
   <td scope="row" data-field="operate"></td>
   </tr>
  {% endfor %}
+
 </tbody>
 </table>
 
