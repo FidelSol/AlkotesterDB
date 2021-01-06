@@ -28,7 +28,7 @@
 <style>
 .card1 {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    width: 450px;
+
     margin: auto;
     text-align: center;
 }
@@ -42,7 +42,7 @@
 .card2 {
 
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    width: 1000px;
+
     margin: auto;
     text-align: center;
 }
@@ -146,7 +146,7 @@ button:hover, a:hover {
   <img src="/{{ photo.data_photo }}" width="150" height="200">
   {% endfor %}</p>
 
-<div class="btn-group btn-group dropup">
+<div class="btn-group btn-group dropdown">
     <div class="dropdown mr-4">
   <button type="button" class="btn btn-secondary dropdown-toggle" style="border: none;
     outline: 0;
@@ -154,10 +154,11 @@ button:hover, a:hover {
     padding: 8px;
     color: white;
     background-color: #2f4f4f;
+    margin: auto;
     text-align: center;
     cursor: pointer;
-    width: 100%;
-    font-size: 20px; width: 450px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Изменить фото</button>
+    width: 450px;
+    font-size: 20px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Изменить фото</button>
   <div class="dropdown-menu" style="width: 800px;">
       <form class="px-4 py-3" method="post" style="text-align: center;" enctype="multipart/form-data" action="">{% csrf_token %}
            <table>{{ formset }}</table>
@@ -187,7 +188,7 @@ button:hover, a:hover {
     background-color: #2f4f4f;
     text-align: center;
     cursor: pointer;
-    width: 100%;
+
     font-size: 20px; width: 450px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Редактировать</button>
 
   <div class="dropdown-menu" style="width: 450px;">
@@ -274,7 +275,7 @@ button:hover, a:hover {
 
     <div class="btn-group mr-2" role="group" aria-label="Second group">
       <div class="dropdown mr-4">
-        <button type="button" class="btn btn-secondary dropdown-toggle" style="width: 200px;" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+        <button type="button" class="btn btn-secondary dropdown-toggle" style="width: 110px;" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
         Добавить
         </button>
         <div class="dropdown-menu">
@@ -312,7 +313,7 @@ button:hover, a:hover {
 
           <div class="btn-group mr-2" role="group" aria-label="Third group">
 
-         <button type="button" class="btn btn-secondary dropdown-toggle" style="width: 200px;" id="dropdownMenuOffset_period" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">Фильтр по периоду</button>
+         <button type="button" class="btn btn-secondary dropdown-toggle" style="width: 180px;" id="dropdownMenuOffset_period" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">Фильтр по периоду</button>
             <div class="dropdown-menu">
 
                 <form class="px-4 py-3" method="get" id="period" enctype="multipart/form-data" style="width: 300px;" action="">
