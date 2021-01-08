@@ -190,7 +190,7 @@ tr:nth-child(even) {
       {% csrf_token %}
     <div class="form-group">
           <div class="input-group date" id="datetimepicker1_put" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" name="expected_time_put" data-target="#datetimepicker1_put" placeholder="Назнач. время"/>
+                    <input type="text" class="form-control datetimepicker-input" id="expected_time_put" name="expected_time_put" data-target="#datetimepicker1_put" placeholder="Назнач. время"/>
                     <div class="input-group-append" data-target="#datetimepicker1_put" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
@@ -198,7 +198,7 @@ tr:nth-child(even) {
 
         <div class="form-group">
           <div class="input-group date" id="datetimepicker2_put" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" name="result_time_put" data-target="#datetimepicker2_put" placeholder="Фактич. время"/>
+                    <input type="text" class="form-control datetimepicker-input" id="result_time_put" name="result_time_put" data-target="#datetimepicker2_put" placeholder="Фактич. время"/>
                     <div class="input-group-append" data-target="#datetimepicker2_put" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
@@ -567,10 +567,22 @@ $(function() {
 $(function() {
 
     var checkedRows = [];
+    var checkedExpected_time = [];
+    var checkedResult_time = [];
+
 
 $('#table').on('check.bs.table', function (e, row) {
   checkedRows.push({tests_id: row.tests_id});
+  checkedExpected_time.push({expected_time: row.expected_time});
+  checkedResult_time.push({result_time: row.result_time});
+
+
   console.log(checkedRows);
+
+   // вывод в значение формы put по-умолчанию
+        document.getElementById("expected_time_put").value = checkedExpected_time[0].expected_time
+        document.getElementById("result_time_put").value = checkedResult_time[0].result_time
+
 
   $("#output").empty();
             $.each(checkedRows, function(index, value) {
@@ -582,6 +594,18 @@ $('#table').on('uncheck.bs.table', function (e, row) {
   $.each(checkedRows, function(index, value) {
     if (value.tests_id === row.tests_id) {
       checkedRows.splice(index,1);
+    }
+  });
+
+  $.each(checkedExpected_time, function(index, value) {
+    if (value.expected_time === row.expected_time) {
+      checkedExpected_time.splice(index,1);
+    }
+  });
+
+  $.each(checkedResult_time, function(index, value) {
+    if (value.result_time === row.result_time) {
+      checkedResult_time.splice(index,1);
     }
   });
   console.log(checkedRows);
