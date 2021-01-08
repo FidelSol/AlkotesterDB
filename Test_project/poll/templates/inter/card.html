@@ -216,7 +216,7 @@ button:hover, a:hover {
                         <span class="input-group-text" id="basic-addon3"><b>Д.Р.</b></span>
 
                     <div class="input-group date" id="datetimepicker_p" style="width: 350px;" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" name="birth_date_put" data-target="#datetimepicker_p" value="{{ persona.birth_date }}" placeholder="Дата рождения"/>
+                    <input type="text" class="form-control datetimepicker-input" id="birth_date_put" name="birth_date_put" value="{{ persona.birth_date|date:'Y-m-d' }}" data-target="#datetimepicker_p" placeholder="Дата рождения"/>
                     <div class="input-group-append" data-target="#datetimepicker_p" data-toggle="datetimepicker"><div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
                       </div>
