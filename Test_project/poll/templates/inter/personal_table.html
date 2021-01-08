@@ -106,10 +106,6 @@ tr:nth-child(even) {
     {% csrf_token %}
 
         <div class="form-group">
-          <input type="number" class="form-control" name="personal_id" placeholder="Персон. ID" /><br>
-        </div>
-
-        <div class="form-group">
           <input type="number" class="form-control" name="ext_id" placeholder="Расшир. ID" /><br>
         </div>
 
@@ -152,16 +148,16 @@ tr:nth-child(even) {
       <input type="hidden" name="_method" value="PUT">
       {% csrf_token %}
         <div class="form-group">
-          <input type="number" class="form-control" name="ext_id_put" placeholder="Расшир. ID" /><br>
+          <input type="number" class="form-control" id="ext_id_put" name="ext_id_put" placeholder="Расшир. ID" /><br>
         </div>
 
         <div class="form-group">
-        <input type="text" class="form-control" name="full_name_put" placeholder="ФИО">
+        <input type="text" class="form-control" id="full_name_put" name="full_name_put" placeholder="ФИО">
         </div>
 
         <div class="form-group">
           <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" name="birth_date_put" data-target="#datetimepicker2" placeholder="Дата рождения"/>
+                    <input type="text" class="form-control datetimepicker-input" id="birth_date_put" name="birth_date_put" data-target="#datetimepicker2" placeholder="Дата рождения"/>
                     <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div></div>
@@ -169,11 +165,11 @@ tr:nth-child(even) {
 
 
         <div class="form-group">
-        <input type="text" class="form-control" name="position_put" placeholder="Должность">
+        <input type="text" class="form-control" id="position_put" name="position_put" placeholder="Должность">
         </div>
 
         <div class="form-group">
-        <input type="text" class="form-control" name="punishment_put" placeholder="Взыскания">
+        <input type="text" class="form-control" id="punishment_put" name="punishment_put" placeholder="Взыскания">
         </div>
 
 
@@ -430,7 +426,6 @@ $(function() {
 		    }
 
             var csrfmiddlewaretoken = data.csrfmiddlewaretoken
-		    var personal_id = parseInt(data.personal_id)
             var ext_id = parseInt(data.ext_id)
             var full_name = data.full_name
             var birth_date = data.birth_date
@@ -444,7 +439,6 @@ $(function() {
         dataType: "json",
 
         data:          {
-                        'personal_id': personal_id,
                         'ext_id': ext_id,
                         'full_name': full_name,
                         'birth_date': birth_date,
@@ -466,18 +460,62 @@ $(function() {
 $(function() {
 
     var checkedRows = [];
+    var checkedExt_id = [];
+    var checkedFull_name = [];
+    var checkedBirth_date = [];
+    var checkedPosition = [];
+    var checkedPunishment = [];
 
+    // выбор ряда
     $('#table').on('check.bs.table', function (e, row) {
         checkedRows.push({personal_id: row.personal_id});
+        checkedExt_id.push({ext_id: row.ext_id});
+        checkedFull_name.push({full_name: row.full_name});
+        checkedBirth_date.push({birth_date: row.birth_date});
+        checkedPosition.push({position: row.position});
+        checkedPunishment.push({punishment: row.punishment});
         console.log(checkedRows);
+        console.log(checkedExt_id[0].ext_id);
+
+        // вывод в значение формы put по-умолчанию
+        document.getElementById("ext_id_put").value = checkedExt_id[0].ext_id
+        document.getElementById("full_name_put").value = checkedFull_name[0].full_name
+        document.getElementById("birth_date_put").value = checkedBirth_date[0].birth_date
+        document.getElementById("position_put").value = checkedPosition[0].position
+        document.getElementById("punishment_put").value = checkedPunishment[0].punishment
+
     });
 
     $('#table').on('uncheck.bs.table', function (e, row) {
         $.each(checkedRows, function(index, value) {
             if (value.personal_id === row.personal_id) {
-                checkedRows.splice(index,1);
-            }
-        });
+                checkedRows.splice(index,1);}
+            })
+
+        $.each(checkedExt_id, function(index, value) {
+            if (value.ext_id === row.ext_id) {
+                checkedExt_id.splice(index,1);}
+            })
+
+            $.each(checkedFull_name, function(index, value) {
+            if (value.full_name === row.full_name) {
+                checkedFull_name.splice(index,1);}
+            })
+
+            $.each(checkedBirth_date, function(index, value) {
+            if (value.birth_date === row.birth_date) {
+                checkedBirth_date.splice(index,1);}
+            })
+
+            $.each(checkedPosition, function(index, value) {
+            if (value.position === row.position) {
+                checkedPosition.splice(index,1);}
+            })
+
+            $.each(checkedPunishment, function(index, value) {
+            if (value.punishment === row.punishment) {
+                checkedPunishment.splice(index,1);}
+            });
     });
 
     $("#btn_put").click(function(){
