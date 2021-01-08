@@ -102,7 +102,7 @@ tr:nth-child(even) {
       Загрузить
     </button>
 <div class="dropdown-menu">
-  <form class="px-4 py-3" method="post" id="ajax_form" enctype="multipart/form-data" action="{% url 'Personals-list' %}">
+  <form class="px-4 py-3" method="post" id="ajax_form" enctype="multipart/form-data" action="">
     {% csrf_token %}
 
         <div class="form-group">
@@ -245,6 +245,10 @@ tr:nth-child(even) {
       return row.personal_id
         })
     }
+
+    // Не отправляет снова формы при обновлении страницы
+    if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );}
 
     function responseHandler(res) {
     $.each(res.rows, function (i, row) {
