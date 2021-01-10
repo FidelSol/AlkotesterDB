@@ -1,4 +1,4 @@
-from django.core.exceptions import ValidationError
+
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -10,7 +10,7 @@ from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, Perso
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required
-from .utils import serialize_bootstraptable
+
 
 from django.views.generic import View, DetailView
 
@@ -158,32 +158,11 @@ class Card(AjaxableResponseMixin, FormMixin, DetailView):
         context = self.get_context_data()
         return render(request, 'inter/card.html', context)
 
-    def post_photo(self, request, *args, **kwargs):
+class Card_photo(Card):
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        formset = self.get_form()
-        if formset.is_valid():
-            return self.form_valid(formset)
-        else:
-            return self.form_invalid(formset)
-
-    def form_valid(self, formset):
-        # Here, we would record the user's interest using the message
-        # passed in form.cleaned_data['message']
-        return super(Card, self).form_valid(formset)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        context = self.get_context_data()
+        context['formset'] = PhotoFormSet(request.POST, request.FILES, instance=context['persona'])
+        if context['formset'].is_valid():
+            context['formset'].save()
+        return HttpResponseRedirect(reverse('card', kwargs={'personal_id': self.object.pk}))

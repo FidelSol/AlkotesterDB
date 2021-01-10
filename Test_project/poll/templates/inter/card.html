@@ -160,7 +160,7 @@ button:hover, a:hover {
     width: 450px;
     font-size: 20px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Изменить фото</button>
   <div class="dropdown-menu" style="width: 800px;">
-      <form class="px-4 py-3" method="post" style="text-align: center;" enctype="multipart/form-data" action="">{% csrf_token %}
+      <form class="px-4 py-3" method="post" style="text-align: center;" enctype="multipart/form-data" action="{% url 'photo' persona.personal_id %}">{% csrf_token %}
            <table>{{ formset }}</table>
 
             <br>
