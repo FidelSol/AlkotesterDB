@@ -558,14 +558,14 @@ $(document).ready(function () {
         console.log(all_d)
 
         //самая ранняя
-        earliest = all_d.reduce(function (a, b) {
-        return a < b ? a : b;
+        earliest = all_d.reduce(function (pre, cur) {
+        return Date.parse(pre) > Date.parse(cur) ? cur : pre;
         });
         console.log(earliest)
         console.log(Date.parse(earliest))
         // поздняя
-        last = all_d.reduce(function (a, b) {
-        return a > b ? a : b;
+        last = all_d.reduce(function (pre, cur) {
+        return Date.parse(pre) < Date.parse(cur) ? cur : pre;
         });
         console.log(last)
         console.log(Date.parse(last))
@@ -590,7 +590,7 @@ $(document).ready(function () {
         //количество тестов в день
         if (d === 0) {
         var aver = 1 } else {
-        var aver = Math.round(data.length / d) }
+        var aver = Math.round(d / data.length) }
         if (isNaN(aver)) { aver = 0 }
         document.getElementById("aver").innerHTML = '<b>Среднее количество тестов в день: </b>' + aver
         console.log(aver)

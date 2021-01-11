@@ -733,6 +733,10 @@ $('#table').on('load-success.bs.table', function (data_f) {
     var item = data[i].result_time;
     all_d.push(item)
     }
+    // убираем null из all_d
+    all_d = all_d.filter(function (el) {
+    return el != null;
+    });
     console.log(all_d)
     //самая ранняя
     earliest = all_d.reduce(function (pre, cur) {
@@ -746,13 +750,15 @@ $('#table').on('load-success.bs.table', function (data_f) {
     console.log(last)
     //количество дней
     var future = moment(last);
+    console.log(typeof future);
     var start = moment(earliest);
     var d = future.diff(start, 'days');
     console.log(d);
+    console.log(aver)
     //количество тестов в день
     if (d === 0) {
         var aver = 1 } else {
-        var aver = Math.round(data.length / d) }
+        var aver = Math.round(d / data.length) }
     if (isNaN(aver)) { aver = 0 }
     document.getElementById("aver").innerHTML = aver
     console.log(aver)
