@@ -555,6 +555,11 @@ $(document).ready(function () {
         var item = data[i].result_time;
         all_d.push(item)
         }
+
+        // убираем null из all_d
+        all_d = all_d.filter(function (el) {
+        return el != null;
+        });
         console.log(all_d)
 
         //самая ранняя
