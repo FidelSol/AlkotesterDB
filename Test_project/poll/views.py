@@ -7,12 +7,11 @@ from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from .models import Personal, Photo, Tests
 from .forms import TestsForm, PersonalForm, PhotoFormSet
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
-from django.contrib.auth.models import User
 from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required
-
-
 from django.views.generic import View, DetailView
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 @login_required

@@ -1,5 +1,11 @@
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+
+User = get_user_model()
+
 
 # Create your models here.
 
@@ -11,6 +17,7 @@ class Personal(models.Model):
     birth_date = models.DateField(db_index=True, verbose_name="Дата рождения", null=True, blank=True)
     position = models.CharField(max_length=30, verbose_name="Должность", null=True, blank=True)
     punishment = models.IntegerField(null=True, blank=True, verbose_name="Дисциплинарные взыскания")
+
 
     objects = models.Manager()
 
@@ -61,7 +68,6 @@ class Tests(models.Model):
     result_time = models.DateTimeField(blank=True, null=True, verbose_name="Фактическое время сдачи теста")
     result = models.BooleanField(choices=RESULT_CHOICES, default=False, verbose_name="Результат")
 
-
     objects = models.Manager()
 
     class Meta:
@@ -77,4 +83,63 @@ class Tests(models.Model):
 
     def save(self, *args, **kwargs):
         super(Tests, self).save(*args, **kwargs)
+
+class CustomAccountManager(BaseUserManager):
+    def create_user(self, username, email, password):
+        user = self.model(username=username, email=email, password=password)
+        user.set_password(password)
+        user.is_staff = False
+        user.is_superuser = False
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, password):
+        user = self.create_user(username=username, email=email, password=password)
+        user.is_active = True
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
+
+    def get_by_natural_key(self, username_):
+        return self.get(username=username_)
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    user_id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=30, verbose_name="Username", unique=True)
+    email = models.EmailField(primary_key=True)
+    is_staff = models.BooleanField(default=False)
+    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'username'
+
+    objects = CustomAccountManager()
+
+    def get_short_name(self):
+        return self.username
+
+    def natural_key(self):
+        return self.username
+
+    def __str__(self):
+        return self.username
+
+ROLE_CHOICES = [
+        ('Chief', 'Руководитель'),
+        ('Manager', 'Менеджер'),
+    ]
+
+class UserGroup(models.Model):
+    group_id = models.AutoField(primary_key=True)
+    role = models.CharField(choices=ROLE_CHOICES, verbose_name="Уровень доступа")
+    members = models.ManyToManyField(CustomUser)
+
+
+
+
+
+
+
+
+
+
 

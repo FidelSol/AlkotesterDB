@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Personal, Photo, Tests
+from django.contrib.auth.admin import UserAdmin
+
+from .models import Personal, Photo, Tests, CustomUser
+
+
+
 # Register your models here.
 
 class PersonalAdmin(admin.ModelAdmin):
@@ -20,3 +25,4 @@ class TestsAdmin(admin.ModelAdmin):
 admin.site.register(Personal, PersonalAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Tests, TestsAdmin)
+admin.site.register(CustomUser, UserAdmin)
