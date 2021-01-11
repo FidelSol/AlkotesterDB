@@ -22,7 +22,7 @@ class Personal(models.Model):
         return self.full_name
 
     def get_absolute_url(self):
-        return reverse('views.card_for_json', args=[str(self.personal_id)])
+        return reverse('views.card', args=[str(self.personal_id)])
 
     def save(self, *args, **kwargs):
         super(Personal, self).save(*args, **kwargs)
@@ -44,7 +44,7 @@ class Photo(models.Model):
         return str(self.personal)
 
     def get_absolute_url(self):
-        return reverse('views.card_for_json', args=[str(self.photo_id)])
+        return reverse('views.photo', args=[str(self.photo_id)])
 
     def save(self, *args, **kwargs):
         super(Photo, self).save(*args, **kwargs)
@@ -73,7 +73,7 @@ class Tests(models.Model):
         return str(self.personal)
 
     def get_absolute_url(self):
-        return reverse('views.card_for_json', args=[str(self.tests_id)])
+        return reverse('views.tests', args=[str(self.tests_id)])
 
     def save(self, *args, **kwargs):
         super(Tests, self).save(*args, **kwargs)
