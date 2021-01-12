@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 
-User = get_user_model()
+
 
 
 # Create your models here.
@@ -107,8 +107,9 @@ class CustomAccountManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=30, verbose_name="Username", unique=True)
-    email = models.EmailField(primary_key=True)
+    email = models.EmailField()
     is_staff = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     REQUIRED_FIELDS = ['email']
     USERNAME_FIELD = 'username'
 
@@ -130,10 +131,10 @@ ROLE_CHOICES = [
 
 class UserGroup(models.Model):
     group_id = models.AutoField(primary_key=True)
-    role = models.CharField(choices=ROLE_CHOICES, verbose_name="Уровень доступа")
+    role = models.CharField(choices=ROLE_CHOICES, max_length=30, verbose_name="Уровень доступа")
     members = models.ManyToManyField(CustomUser)
 
-
+User = get_user_model()
 
 
 
