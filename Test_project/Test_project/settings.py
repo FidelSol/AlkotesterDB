@@ -34,9 +34,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.admin',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'datatableview',
     'corsheaders',
 ]
+
+
 
 REST_FRAMEWORK = {
 
@@ -67,7 +69,12 @@ REST_FRAMEWORK = {
 
 }
 
+AUTHENTICATION_BACKENDS = (
+    'myproject.auth_backends.CustomUserModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
+CUSTOM_USER_MODEL = 'poll.CustomUser'
 
 SWAGGER_SETTINGS = {
     'VALIDATOR_URL': 'http://localhost:8000',
@@ -141,6 +148,7 @@ DATABASES = {
     }
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -159,7 +167,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'poll.CustomUser'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

@@ -1,8 +1,12 @@
 from django import forms
+
 from django.forms import inlineformset_factory
+
+
 from .models import Tests, Photo, Personal
-from django.contrib.auth import get_user_model
-User = get_user_model()
+
+
+
 
 class PersonalForm(forms.ModelForm):
     birth_date = forms.DateField(label='Дата рождения:')

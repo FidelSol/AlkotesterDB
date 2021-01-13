@@ -1,14 +1,31 @@
-from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User, UserManager
 
+ADMIN = 1
+CHIEF = 2
+REVIZOR = 3
+MANAGER = 4
 
+ROLE_CHOICES = [
+        (ADMIN, 'Администратор'),
+        (CHIEF, 'Руководитель'),
+        (REVIZOR, 'Проверяющий'),
+        (MANAGER, 'Менеджер'),
+    ]
 
+class CustomUser(User):
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, verbose_name="Уровень доступа")
 
-# Create your models here.
+    objects = UserManager()
 
+    class Meta:
+        permissions = (
+            ('1', 'Полный доступ'),
+            ('2', 'See, Add, Edit, Del'),
+            ('3', 'See, Add tests'),
+            ('4', 'See'),
+        )
 
 class Personal(models.Model):
     personal_id = models.AutoField(primary_key=True)
@@ -84,57 +101,8 @@ class Tests(models.Model):
     def save(self, *args, **kwargs):
         super(Tests, self).save(*args, **kwargs)
 
-class CustomAccountManager(BaseUserManager):
-    def create_user(self, username, email, password):
-        user = self.model(username=username, email=email, password=password)
-        user.set_password(password)
-        user.is_staff = False
-        user.is_superuser = False
-        user.save(using=self._db)
-        return user
 
-    def create_superuser(self, username, email, password):
-        user = self.create_user(username=username, email=email, password=password)
-        user.is_active = True
-        user.is_staff = True
-        user.is_superuser = True
-        user.save(using=self._db)
-        return user
 
-    def get_by_natural_key(self, username_):
-        return self.get(username=username_)
-
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=30, verbose_name="Username", unique=True)
-    email = models.EmailField()
-    is_staff = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    REQUIRED_FIELDS = ['email']
-    USERNAME_FIELD = 'username'
-
-    objects = CustomAccountManager()
-
-    def get_short_name(self):
-        return self.username
-
-    def natural_key(self):
-        return self.username
-
-    def __str__(self):
-        return self.username
-
-ROLE_CHOICES = [
-        ('Chief', 'Руководитель'),
-        ('Manager', 'Менеджер'),
-    ]
-
-class UserGroup(models.Model):
-    group_id = models.AutoField(primary_key=True)
-    role = models.CharField(choices=ROLE_CHOICES, max_length=30, verbose_name="Уровень доступа")
-    members = models.ManyToManyField(CustomUser)
-
-User = get_user_model()
 
 
 
