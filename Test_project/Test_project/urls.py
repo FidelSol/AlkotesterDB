@@ -25,6 +25,7 @@ from django.conf.urls.static import static
 from poll.views import PersonalsViewSet, TestsViewSet, PhotosViewSet, UsersViewSet
 from rest_framework.routers import DefaultRouter
 
+admin.autodiscover()
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -48,14 +49,23 @@ router.register(r'api/v1/users', UsersViewSet, basename='Users')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('django.contrib.auth.urls')),
-    path('login/', auth_views.LoginView.as_view(template_name="poll/registration/login.html"), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name="poll/registration/logout.html"), name='logout'),
-    path('password-reset/', auth_views.PasswordResetView.as_view(template_name="poll/registration/password_reset_form.html"), name='password_reset'),
-    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name="poll/registration/password_reset_done.html"), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="poll/registration/password_reset_confirm.html"), name='password_reset_confirm'),
-    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name="poll/registration/password_reset_complete.html"), name='password_reset_complete'),
-    path('password-change/', auth_views.PasswordChangeView.as_view(template_name="poll/registration/password_change_form.html"), name='password_change'),
-    path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(template_name="poll/registration/password_change_done.html"), name='password_change_done'),
+    path('login/', auth_views.LoginView.as_view(template_name="poll/registration/login.html"),
+                       name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name="poll/registration/logout.html"),
+                       name='logout'),
+    path('password-reset/',
+                       auth_views.PasswordResetView.as_view(template_name="poll/registration/password_reset_form.html"),
+                       name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(
+                      template_name="poll/registration/password_reset_done.html"), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+                      template_name="poll/registration/password_reset_confirm.html"), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(
+                      template_name="poll/registration/password_reset_complete.html"), name='password_reset_complete'),
+    path('password-change/', auth_views.PasswordChangeView.as_view(
+                      template_name="poll/registration/password_change_form.html"), name='password_change'),
+    path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(
+                      template_name="poll/registration/password_change_done.html"), name='password_change_done'),
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

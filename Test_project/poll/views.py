@@ -14,13 +14,13 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-@login_required
+
 def index(request):
     personals = Personal.objects.all()
     context = {'personals': personals}
     return render(request, 'poll/index.html', context)
 
-@login_required
+
 def detail(request, personal_id):
     persona = Personal.objects.get(pk = personal_id)
     photos = Photo.objects.filter(personal__personal_id=personal_id)
@@ -28,14 +28,14 @@ def detail(request, personal_id):
     context = {'persona': persona, 'photos': photos, 'tests': tests}
     return render(request, 'poll/detail.html', context)
 
-@login_required
+
 def test_fail(request):
    tests = Tests.objects.filter(result=False)
    personals = Personal.objects.filter(tests__result = False).distinct()
    context = {'tests': tests, 'personals': personals}
    return render(request, 'poll/fail.html', context)
 
-@login_required
+
 def add_personal(request):
     form = PersonalForm(request.POST)
     if request.method == "POST":
@@ -46,7 +46,7 @@ def add_personal(request):
             form = PersonalForm(request.POST)
     return render(request, 'poll/add_personal.html', {"form": form})
 
-@login_required
+
 def add_tests(request):
     personals = Personal.objects.all()
     value_name = request.POST.get('full_name')

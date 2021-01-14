@@ -20,6 +20,8 @@ class CustomUser(User):
     objects = UserManager()
 
     class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
         permissions = (
             ('1', 'Полный доступ'),
             ('2', 'See, Add, Edit, Del'),
