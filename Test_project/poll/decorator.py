@@ -7,7 +7,7 @@ def access_permissions(permission):
 
     def decorator(drf_custom_method):
         def _decorator(self, *args, **kwargs):
-            user_permission = str(kwargs['id'])+permission
+            user_permission = str(kwargs['pk'])+permission
             if self.request.user.has_perm(user_permission):
                 return drf_custom_method(self, *args, **kwargs)
             else:

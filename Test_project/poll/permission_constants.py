@@ -1,10 +1,10 @@
 # Permissions name and code
-archive_permission = ('_can_archive_permission', 'Can archive permission')
-all_crud_permission = ('_can_do_all_crud_permission', 'Can do all crud')
-view_only_permission = ('_can_view_only_permission', 'Can view only permission')
-view_classified_information_permission = ('_can_view_classified_information',
+archive_permission = ('can_archive_permission', 'Can archive permission')
+all_crud_permission = ('can_do_all_crud_permission', 'Can do all crud')
+view_only_permission = ('can_view_only_permission', 'Can view only permission')
+view_classified_information_permission = ('can_view_classified_information',
                                           'Can view classified information')
-document_management_permission = ('_can_upload_or_delete_tests',
+document_management_permission = ('can_upload_or_delete_tests',
                                   'Can upload or delete tests')
 
 # Permission list associated with groups

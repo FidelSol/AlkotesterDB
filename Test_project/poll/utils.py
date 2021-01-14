@@ -1,7 +1,7 @@
 from django.core.serializers import serialize
 import json
 from django.contrib.auth.models import Group, Permission
-
+from .permission_constants import *
 
 PERMISSION_GROUP_SUFFIX = '_permission_group'
 current_module_variables = vars()
