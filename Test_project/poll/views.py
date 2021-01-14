@@ -4,17 +4,19 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.edit import FormMixin
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
+from rest_framework_simplejwt.state import User
+
 from .models import Personal, Photo, Tests
 from .forms import TestsForm, PersonalForm, PhotoFormSet
+from .permission_constants import view_only_permission
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View, DetailView
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from .decorator import *
 
-
-
+@login_required()
+@access_permissions(view_only_permission)
 def index(request):
     personals = Personal.objects.all()
     context = {'personals': personals}
@@ -103,10 +105,12 @@ class AjaxableResponseMixin(object):
         else:
             return response
 
+
 class Table_tests(AjaxableResponseMixin, View):
     template_name ='inter/tests_table.html'
     personals = Personal.objects.all()
     model = Tests
+
 
     def get(self, request):
         personals = self.personals

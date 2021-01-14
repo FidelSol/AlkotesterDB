@@ -7,7 +7,7 @@ from .models import Personal, Photo, Tests, CustomUser
 
 class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
-    list_display = ('username', 'last_name', 'first_name',
+    list_display = ('username', 'role', 'last_name', 'first_name',
                     'is_staff', 'is_active')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),

@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User, UserManager
+from django.contrib.auth.models import Group
+
 
 ADMIN = 1
 CHIEF = 2
@@ -8,13 +10,14 @@ REVIZOR = 3
 MANAGER = 4
 
 ROLE_CHOICES = [
-        (ADMIN, 'Администратор'),
-        (CHIEF, 'Руководитель'),
-        (REVIZOR, 'Проверяющий'),
-        (MANAGER, 'Менеджер'),
-    ]
+    (CHIEF, 'Руководитель'),
+    (REVIZOR, 'Проверяющий'),
+    (MANAGER, 'Менеджер'),
+]
 
 class CustomUser(User):
+
+
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, verbose_name="Уровень доступа")
 
     objects = UserManager()
@@ -22,12 +25,17 @@ class CustomUser(User):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        permissions = (
-            ('1', 'Полный доступ'),
-            ('2', 'See, Add, Edit, Del'),
-            ('3', 'See, Add tests'),
-            ('4', 'See'),
-        )
+
+    @classmethod
+    def create(cls, role):
+        customuser = cls(role=role)
+        if customuser.role == CHIEF:
+            group = Group.objects.get(name='_poll_super_group')
+            customuser = customuser.groups.add(group)
+        return customuser
+
+
+
 
 class Personal(models.Model):
     personal_id = models.AutoField(primary_key=True)
