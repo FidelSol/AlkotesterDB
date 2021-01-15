@@ -15,8 +15,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import View, DetailView
 from .decorator import *
 
-@login_required()
-@access_permissions(view_only_permission)
+login_required()
+access_permissions(view_only_permission)
 def index(request):
     personals = Personal.objects.all()
     context = {'personals': personals}
@@ -126,7 +126,7 @@ class Table_persons(AjaxableResponseMixin, View):
     model = Personal
     personals = Personal.objects.all()
     fails = Personal.objects.filter(tests__result=False).distinct()
-    f = len(fails)
+    f = Personal.objects.filter(tests__result=False).distinct().count()
     context = {'personals': personals, 'fails': fails, 'f': f}
 
     def get(self, request):

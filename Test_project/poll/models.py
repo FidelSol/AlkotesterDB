@@ -26,15 +26,6 @@ class CustomUser(User):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
-    @classmethod
-    def create(cls, role):
-        customuser = cls(role=role)
-        if customuser.role == CHIEF:
-            group = Group.objects.get(name='_poll_super_group')
-            customuser = customuser.groups.add(group)
-        return customuser
-
-
 
 
 class Personal(models.Model):
