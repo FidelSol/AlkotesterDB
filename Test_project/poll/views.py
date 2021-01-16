@@ -37,7 +37,8 @@ def test_fail(request):
    context = {'tests': tests, 'personals': personals}
    return render(request, 'poll/fail.html', context)
 
-
+login_required()
+access_permissions(view_only_permission)
 def add_personal(request):
     form = PersonalForm(request.POST)
     if request.method == "POST":

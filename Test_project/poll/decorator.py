@@ -1,6 +1,4 @@
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth.models import User
-from .models import CustomUser
 
 def access_permissions(permission):
     """ django-rest-framework permission decorator for custom methods """
