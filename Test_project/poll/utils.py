@@ -18,7 +18,6 @@ def generate_groups_and_permission(model_name, instance_name, content_type):
                 permission, created = Permission.objects.get_or_create(codename=permission_codename,
                                                                        name=permission_name,
                                                                        content_type=content_type)
-
                 group.permissions.add(permission)
         except Exception as e:
             raise e

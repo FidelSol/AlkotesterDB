@@ -8,7 +8,7 @@ from .permission_constants import *
 from django.contrib.auth.models import Group
 
 @receiver(post_save, sender=CustomUser)
-def create_groups_for_project(sender, instance, **kwargs):
+def create_groups_for_project(CustomUser, instance, **kwargs):
     if kwargs['created']:
         try:
             content_type = ContentType.objects.get(model=instance._meta.model_name)
@@ -16,6 +16,7 @@ def create_groups_for_project(sender, instance, **kwargs):
                                            str(instance.id), content_type)
 
             super_group = Group.objects.get(name=str(instance.id) + '-' + CUSTOMUSER_SUPER_GROUP)
+
 
 
             instance.groups.add(super_group)
