@@ -16,8 +16,6 @@ ROLE_CHOICES = [
 ]
 
 class CustomUser(User):
-
-
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, verbose_name="Уровень доступа")
 
     objects = UserManager()

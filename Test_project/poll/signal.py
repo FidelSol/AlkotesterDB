@@ -9,22 +9,16 @@ from django.contrib.auth.models import Group
 
 @receiver(post_save, sender=CustomUser)
 def create_groups_for_project(CustomUser, instance, **kwargs):
-    if kwargs['created']:
-        try:
-            content_type = ContentType.objects.get(model=instance._meta.model_name)
-            generate_groups_and_permission(instance._meta.model_name,
-                                           str(instance.id), content_type)
+    c = CustomUser.objects.last()
+    try:
+        content_type = ContentType.objects.get(model=c._meta.model_name)
+        generate_groups_and_permission(c._meta.model_name, str(c.id), content_type)
+        super_group = Group.objects.get(name=str(c.id) + '-' + CUSTOMUSER_SUPER_GROUP)
+        c.groups.add(super_group)
+        super_group.user_set.add(c)
+    except Exception as e:
+        raise e
 
-            super_group = Group.objects.get(name=str(instance.id) + '-' + CUSTOMUSER_SUPER_GROUP)
-
-
-
-            instance.groups.add(super_group)
-
-        except Exception as e:
-            raise e
-    else:
-        print("Object not created yet.")
 
 
 

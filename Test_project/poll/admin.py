@@ -1,11 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
-from .forms import CustomUserChangeForm
-from .models import Personal, Photo, Tests, CustomUser
+from .forms import CustomUserChangeForm, CustomUserCreationForm
+from .models import Personal, Photo, Tests, CustomUser, CHIEF, REVIZOR
+from .utils import generate_groups_and_permission
+
 
 class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     list_display = ('username', 'role', 'last_name', 'first_name',
                     'is_staff', 'is_active')
@@ -18,6 +22,24 @@ class CustomUserAdmin(UserAdmin):
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('Groups'), {'fields': ('groups',)}),
     )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'password1', 'password2', 'role')}
+         ),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        content_type = ContentType.objects.get(model=obj._meta.model_name)
+        generate_groups_and_permission(obj._meta.model_name, content_type)
+        if obj.role == CHIEF:
+            group = Group.objects.get(name='_customuser_super_group')
+        elif obj.role == REVIZOR:
+            group = Group.objects.get(name='_customuser_document_management_group')
+        else:
+            group = Group.objects.get(name='_customuser_view_only_group')
+        group.user_set.add(obj)
 
 
 # Register your models here.

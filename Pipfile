@@ -20,6 +20,7 @@ django-cors-headers = "*"
 django-tables2-bootstrap4 = "*"
 drf-proxy-pagination = "*"
 pytz = "*"
+django-reset-migrations = "*"
 
 [dev-packages]
 

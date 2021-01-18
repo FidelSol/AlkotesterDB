@@ -1,9 +1,17 @@
 from django import forms
 from django.forms import inlineformset_factory
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
 from django.contrib.auth.forms import UserChangeForm
 from django.utils.translation import ugettext_lazy as _
-from .models import Tests, Photo, Personal, CustomUser
+from .models import Tests, Photo, Personal, CustomUser, ROLE_CHOICES
+
+
+class CustomUserCreationForm(UserCreationForm):
+    role = forms.ChoiceField(label="Уровень доступа", choices=ROLE_CHOICES)
+
+    class Meta(UserCreationForm):
+        model = CustomUser
+        fields = ('role',)
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -12,13 +20,14 @@ class CustomUserChangeForm(UserChangeForm):
         help_text=_("Raw passwords are not stored, so there is no way to see "
                     "this user's password, but you can change the password "
                     "using <a href=\"password/\">this form</a>."))
+    role = forms.ChoiceField(label="Уровень доступа", choices=ROLE_CHOICES)
 
     def clean_password(self):
         return self.initial["password"]
 
     class Meta:
         model = CustomUser
-        fields = ('first_name', 'last_name', 'email', 'role')
+        fields = ('first_name', 'last_name', 'email')
 
 class PersonalForm(forms.ModelForm):
     birth_date = forms.DateField(label='Дата рождения:')
