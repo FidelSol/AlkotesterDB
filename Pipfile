@@ -21,6 +21,7 @@ django-tables2-bootstrap4 = "*"
 drf-proxy-pagination = "*"
 pytz = "*"
 django-reset-migrations = "*"
+django-currentuser = "*"
 
 [dev-packages]
 

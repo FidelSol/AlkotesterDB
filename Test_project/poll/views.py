@@ -8,21 +8,21 @@ from rest_framework_simplejwt.state import User
 
 from .models import Personal, Photo, Tests
 from .forms import TestsForm, PersonalForm, PhotoFormSet
-from .permission_constants import view_only_permission
+from .permission_constants import view_only_permission, all_crud_permission
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View, DetailView
 from .decorator import *
 
-login_required()
-access_permissions(view_only_permission)
+@login_required
+@access(view_only_permission)
 def index(request):
     personals = Personal.objects.all()
     context = {'personals': personals}
     return render(request, 'poll/index.html', context)
 
-
+@login_required
 def detail(request, personal_id):
     persona = Personal.objects.get(pk = personal_id)
     photos = Photo.objects.filter(personal__personal_id=personal_id)
@@ -30,15 +30,15 @@ def detail(request, personal_id):
     context = {'persona': persona, 'photos': photos, 'tests': tests}
     return render(request, 'poll/detail.html', context)
 
-
+@login_required
 def test_fail(request):
    tests = Tests.objects.filter(result=False)
    personals = Personal.objects.filter(tests__result = False).distinct()
    context = {'tests': tests, 'personals': personals}
    return render(request, 'poll/fail.html', context)
 
-login_required()
-access_permissions(view_only_permission)
+@login_required
+@access_permissions(all_crud_permission)
 def add_personal(request):
     form = PersonalForm(request.POST)
     if request.method == "POST":
@@ -112,7 +112,7 @@ class Table_tests(AjaxableResponseMixin, View):
     personals = Personal.objects.all()
     model = Tests
 
-
+    @access_permissions(view_only_permission)
     def get(self, request):
         personals = self.personals
         return render(request, 'inter/tests_table.html', {'personals': personals})

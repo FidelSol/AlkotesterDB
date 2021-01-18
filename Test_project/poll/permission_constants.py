@@ -1,7 +1,7 @@
 # Permissions name and code
 archive_permission = ('_customuser_can_archive_permission', 'Can archive permission')
 all_crud_permission = ('_customuser_can_do_all_crud_permission', 'Can do all crud')
-view_only_permission = ('_customuser_can_view_only_permission', 'Can view only permission')
+view_only_permission = ('can_view_personal', 'Can view only permission')
 view_classified_information_permission = ('_customuser_can_view_classified_information',
                                           'Can view classified information')
 document_management_permission = ('_customuser_can_upload_or_delete_tests',
