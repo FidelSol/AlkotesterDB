@@ -16,13 +16,14 @@ from django.views.generic import View, DetailView
 from .decorator import *
 
 @login_required
-
+@access_permissions(view_only_permission)
 def index(request):
     personals = Personal.objects.all()
     context = {'personals': personals}
     return render(request, 'poll/index.html', context)
 
 @login_required
+@access_permissions(view_only_permission)
 def detail(request, personal_id):
     persona = Personal.objects.get(pk = personal_id)
     photos = Photo.objects.filter(personal__personal_id=personal_id)
@@ -31,6 +32,7 @@ def detail(request, personal_id):
     return render(request, 'poll/detail.html', context)
 
 @login_required
+@access_permissions(view_only_permission)
 def test_fail(request):
    tests = Tests.objects.filter(result=False)
    personals = Personal.objects.filter(tests__result = False).distinct()
@@ -113,11 +115,12 @@ class Table_tests(AjaxableResponseMixin, View):
     personals = Personal.objects.all()
     model = Tests
 
-    @access_permissions(view_only_permission)
+    @access_permissions(all_crud_permission)
     def get(self, request):
         personals = self.personals
         return render(request, 'inter/tests_table.html', {'personals': personals})
 
+    @access_permissions(all_crud_permission)
     def post(self, request, *args, **kwargs):
         personals = self.personals
         return render(request, 'inter/tests_table.html', {'personals': personals})
@@ -131,10 +134,12 @@ class Table_persons(AjaxableResponseMixin, View):
     f = Personal.objects.filter(tests__result=False).distinct().count()
     context = {'personals': personals, 'fails': fails, 'f': f}
 
+    @access_permissions(all_crud_permission)
     def get(self, request):
         context = self.context
         return render(request, 'inter/personal_table.html', context)
 
+    @access_permissions(all_crud_permission)
     def post(self, request, *args, **kwargs):
         context = self.context
         return render(request, 'inter/personal_table.html', context)
@@ -145,9 +150,9 @@ class Card(AjaxableResponseMixin, FormMixin, DetailView):
     pk_url_kwarg = "personal_id"
     form_class = PhotoFormSet
 
+    @access_permissions(all_crud_permission)
     def get_success_url(self):
         return reverse('card', kwargs={'pk': self.object.pk})
-
 
     def get_context_data(self, **kwargs):
         context = super(Card, self).get_context_data(**kwargs)
@@ -158,12 +163,15 @@ class Card(AjaxableResponseMixin, FormMixin, DetailView):
         context['formset'] = PhotoFormSet(instance=context['persona'])
         return context
 
+    @access_permissions(all_crud_permission)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data()
         return render(request, 'inter/card.html', context)
 
 class Card_photo(Card):
+
+    @access_permissions(all_crud_permission)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data()
