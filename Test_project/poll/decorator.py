@@ -1,7 +1,7 @@
-
+from __future__ import absolute_import
 from django.core.exceptions import PermissionDenied
 from django_currentuser.middleware import (
-get_current_user, get_current_authenticated_user)
+    get_current_user, get_current_authenticated_user)
 
 
 def access_permissions(permission):
@@ -9,25 +9,18 @@ def access_permissions(permission):
 
     def decorator(drf_custom_method):
         def _decorator(self, *args, **kwargs):
-            user_permission = permission
+            user_permission = 'auth.' + permission[0]
             user = get_current_user()
-            if user.has_perm(user_permission):
+            mn = user.get_group_permissions()
+            if user_permission in mn:
                 return drf_custom_method(self, *args, **kwargs)
             else:
                 raise PermissionDenied()
         return _decorator
     return decorator
 
-user = get_current_authenticated_user()
 
-def access(permission):
 
-    def decorator(permission):
-        user_permission = permission
-        if user.has_perm(user_permission):
-            return decorator()
-        else:
-            raise PermissionDenied()
-    return decorator
+
 
 

@@ -8,7 +8,7 @@ from rest_framework_simplejwt.state import User
 
 from .models import Personal, Photo, Tests
 from .forms import TestsForm, PersonalForm, PhotoFormSet
-from .permission_constants import view_only_permission, all_crud_permission
+from .permission_constants import view_only_permission, all_crud_permission, document_management_permission
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required
@@ -16,7 +16,7 @@ from django.views.generic import View, DetailView
 from .decorator import *
 
 @login_required
-@access(view_only_permission)
+
 def index(request):
     personals = Personal.objects.all()
     context = {'personals': personals}
@@ -49,7 +49,8 @@ def add_personal(request):
             form = PersonalForm(request.POST)
     return render(request, 'poll/add_personal.html', {"form": form})
 
-
+@login_required
+@access_permissions(document_management_permission)
 def add_tests(request):
     personals = Personal.objects.all()
     value_name = request.POST.get('full_name')

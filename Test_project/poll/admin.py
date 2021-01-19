@@ -32,7 +32,7 @@ class CustomUserAdmin(UserAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
         content_type = ContentType.objects.get(model=obj._meta.model_name)
-        generate_groups_and_permission(obj._meta.model_name, content_type)
+        generate_groups_and_permission(content_type)
         if obj.role == CHIEF:
             group = Group.objects.get(name='_customuser_super_group')
         elif obj.role == REVIZOR:
