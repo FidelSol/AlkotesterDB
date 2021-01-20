@@ -1,7 +1,7 @@
 # Permissions name and code
 archive_permission = ('_customuser_can_archive_permission', 'Can archive permission')
 all_crud_permission = ('_customuser_can_do_all_crud_permission', 'Право действий CRUD - уровень руководителя')
-view_only_permission = ('can_view_personal', 'Право просмотра - уровень менеджера, посетителя')
+view_only_permission = ('_customuser_can_view_only_permission', 'Право просмотра - уровень менеджера, посетителя')
 view_classified_information_permission = ('_customuser_can_view_classified_information',
                                           'Can view classified information')
 document_management_permission = ('_customuser_can_upload_or_delete_tests',
@@ -11,7 +11,7 @@ document_management_permission = ('_customuser_can_upload_or_delete_tests',
 super_group_permissions = [archive_permission, all_crud_permission, view_only_permission,
                            view_classified_information_permission,
                            document_management_permission]
-document_management_group_permissions = [document_management_permission]
+document_management_group_permissions = [document_management_permission, view_only_permission]
 view_group_permission = [view_only_permission]
 archive_group_permission = [archive_permission]
 

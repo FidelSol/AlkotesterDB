@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User, UserManager
-from django.contrib.auth.models import Group
+
 
 
 ADMIN = 1
@@ -33,7 +33,7 @@ class Personal(models.Model):
     birth_date = models.DateField(db_index=True, verbose_name="Дата рождения", null=True, blank=True)
     position = models.CharField(max_length=30, verbose_name="Должность", null=True, blank=True)
     punishment = models.IntegerField(null=True, blank=True, verbose_name="Дисциплинарные взыскания")
-
+    owner = models.ForeignKey('CustomUser', related_name='personal', on_delete=models.CASCADE)
 
     objects = models.Manager()
 
@@ -56,6 +56,7 @@ class Photo(models.Model):
     personal = models.ForeignKey(Personal, on_delete=models.CASCADE, null=True, blank=True)
     data_pub = models.DateField(auto_now=True, db_index=True, verbose_name="Дата публикации")
     data_photo = models.ImageField(upload_to='static/poll', null=True, blank=True, verbose_name="Фото")
+    owner = models.ForeignKey('CustomUser', related_name='photo', on_delete=models.CASCADE)
 
     objects = models.Manager()
 
@@ -83,6 +84,7 @@ class Tests(models.Model):
     expected_time = models.DateTimeField(blank=True, null=True, verbose_name="Назначенное время теста")
     result_time = models.DateTimeField(blank=True, null=True, verbose_name="Фактическое время сдачи теста")
     result = models.BooleanField(choices=RESULT_CHOICES, default=False, verbose_name="Результат")
+    owner = models.ForeignKey('CustomUser', related_name='tests', on_delete=models.CASCADE)
 
     objects = models.Manager()
 

@@ -1,5 +1,7 @@
+
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from rest_framework_jwt.settings import api_settings
+
 from .models import Personal, Tests, Photo, CustomUser
 
 
@@ -38,8 +40,21 @@ class PhotoSerializer(serializers.ModelSerializer):
         fields = ('photo_id', 'personal_id', 'data_pub', 'data_photo')
 
 class UserSerializer(serializers.ModelSerializer):
+    personal = serializers.PrimaryKeyRelatedField(many=True, queryset=Personal.objects.all())
+    tests = serializers.PrimaryKeyRelatedField(many=True, queryset=Tests.objects.all())
+    photo = serializers.PrimaryKeyRelatedField(many=True, queryset=Photo.objects.all())
+    owner = serializers.ReadOnlyField(source='owner.username')
+    token = serializers.SerializerMethodField()
+
+    def get_token(self, obj):
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+        payload = jwt_payload_handler(obj)
+        token = jwt_encode_handler(payload)
+        return token
+
     class Meta:
         model = CustomUser
-        fields = ['id', 'username']
-        owner = serializers.ReadOnlyField(source='owner.username')
+        fields = ['id', 'username', 'role', 'personal', 'tests', 'photo', 'owner', 'token']
+
 

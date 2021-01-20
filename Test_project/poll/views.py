@@ -3,12 +3,15 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.edit import FormMixin
+from rest_framework.decorators import api_view
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
-from rest_framework_simplejwt.state import User
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from .models import Personal, Photo, Tests
+from .models import Personal, Photo, Tests, CustomUser
 from .forms import TestsForm, PersonalForm, PhotoFormSet
 from .permission_constants import view_only_permission, all_crud_permission, document_management_permission
+from .permissions import IsOwnerOrReadOnly, ChiefAndRevizorPermissions, ChiefPermissions
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from rest_framework import viewsets
 from django.contrib.auth.decorators import login_required
@@ -71,21 +74,35 @@ class PersonalsViewSet(viewsets.ModelViewSet):
     queryset = Personal.objects.prefetch_related('tests_set').all()
     serializer_class = PersonalSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class PhotosViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
-class UsersViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class UsersViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-
+    permission_classes = [IsAuthenticated,
+                          IsOwnerOrReadOnly, ChiefPermissions,]
 
 class AjaxableResponseMixin(object):
     """
@@ -179,3 +196,4 @@ class Card_photo(Card):
         if context['formset'].is_valid():
             context['formset'].save()
         return HttpResponseRedirect(reverse('card', kwargs={'personal_id': self.object.pk}))
+

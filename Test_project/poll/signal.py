@@ -1,24 +1,16 @@
+from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from rest_framework_jwt.settings import api_settings
 
-from .models import CustomUser
-from .utils import generate_groups_and_permission
-from django.contrib.contenttypes.models import ContentType
-from .permission_constants import *
-from django.contrib.auth.models import Group
 
-#@receiver(post_save, sender=CustomUser)
-#def create_groups_for_project(CustomUser, instance, **kwargs):
-    #c = CustomUser.objects.last()
-    #try:
-        #content_type = ContentType.objects.get(model=c._meta.model_name)
-        #generate_groups_and_permission(c._meta.model_name, str(c.id), content_type)
-        #super_group = Group.objects.get(name=str(c.id) + '-' + CUSTOMUSER_SUPER_GROUP)
-        #c.groups.add(super_group)
-        #super_group.user_set.add(c)
-    #except Exception as e:
-        #raise e
-
+#@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+#def get_token(self, sender):
+    #jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+    #jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+    #payload = jwt_payload_handler(sender)
+    #token = jwt_encode_handler(payload)
+    #return token
 
 
 
