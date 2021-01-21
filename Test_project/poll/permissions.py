@@ -13,7 +13,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.owner == request.user
 
 class ChiefPermissions(permissions.BasePermission):
-    allowed_group_permissions = ('poll._customuser_can_do_all_crud_permission')
+    allowed_group_permissions = ('poll.add_personal')
 
     def has_permission(self, request, view):
         self.user = request.user
@@ -22,7 +22,7 @@ class ChiefPermissions(permissions.BasePermission):
         return is_allowed_user
 
 class ChiefAndRevizorPermissions(permissions.BasePermission):
-    allowed_group_permissions = {'poll._customuser_can_do_all_crud_permission', 'poll._customuser_can_upload_or_delete_tests'}
+    allowed_group_permissions = {'poll.add_personal', 'poll.add_tests'}
 
     def has_permission(self, request, view):
         is_allowed_user = True

@@ -7,7 +7,6 @@ from .forms import CustomUserChangeForm, CustomUserCreationForm
 from .models import Personal, Photo, Tests, CustomUser, CHIEF, REVIZOR
 from .utils import generate_groups_and_permission
 
-
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -36,7 +35,7 @@ class CustomUserAdmin(UserAdmin):
         if obj.role == CHIEF:
             group = Group.objects.get(name='_customuser_super_group')
         elif obj.role == REVIZOR:
-            group = Group.objects.get(name='_customuser_document_management_group')
+            group = Group.objects.get(name='_customuser_add_tests_group')
         else:
             group = Group.objects.get(name='_customuser_view_only_group')
         group.user_set.add(obj)
@@ -58,7 +57,6 @@ class TestsAdmin(admin.ModelAdmin):
     list_display = ('tests_id', 'personal', 'expected_time', 'result_time')
     list_display_links = ('tests_id', 'personal', 'expected_time', 'result_time')
     search_fields = ('tests_id', 'personal', 'expected_time', 'result_time')
-
 
 
 admin.site.register(Personal, PersonalAdmin)

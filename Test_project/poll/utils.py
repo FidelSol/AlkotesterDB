@@ -3,10 +3,6 @@ import json
 from django.contrib.auth.models import Group, Permission
 from .permission_constants import *
 
-#PERMISSION_GROUP_SUFFIX = '_permission_group'
-#current_module_variables = vars()
-#current_module_variables[model_name + PERMISSION_GROUP_SUFFIX]
-
 def generate_groups_and_permission(content_type):
     groups = customuser_permission_group
     for k, v in groups.items():

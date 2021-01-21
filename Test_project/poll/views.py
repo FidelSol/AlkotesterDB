@@ -7,7 +7,8 @@ from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
 from .models import Personal, Photo, Tests, CustomUser
 from .forms import TestsForm, PersonalForm, PhotoFormSet
-from .permission_constants import view_only_permission, all_crud_permission, document_management_permission
+from .permission_constants import personal_view_permission, personal_change_permission, tests_add_permission, \
+    personal_add_permission, tests_view_permission
 from .permissions import IsOwnerOrReadOnly, ChiefAndRevizorPermissions, ChiefPermissions
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from rest_framework import viewsets
@@ -16,14 +17,14 @@ from django.views.generic import View, DetailView
 from .decorator import *
 
 @login_required
-@access_permissions(view_only_permission)
+@access_permissions(personal_view_permission)
 def index(request):
     personals = Personal.objects.all()
     context = {'personals': personals}
     return render(request, 'poll/index.html', context)
 
 @login_required
-@access_permissions(view_only_permission)
+@access_permissions(personal_change_permission)
 def detail(request, personal_id):
     persona = Personal.objects.get(pk = personal_id)
     photos = Photo.objects.filter(personal__personal_id=personal_id)
@@ -32,7 +33,7 @@ def detail(request, personal_id):
     return render(request, 'poll/detail.html', context)
 
 @login_required
-@access_permissions(view_only_permission)
+@access_permissions(personal_view_permission)
 def test_fail(request):
    tests = Tests.objects.filter(result=False)
    personals = Personal.objects.filter(tests__result = False).distinct()
@@ -40,7 +41,7 @@ def test_fail(request):
    return render(request, 'poll/fail.html', context)
 
 @login_required
-@access_permissions(all_crud_permission)
+@access_permissions(personal_add_permission)
 def add_personal(request):
     form = PersonalForm(request.POST)
     if request.method == "POST":
@@ -52,7 +53,7 @@ def add_personal(request):
     return render(request, 'poll/add_personal.html', {"form": form})
 
 @login_required
-@access_permissions(document_management_permission)
+@access_permissions(tests_add_permission)
 def add_tests(request):
     personals = Personal.objects.all()
     value_name = request.POST.get('full_name')
@@ -128,12 +129,12 @@ class Table_tests(AjaxableResponseMixin, View):
     personals = Personal.objects.all()
     model = Tests
 
-    @access_permissions(all_crud_permission)
+    @access_permissions(tests_add_permission)
     def get(self, request):
         personals = self.personals
         return render(request, 'inter/tests_table.html', {'personals': personals})
 
-    @access_permissions(all_crud_permission)
+    @access_permissions(tests_add_permission)
     def post(self, request, *args, **kwargs):
         personals = self.personals
         return render(request, 'inter/tests_table.html', {'personals': personals})
@@ -147,12 +148,12 @@ class Table_persons(AjaxableResponseMixin, View):
     f = Personal.objects.filter(tests__result=False).distinct().count()
     context = {'personals': personals, 'fails': fails, 'f': f}
 
-    @access_permissions(all_crud_permission)
+    @access_permissions(personal_add_permission)
     def get(self, request):
         context = self.context
         return render(request, 'inter/personal_table.html', context)
 
-    @access_permissions(all_crud_permission)
+    @access_permissions(personal_add_permission)
     def post(self, request, *args, **kwargs):
         context = self.context
         return render(request, 'inter/personal_table.html', context)
@@ -163,7 +164,7 @@ class Card(AjaxableResponseMixin, FormMixin, DetailView):
     pk_url_kwarg = "personal_id"
     form_class = PhotoFormSet
 
-    @access_permissions(all_crud_permission)
+    @access_permissions(personal_change_permission)
     def get_success_url(self):
         return reverse('card', kwargs={'pk': self.object.pk})
 
@@ -176,7 +177,7 @@ class Card(AjaxableResponseMixin, FormMixin, DetailView):
         context['formset'] = PhotoFormSet(instance=context['persona'])
         return context
 
-    @access_permissions(all_crud_permission)
+    @access_permissions(personal_change_permission)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data()
@@ -184,7 +185,7 @@ class Card(AjaxableResponseMixin, FormMixin, DetailView):
 
 class Card_photo(Card):
 
-    @access_permissions(all_crud_permission)
+    @access_permissions(personal_change_permission)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data()
