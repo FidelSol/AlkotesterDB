@@ -19,7 +19,7 @@ class CustomUserChangeForm(UserChangeForm):
         label=_("Password"),
         help_text=_("Raw passwords are not stored, so there is no way to see "
                     "this user's password, but you can change the password "
-                    "using <a href=\"password/\">this form</a>."))
+                    "using <a href=\"../password/\">this form</a>."))
     role = forms.ChoiceField(label="Уровень доступа", choices=ROLE_CHOICES)
 
     def clean_password(self):

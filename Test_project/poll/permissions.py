@@ -1,9 +1,4 @@
-
 from rest_framework import permissions
-
-
-
-
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -19,7 +14,6 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
 class ChiefPermissions(permissions.BasePermission):
     allowed_group_permissions = ('poll._customuser_can_do_all_crud_permission')
-
 
     def has_permission(self, request, view):
         self.user = request.user

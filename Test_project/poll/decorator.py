@@ -6,7 +6,6 @@ from django_currentuser.middleware import (
 
 def access_permissions(permission):
     """ django-rest-framework permission decorator for custom methods """
-
     def decorator(drf_custom_method):
         def _decorator(self, *args, **kwargs):
             user_permission = 'poll.' + permission[0]
@@ -19,18 +18,5 @@ def access_permissions(permission):
         return _decorator
     return decorator
 
-def access(permission):
-    def decorator(function):
-        def wrap(request, *args, **kwargs):
-            user_permission = 'auth.' + permission[0]
-            user = get_current_user()
-            mn = user.get_group_permissions()
-            if user_permission in mn:
-                return function(request, *args, **kwargs)
-            else:
-                raise PermissionDenied()
-        wrap.__doc__ = function.__doc__
-        wrap.__name__ = function.__name__
-        return wrap
-    return decorator
+
 
