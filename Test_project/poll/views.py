@@ -3,11 +3,8 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.edit import FormMixin
-from rest_framework.decorators import api_view
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-
 from .models import Personal, Photo, Tests, CustomUser
 from .forms import TestsForm, PersonalForm, PhotoFormSet
 from .permission_constants import view_only_permission, all_crud_permission, document_management_permission
@@ -74,7 +71,7 @@ class PersonalsViewSet(viewsets.ModelViewSet):
     queryset = Personal.objects.prefetch_related('tests_set').all()
     serializer_class = PersonalSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly, ChiefPermissions]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -83,7 +80,7 @@ class TestsViewSet(viewsets.ModelViewSet):
     queryset = Tests.objects.all()
     serializer_class = TestsSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, ChiefAndRevizorPermissions, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -92,7 +89,7 @@ class PhotosViewSet(viewsets.ModelViewSet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly, ChiefPermissions]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -101,8 +98,7 @@ class PhotosViewSet(viewsets.ModelViewSet):
 class UsersViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated,
-                          IsOwnerOrReadOnly, ChiefPermissions,]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly, ChiefPermissions]
 
 class AjaxableResponseMixin(object):
     """

@@ -37,6 +37,7 @@ class ChiefAndRevizorPermissions(permissions.BasePermission):
         for p in mn:
             if p in self.allowed_group_permissions:
                 is_allowed_user = True
+                break
             else:
                 is_allowed_user = False
         return is_allowed_user

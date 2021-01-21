@@ -50,7 +50,13 @@ router.register(r'api/v1/tests', TestsViewSet, basename='Tests')
 router.register(r'api/v1/photos', PhotosViewSet, basename='Photos')
 router.register(r'api/v1/users', UsersViewSet, basename='Users')
 
+
 urlpatterns = [
+    path('api/v1/auth/', include('djoser.urls')),
+    path('api/v1/auth/', include('djoser.urls.jwt')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('admin/', admin.site.urls),
     path('', include('django.contrib.auth.urls')),
     path('login/', auth_views.LoginView.as_view(template_name="poll/registration/login.html"),
@@ -73,10 +79,5 @@ urlpatterns = [
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('api-auth/', include('rest_framework.urls')),
-    path('api/v1/auth/', include('djoser.urls')),
-    path('api/v1/auth/', include('djoser.urls.jwt')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include('poll.urls')),
 ] + router.urls + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

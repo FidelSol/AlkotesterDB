@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'poll',
     'crispy_forms',
     'datetimewidget',
-    'rest_framework',
     'djoser',
+    'rest_framework',
     'rest_framework_simplejwt',
     'datatableview',
     'corsheaders',
@@ -57,9 +57,9 @@ REST_FRAMEWORK = {
 
     'PAGINATE_BY': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     "DEFAULT_RENDERER_CLASSES": (
         'rest_framework.renderers.JSONRenderer',

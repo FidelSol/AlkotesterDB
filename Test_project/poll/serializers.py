@@ -5,6 +5,7 @@ from rest_framework_jwt.settings import api_settings
 from .models import Personal, Tests, Photo, CustomUser
 
 
+
 class PersonalSerializer(serializers.ModelSerializer):
     personal_id = serializers.IntegerField(required=False)
     ext_id = serializers.IntegerField(required=False)
