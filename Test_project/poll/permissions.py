@@ -35,3 +35,4 @@ class ChiefAndRevizorPermissions(permissions.BasePermission):
             else:
                 is_allowed_user = False
         return is_allowed_user
+

@@ -40,9 +40,6 @@ class CustomUserAdmin(UserAdmin):
             group = Group.objects.get(name='_customuser_view_only_group')
         group.user_set.add(obj)
 
-
-# Register your models here.
-
 class PersonalAdmin(admin.ModelAdmin):
     list_display = ('personal_id', 'ext_id', 'full_name', 'birth_date', 'position', 'punishment', 'owner')
     list_display_links = ('personal_id', 'ext_id', 'full_name', 'birth_date', 'position', 'punishment', 'owner')
@@ -57,7 +54,6 @@ class TestsAdmin(admin.ModelAdmin):
     list_display = ('tests_id', 'personal', 'expected_time', 'result_time', 'owner')
     list_display_links = ('tests_id', 'personal', 'expected_time', 'result_time', 'owner')
     search_fields = ('tests_id', 'personal', 'expected_time', 'result_time')
-
 
 admin.site.register(Personal, PersonalAdmin)
 admin.site.register(Photo, PhotoAdmin)

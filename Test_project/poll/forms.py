@@ -5,14 +5,12 @@ from django.contrib.auth.forms import UserChangeForm
 from django.utils.translation import ugettext_lazy as _
 from .models import Tests, Photo, Personal, CustomUser, ROLE_CHOICES
 
-
 class CustomUserCreationForm(UserCreationForm):
     role = forms.ChoiceField(label="Уровень доступа", choices=ROLE_CHOICES)
 
     class Meta(UserCreationForm):
         model = CustomUser
         fields = ('role',)
-
 
 class CustomUserChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField(
@@ -45,7 +43,6 @@ class TestsForm(forms.ModelForm):
         fields = ('expected_time', 'result_time', 'result')
 
 class PhotoForm(forms.ModelForm):
-
 
     class Meta:
         model = Photo

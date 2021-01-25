@@ -1,4 +1,3 @@
-
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -7,8 +6,7 @@ from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
 from .models import Personal, Photo, Tests, CustomUser
 from .forms import TestsForm, PersonalForm, PhotoFormSet
-from .permission_constants import personal_view_permission, personal_change_permission, tests_add_permission, \
-    personal_add_permission, tests_view_permission
+from .permission_constants import personal_view_permission, personal_change_permission, tests_add_permission, personal_add_permission
 from .permissions import IsOwnerOrReadOnly, ChiefAndRevizorPermissions, ChiefPermissions
 from .serializers import TestsSerializer, PhotoSerializer, UserSerializer, PersonalSerializer
 from rest_framework import viewsets
@@ -95,7 +93,6 @@ class PhotosViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-
 class UsersViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
@@ -123,7 +120,6 @@ class AjaxableResponseMixin(object):
         else:
             return response
 
-
 class Table_tests(AjaxableResponseMixin, View):
     template_name ='inter/tests_table.html'
     personals = Personal.objects.all()
@@ -138,7 +134,6 @@ class Table_tests(AjaxableResponseMixin, View):
     def post(self, request, *args, **kwargs):
         personals = self.personals
         return render(request, 'inter/tests_table.html', {'personals': personals})
-
 
 class Table_persons(AjaxableResponseMixin, View):
     template_name = 'inter/personal_table.html'

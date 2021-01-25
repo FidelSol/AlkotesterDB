@@ -3,7 +3,6 @@ from django.core.exceptions import PermissionDenied
 from django_currentuser.middleware import (
     get_current_user)
 
-
 def access_permissions(permission):
     """ django-rest-framework permission decorator for custom methods """
     def decorator(drf_custom_method):

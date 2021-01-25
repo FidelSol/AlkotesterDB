@@ -4,7 +4,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django.apps import apps
 apps.get_model(*settings.CUSTOM_USER_MODEL.split('.'))
 
-
 class CustomUserModelBackend(ModelBackend):
     def authenticate(self, username=None, password=None, **kwargs):
         try:

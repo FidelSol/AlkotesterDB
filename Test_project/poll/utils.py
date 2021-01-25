@@ -1,5 +1,3 @@
-from django.core.serializers import serialize
-import json
 from django.contrib.auth.models import Group, Permission
 from .permission_constants import *
 
@@ -19,13 +17,3 @@ def generate_groups_and_permission(content_type):
         except Exception as e:
             return e
 
-def serialize_bootstraptable(queryset):
-    json_data = serialize('json', queryset)
-    json_final = {"total": queryset.count(), "rows": []}
-    data = json.loads(json_data)
-    for item in data:
-        del item["model"]
-        item["fields"].update({"id": item["pk"]})
-        item = item["fields"]
-        json_final['rows'].append(item)
-    return json_final
