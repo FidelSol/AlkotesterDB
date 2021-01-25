@@ -44,18 +44,18 @@ class CustomUserAdmin(UserAdmin):
 # Register your models here.
 
 class PersonalAdmin(admin.ModelAdmin):
-    list_display = ('personal_id', 'ext_id', 'full_name')
-    list_display_links = ('personal_id', 'ext_id', 'full_name')
+    list_display = ('personal_id', 'ext_id', 'full_name', 'birth_date', 'position', 'punishment', 'owner')
+    list_display_links = ('personal_id', 'ext_id', 'full_name', 'birth_date', 'position', 'punishment', 'owner')
     search_fields = ('personal_id', 'ext_id', 'full_name')
 
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ('photo_id', 'personal', 'data_pub', 'data_photo')
-    list_display_links = ('photo_id', 'personal', 'data_pub', 'data_photo')
+    list_display = ('photo_id', 'personal', 'data_pub', 'data_photo', 'owner')
+    list_display_links = ('photo_id', 'personal', 'data_pub', 'data_photo', 'owner')
     search_fields = ('photo_id', 'personal', 'data_pub', 'data_photo')
 
 class TestsAdmin(admin.ModelAdmin):
-    list_display = ('tests_id', 'personal', 'expected_time', 'result_time')
-    list_display_links = ('tests_id', 'personal', 'expected_time', 'result_time')
+    list_display = ('tests_id', 'personal', 'expected_time', 'result_time', 'owner')
+    list_display_links = ('tests_id', 'personal', 'expected_time', 'result_time', 'owner')
     search_fields = ('tests_id', 'personal', 'expected_time', 'result_time')
 
 
