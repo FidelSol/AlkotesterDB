@@ -22,8 +22,6 @@ class CustomUser(User):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
-
-
 class Personal(models.Model):
     personal_id = models.AutoField(primary_key=True)
     ext_id = models.IntegerField(null=True, blank=True, verbose_name="Расширенный ID")
@@ -49,7 +47,6 @@ class Personal(models.Model):
         super(Personal, self).save(*args, **kwargs)
 
 class Photo(models.Model):
-
     photo_id = models.AutoField(primary_key=True)
     personal = models.ForeignKey(Personal, on_delete=models.CASCADE, null=True, blank=True)
     data_pub = models.DateField(auto_now=True, db_index=True, verbose_name="Дата публикации")
