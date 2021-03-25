@@ -1,5 +1,4 @@
 """Test_project URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
 Examples:
@@ -29,7 +28,6 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-
 schema_view = get_schema_view(
    openapi.Info(
       title="Snippets API",
@@ -42,7 +40,6 @@ schema_view = get_schema_view(
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
-
 
 router = DefaultRouter()
 router.register(r'api/v1/personals', PersonalsViewSet, basename='Personals')
